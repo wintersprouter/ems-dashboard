@@ -41,6 +41,7 @@ function Login() {
                   autoComplete='email'
                   className='w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border  shadow-sm rounded-lg'
                   {...register("email")}
+                  placeholder='Example@email.com'
                   autoFocus
                 />
               </label>
@@ -54,6 +55,7 @@ function Login() {
                   required
                   autoComplete='current-password'
                   className='w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border  shadow-sm rounded-lg'
+                  placeholder='at least 8 characters'
                   {...register("password")}
                 />
               </label>
