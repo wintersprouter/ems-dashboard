@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./error-page";
 import "./index.css";
 import Login from "./routes/login";
+import MonitoringPoint from "./routes/monitoring-point";
 import Overview from "./routes/overview";
 import Root from "./routes/root";
 
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         element: <Overview />,
         path: "/",
+      },
+      {
+        element: <MonitoringPoint />,
+        path: "/monitoring-point",
       },
     ],
   },
