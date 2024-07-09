@@ -2,7 +2,7 @@ function Header() {
   return (
     <div
       id='header'
-      className='flex-grow flex h-20 justify-between align-middle max-w-full px-4 py-2 m-4'
+      className='flex h-20 justify-between align-middle px-4 py-2'
     >
       <div>
         <div className='flex-col'>
