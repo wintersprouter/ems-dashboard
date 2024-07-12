@@ -1,3 +1,5 @@
+import UsernameIcon from "../assets/username.svg";
+
 function Header() {
   return (
     <div
@@ -17,13 +19,9 @@ function Header() {
           </div>
         </div>
       </div>
-      <div className='flex justify-items-center'>
-        <img
-          className='rounded-full bg-slate-600'
-          alt='avatar'
-          src='../../public/username.png'
-        ></img>
-        <p className='text-black text-base font-normal'>username</p>
+      <div className='flex justify-items-center gap-2 items-center'>
+        <img src={UsernameIcon} alt='Username' />
+        <p className='text-black text-base font-normal'>Username</p>
       </div>
     </div>
   );
