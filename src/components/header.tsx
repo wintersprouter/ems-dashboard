@@ -4,12 +4,8 @@ function Header() {
       id='header'
       className='flex h-20 justify-between align-middle px-4 py-2'
     >
-      <div>
-        <div className='flex-col'>
-          <p className='text-gray-500 text-xs'>2024 / 07 / 01 WED</p>
-          <p className='text-gray-800 text font-medium'>H:28°C / L:20°C</p>
-        </div>
-      </div>
+      <h1 className='logo text-3xl text-green-600 font-semibold'>Epower OS</h1>
+      <div></div>
       <div className='flex justify-items-center'>
         {/* <img className='rounded-full bg-slate-600' alt='avatar'></img> */}
         <p className='text-black text font-normal'>username</p>
