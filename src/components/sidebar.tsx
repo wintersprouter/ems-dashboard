@@ -6,7 +6,7 @@ import overview_icon from "../assets/overview_icon.svg";
 import tree_active_icon from "../assets/tree_active_icon.svg";
 import tree_icon from "../assets/tree_icon.svg";
 const navLinkStyle =
-  "flex px-1 hover:bg-green-100 hover:rounded duration-150 ease-in-out";
+  "flex px-1 pl-2 hover:bg-green-100 hover:rounded duration-150 ease-in-out";
 const activeNavLinkStyle =
   "flex px-1  rounded bg-green-100 border-green-400 border duration-150 ease-in-out";
 
