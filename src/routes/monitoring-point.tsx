@@ -1,8 +1,10 @@
+import Sidebar from "../components/sidebar";
+
 function MonitoringPoint() {
   return (
-    <div>
-      <h1>Monitoring Point</h1>
-    </div>
+    <section className='flex container'>
+      <Sidebar />
+    </section>
   );
 }
 export default MonitoringPoint;
