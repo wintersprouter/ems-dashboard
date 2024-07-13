@@ -1,10 +1,10 @@
 import Sidebar from "../components/sidebar";
 
-function MonitoringPoint() {
+function Tree() {
   return (
     <section className='flex container'>
       <Sidebar />
     </section>
   );
 }
-export default MonitoringPoint;
+export default Tree;
