@@ -2,7 +2,7 @@ function Sidebar() {
   return (
     <div
       id='sidebar'
-      className='m-4 rounded-2xl bg-gray-50 py-6 px-3 border border-white flex-shrink'
+      className='mb-4 rounded-2xl bg-gray-50 py-6 px-3 border border-white  marker flex-shrink mx-2'
     >
       <div className='grid grid-cols-1 divide-y-2 divide-gray-200 gap-6 '>
         <div className='justify-center'>
