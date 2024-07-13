@@ -27,11 +27,11 @@ const router = createBrowserRouter([
         element: <MonitoringPoint />,
         path: "/monitoring-point",
       },
+      {
+        path: "login",
+        element: <Login />,
+      },
     ],
-  },
-  {
-    path: "login",
-    element: <Login />,
   },
 ]);
 
