@@ -1,6 +1,12 @@
 # .github/workflows/netlify.yml
 name: Build and Deploy to Netlify
-on: push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -17,8 +23,6 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Build
-        run: yarn build
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
