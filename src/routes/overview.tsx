@@ -2,10 +2,10 @@ import Sidebar from "../components/sidebar";
 
 function Overview() {
   return (
-    <section className='flex container'>
+    <>
       <Sidebar />
-      <section className='flex-1 flex-grow flex-col mx-2'>
-        <section className='p-6 divide-x-2  align-middle justify-between flex flex-row gap-4 bg-white rounded-xl h-fit'>
+      <section className='absolute top-20 left-0 lg:left-56 flex-1 flex-grow flex-col w-full mx-auto lg:max-w-7xl'>
+        <section className='p-6 divide-x-2  align-middle justify-between flex flex-wrap gap-4 bg-white rounded-xl h-fit'>
           <div className='flex flex-col items-center justify-center p-6'>
             <h3 className='font-medium font-gray-800 text-lg'>Real-time</h3>
             <ul>
@@ -65,7 +65,7 @@ function Overview() {
           </div>
         </section>
       </section>
-    </section>
+    </>
   );
 }
 export default Overview;

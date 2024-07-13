@@ -11,9 +11,9 @@ const activeNavLinkStyle =
   "flex px-1  rounded bg-green-100 border-green-400 border duration-150 ease-in-out";
 
 const navTextStyle =
-  "p-2 text-base text-gray-800 font-normal hover:text-green-800 hidden lg:opacity-100";
+  "p-2 text-base text-gray-800 font-normal hover:text-green-800 hidden lg:flex ";
 const navActiveTextStyle =
-  "p-2 text-base text-green-800 font-normal hidden lg:opacity-100";
+  "p-2 text-base text-green-800 font-normal hidden lg:flex ";
 
 const navigation = [
   {
@@ -42,7 +42,7 @@ function Sidebar() {
     <aside
       id='default-sidebar'
       className='
-      fixed top-36 lg:top-20 left-1 z-40 h-[50rem] rounded-2xl border border-white mx-2 shadow min-w-fit py-6 px-3 overflow-y-auto bg-gray-50'
+      fixed top-36 lg:top-20 left-1 z-40 h-[50rem] rounded-2xl border border-white mx-2 shadow min-w-fit py-6 px-3 overflow-y-auto bg-gray-50 hidden lg:flex'
       aria-label='Sidebar'
     >
       <div className='grid grid-cols-1 divide-y-2 divide-gray-200 gap-6 h-full '>
