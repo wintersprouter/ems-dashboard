@@ -41,7 +41,7 @@ function Sidebar() {
     <aside
       id='default-sidebar'
       className='
-      fixed top-18 left-1 z-40 h-[50rem] rounded-2xl border border-white mx-2 shadow min-w-fit py-6 px-3 overflow-y-auto bg-gray-50'
+      fixed top-36 lg:top-20 left-1 z-40 h-[50rem] rounded-2xl border border-white mx-2 shadow min-w-fit py-6 px-3 overflow-y-auto bg-gray-50'
       aria-label='Sidebar'
     >
       <div className='grid grid-cols-1 divide-y-2 divide-gray-200 gap-6 h-full '>

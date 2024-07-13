@@ -6,15 +6,15 @@ const navTextStyle = "text-black font-normal text-base";
 const navActiveTextStyle = "text-white font-normal text-base";
 function Header() {
   return (
-    <div
+    <header
       id='header'
-      className='flex justify-between px-4 py-2 bg-white border-l rounded-full items-center m-2 '
+      className='flex flex-wrap justify-between px-5 py-3 lg:py-2 lg:px-2 bg-white border-l rounded-full items-center mx-auto lg:mx-2 mt-2 z-40 overflow-y-auto gap-4'
     >
-      <div className='flex gap-8'>
+      <div className='flex gap-8 items-center justify-between'>
         <h1 className='logo text-3xl text-green-600 font-semibold'>
           Epower OS
         </h1>
-        <div className='rounded-full bg-green-50 flex'>
+        <div className='rounded-full bg-green-50  hidden lg:flex lg:opacity-100'>
           <NavLink
             to={"/"}
             className={({ isActive, isPending }) =>
@@ -53,7 +53,7 @@ function Header() {
         <img src={UsernameIcon} alt='Username' />
         <p className='text-black text-base font-normal'>Username</p>
       </div>
-    </div>
+    </header>
   );
 }
 export default Header;
