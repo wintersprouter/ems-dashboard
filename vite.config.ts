@@ -9,7 +9,7 @@ export default defineConfig({
     manifest: true,
     rollupOptions: {
       // overwrite default .html entry
-      input: "/path/to/main.tsx",
+      input: "/src/main.tsx",
     },
   },
 });
