@@ -11,8 +11,9 @@ const activeNavLinkStyle =
   "flex px-1  rounded bg-green-100 border-green-400 border duration-150 ease-in-out";
 
 const navTextStyle =
-  "p-2 text-base text-gray-800 font-normal hover:text-green-800 ";
-const navActiveTextStyle = "p-2 text-base text-green-800 font-normal ";
+  "p-2 text-base text-gray-800 font-normal hover:text-green-800 hidden lg:opacity-100";
+const navActiveTextStyle =
+  "p-2 text-base text-green-800 font-normal hidden lg:opacity-100";
 
 const navigation = [
   {
