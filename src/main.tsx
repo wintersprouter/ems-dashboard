@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       {
         element: <Overview />,
-        path: "/",
+        path: "/overview",
       },
       {
         element: <MonitoringPoint />,
