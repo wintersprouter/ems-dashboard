@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import UsernameIcon from "../assets/username.svg";
 
 function Header() {
@@ -11,10 +12,10 @@ function Header() {
           Epower OS
         </h1>
         <div className='rounded-full bg-green-50 flex'>
-          <div className='rounded-[32px] py-2 px-6'>
+          <NavLink to={"/"} className='rounded-[32rem] py-2 px-6'>
             <p className='text-black font-normal text-base'>Home</p>
-          </div>
-          <div className='rounded-[32px] py-2 px-6 bg-green-600'>
+          </NavLink>
+          <div className='rounded-[32rem] py-2 px-6 bg-green-600'>
             <p className='text-white font-normal text-base'>Data</p>
           </div>
         </div>

@@ -16,20 +16,20 @@ const navActiveTextStyle = "p-2 text-base text-green-800 font-normal";
 
 const navigation = [
   {
-    navigation: "/overview",
+    navigation: "/dashboard/overview",
     name: "Overview",
     icon: overview_icon,
     activeIcon: overview_active_icon,
   },
 
   {
-    navigation: "/tree",
+    navigation: "/dashboard/tree",
     name: "Tree",
     icon: tree_icon,
     activeIcon: tree_active_icon,
   },
   {
-    navigation: "/monitoring-point",
+    navigation: "/dashboard/monitoring-point",
     name: "Monitoring Point",
     icon: monitoring_point_icon,
     activeIcon: monitoring_point_active_icon,
