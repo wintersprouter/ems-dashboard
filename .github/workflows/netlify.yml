@@ -13,12 +13,12 @@ jobs:
           node-version: 20
           cache: "npm"
       - name: Install dependencies
-        run: npm ci
+        run: yarn install
       - name: Build
-        run: npm run build
+        run: yarn build
 
       - name: Build
-        run: npm run build
+        run: yarn build
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
