@@ -12,6 +12,7 @@ import Login from "./routes/login";
 import MonitoringPoint from "./routes/monitoring-point";
 import Overview from "./routes/overview";
 import Root from "./routes/root";
+import Tree from "./routes/tree";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         element: <Overview />,
         path: "overview",
+      },
+      {
+        element: <Tree />,
+        path: "tree",
       },
       {
         element: <MonitoringPoint />,
