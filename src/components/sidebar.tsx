@@ -1,37 +1,85 @@
+import { NavLink } from "react-router-dom";
+import monitoring_point_active_icon from "../assets/monitoring_point_active_icon.svg";
+import monitoring_point_icon from "../assets/monitoring_point_icon.svg";
+import overview_active_icon from "../assets/overview_active_icon.svg";
+import overview_icon from "../assets/overview_icon.svg";
+import tree_active_icon from "../assets/tree_active_icon.svg";
+import tree_icon from "../assets/tree_icon.svg";
+const navLinkStyle =
+  "flex px-1 pl-2 hover:bg-green-100 hover:rounded duration-150 ease-in-out";
+const activeNavLinkStyle =
+  "flex px-1  rounded bg-green-100 border-green-400 border duration-150 ease-in-out";
+
+const navTextStyle =
+  "p-2 text-base text-gray-800 font-normal hover:text-green-800 hidden lg:flex ";
+const navActiveTextStyle =
+  "p-2 text-base text-green-800 font-normal hidden lg:flex ";
+
+const navigation = [
+  {
+    navigation: "/dashboard/overview",
+    name: "Overview",
+    icon: overview_icon,
+    activeIcon: overview_active_icon,
+  },
+
+  {
+    navigation: "/dashboard/tree",
+    name: "Tree",
+    icon: tree_icon,
+    activeIcon: tree_active_icon,
+  },
+  {
+    navigation: "/dashboard/monitoring-point",
+    name: "Monitoring Point",
+    icon: monitoring_point_icon,
+    activeIcon: monitoring_point_active_icon,
+  },
+];
+
 function Sidebar() {
   return (
-    <div
-      id='sidebar'
-      className='m-4 rounded-2xl bg-gray-50 py-6 px-3 border border-white flex-shrink'
+    <aside
+      id='default-sidebar'
+      className='
+      fixed top-36 lg:top-20 left-1 z-40 h-[50rem] rounded-2xl border border-white mx-2 shadow min-w-fit py-6 px-3 overflow-y-auto bg-gray-50 hidden lg:flex'
+      aria-label='Sidebar'
     >
-      <div className='grid grid-cols-1 divide-y-2 divide-gray-200 gap-6 '>
-        <div className='justify-center'>
-          <h1 className='text-center text-3xl'>EMS</h1>
-          <h1>智慧電能管理系統</h1>
-        </div>
-        <nav className='py-4'>
+      <div className='grid grid-cols-1 divide-y-2 divide-gray-200 gap-6 h-full '>
+        <nav className='pb-4'>
           <h2 className='text-left text-xs text-gray-400'>General</h2>
-          <ul className='flex-col'>
-            <li>
-              <a href='#'>Overview</a>
-            </li>
-            <li>
-              <a href='#'>Stations</a>
-            </li>
-            <li>
-              <a href='#'>Monitoring Point</a>
-            </li>
-            <li>
-              <a href='#'>Control Unit</a>
-            </li>
+          <ul className='flex flex-col gap-3 my-3'>
+            {navigation.map((item, idx) => (
+              <NavLink to={item.navigation}>
+                {({ isActive, isPending }) => (
+                  <li
+                    key={idx}
+                    className={
+                      isActive
+                        ? activeNavLinkStyle
+                        : isPending
+                        ? navLinkStyle
+                        : navLinkStyle
+                    }
+                  >
+                    {isActive && (
+                      <div className='relative right-4 top-0 h-10 w-1 bg-green-800' />
+                    )}
+                    <img
+                      src={isActive ? item.activeIcon : item.icon}
+                      alt={item.navigation}
+                    />
+                    <p className={isActive ? navActiveTextStyle : navTextStyle}>
+                      {item.name}
+                    </p>
+                  </li>
+                )}
+              </NavLink>
+            ))}
           </ul>
         </nav>
-        <div className='py-4'>
-          <h2 className='text-left text-xs text-gray-400'>Other</h2>
-          <div>Setting</div>
-        </div>
       </div>
-    </div>
+    </aside>
   );
 }
 export default Sidebar;
