@@ -12,7 +12,7 @@ const activeNavLinkStyle =
 
 const navTextStyle =
   "p-2 text-base text-gray-800 font-normal hover:text-green-800 ";
-const navActiveTextStyle = "p-2 text-base text-green-800 font-normal";
+const navActiveTextStyle = "p-2 text-base text-green-800 font-normal ";
 
 const navigation = [
   {
@@ -38,11 +38,13 @@ const navigation = [
 
 function Sidebar() {
   return (
-    <div
-      id='sidebar'
-      className='mb-4 rounded-2xl bg-gray-50 py-6 px-3 border border-white  marker flex-shrink mx-2 shadow h-[60rem] min-w-fit'
+    <aside
+      id='default-sidebar'
+      className='
+      fixed top-18 left-1 z-40 h-[50rem] rounded-2xl border border-white mx-2 shadow min-w-fit py-6 px-3 overflow-y-auto bg-gray-50'
+      aria-label='Sidebar'
     >
-      <div className='grid grid-cols-1 divide-y-2 divide-gray-200 gap-6'>
+      <div className='grid grid-cols-1 divide-y-2 divide-gray-200 gap-6 h-full '>
         <nav className='pb-4'>
           <h2 className='text-left text-xs text-gray-400'>General</h2>
           <ul className='flex flex-col gap-3 my-3'>
@@ -76,7 +78,7 @@ function Sidebar() {
           </ul>
         </nav>
       </div>
-    </div>
+    </aside>
   );
 }
 export default Sidebar;
