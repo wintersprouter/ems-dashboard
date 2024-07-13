@@ -4,7 +4,7 @@ function Header() {
   return (
     <div
       id='header'
-      className='flex  justify-between px-4 py-2 bg-white border-l rounded-full items-center'
+      className='flex  justify-between px-4 py-2 bg-white border-l rounded-full items-center m-2'
     >
       <div className='flex gap-8'>
         <h1 className='logo text-3xl text-green-600 font-semibold'>

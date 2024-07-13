@@ -1,12 +1,9 @@
-import Header from "../components/header";
-
 function Overview() {
   return (
     <>
-      <Header />
       <section
         className='container border-y-2 border-y-gray-300  
-       p-4 divide-x-2 divide-gray-300 align-middle justify-between flex flex-row gap-4'
+      p-4 divide-x-2 divide-gray-300 align-middle justify-between flex flex-row gap-4'
       >
         <div className='flex flex-col items-center justify-center p-6'>
           <h3 className='font-medium font-gray-800 text-lg'>Real-time</h3>
