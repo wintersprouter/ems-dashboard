@@ -1,6 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import ErrorPage from "./error-page";
 import "./index.css";
 import Home from "./routes/home";
@@ -26,6 +30,10 @@ const router = createBrowserRouter([
     element: <Root />,
     path: "dashboard",
     children: [
+      {
+        path: "",
+        element: <Navigate to='overview' />,
+      },
       {
         path: "login",
         element: <Login />,
