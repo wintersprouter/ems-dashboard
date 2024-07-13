@@ -23,8 +23,6 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Build
-        run: yarn build
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
