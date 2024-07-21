@@ -19,10 +19,7 @@ const ToolBar = () => {
   };
 
   return (
-    <section
-      className='relative top-36 lg:top-4 lg:left-48 bg-white rounded-2xl gap-4 p-4 pl-8 flex flex-col divide-y-[1px] divide-gray-300  max-w-72 h-[42rem]
-    '
-    >
+    <section className='relative top-4 lg:top-4 lg:left-48 bg-white rounded-2xl gap-4 p-4 pl-8 flex flex-col divide-y-[1px] divide-gray-300  max-w-72 h-[42rem]'>
       <div className='grid grid-cols-2 gap-1'>
         <button
           type='button'
