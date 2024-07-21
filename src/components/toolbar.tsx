@@ -75,19 +75,38 @@ const ToolBar = () => {
       </div>
       <div>
         <h4 className='my-4 font-medium text-gray-800'>Date Range</h4>
-        <input
-          aria-label='Date and time from'
-          value={startTime}
-          onChange={handleStartTimeChange}
-          type='datetime-local'
-        />
-        <input
-          aria-label='Date and time to'
-          min={startTime}
-          value={endTime}
-          onChange={handleEndTimeChange}
-          type='datetime-local'
-        />
+        <div className='gap-2'>
+          <label
+            htmlFor='start'
+            className=' bg-white text-gray-300 text-xs font-normal focus-within:text-gray-800'
+          >
+            <p className='relative top-2 left-2 z-20 bg-white w-fit'>Start</p>
+            <input
+              id='start'
+              aria-label='Date and time from'
+              value={startTime}
+              onChange={handleStartTimeChange}
+              type='datetime-local'
+              className='relative left-0 rounded-lg border border-gray-300 p-2 text-sm text-gray-300
+          font-normal active:border-gray-800 active:text-gray-800 focus:border-gray-800 focus:text-gray-800'
+            />
+          </label>
+          <label
+            htmlFor='end'
+            className=' bg-white text-gray-300 text-xs font-normal focus-within:text-gray-800'
+          >
+            <p className='relative top-2 left-2 z-20 bg-white w-fit'>End</p>
+            <input
+              id='end'
+              aria-label='Date and time to'
+              min={startTime}
+              value={endTime}
+              onChange={handleEndTimeChange}
+              type='datetime-local'
+              className='relative left-0 rounded-lg border border-gray-300 p-2 text-sm text-gray-300 font-normal active:border-gray-800 active:text-gray-800 focus:border-gray-800 focus:text-gray-800'
+            />
+          </label>
+        </div>
       </div>
       <div>
         <h4 className='my-4 font-medium text-gray-800'>Introduction</h4>
