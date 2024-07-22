@@ -22,30 +22,17 @@ export const userApi = makeApi([
     path: "/User/SignIn",
     alias: "signIn",
     description: "Sign in",
-    request: z.object({
-      email: z.string(),
-      password: z.string(),
-    }),
+
     parameters: [
       {
-        name: "email",
+        name: "body",
         type: "Body",
-        schema: z.string().email(),
-      },
-      {
-        name: "password",
-        type: "Body",
-        schema: z.string(),
-      },
-      {
-        name: "action",
-        type: "Body",
-        schema: z.string(),
-      },
-      {
-        name: "token",
-        type: "Body",
-        schema: z.string(),
+        schema: z.object({
+          email: z.string().trim().email().min(5),
+          password: z.string().min(8),
+          action: z.string(),
+          token: z.string(),
+        }),
       },
     ],
     response: userAuthResponse,

@@ -1,8 +1,12 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import { Api } from "../services/apis";
+import { StatusCode } from "../services/apis/user";
 
 function Login() {
+  const navigate = useNavigate();
   const validationSchema = z.object({
     email: z.string().trim().email().min(5),
     password: z.string().min(8),
@@ -13,11 +17,33 @@ function Login() {
     handleSubmit,
     register,
     formState: { errors, isLoading },
+    setError,
   } = methods;
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (reqData, e?) => {
-    e?.persist();
-    console.log(reqData);
+    try {
+      e?.persist();
+      const res = await Api.signIn({
+        email: reqData.email,
+        password: reqData.password,
+        action: "signIn",
+        token: "",
+      });
+      if (res.statusCode === StatusCode.EMailOrPasswordError) {
+        setError("password", {
+          type: "manual",
+          message: "Email or password is incorrect.",
+        });
+      } else if (res.statusCode === StatusCode.OK) {
+        return navigate("/", { replace: true });
+      }
+    } catch (error) {
+      console.error(error);
+      setError("password", {
+        type: "server",
+        message: "Invalid email or password",
+      });
+    }
   };
 
   return (
