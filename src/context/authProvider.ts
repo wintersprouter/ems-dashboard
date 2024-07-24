@@ -14,6 +14,7 @@ interface AuthProvider {
     signInPayload: SignInParams
   ): Promise<z.infer<typeof userAuthResponse>>;
   signOut(): Promise<void>;
+  getAuthStatus(): Promise<void>;
 }
 
 export const AuthProvider: AuthProvider = {
@@ -37,6 +38,24 @@ export const AuthProvider: AuthProvider = {
       AuthProvider.token = res.token;
     }
     return res;
+  },
+  async getAuthStatus() {
+    try {
+      AuthProvider.token = localStorage.getItem("token");
+      AuthProvider.email = localStorage.getItem("email");
+      AuthProvider.isAuthenticated = !!AuthProvider.token;
+      if (
+        AuthProvider.isAuthenticated &&
+        AuthProvider.token &&
+        AuthProvider.email
+      ) {
+        //Todo: get user info
+      } else {
+        console.log("No Auth");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   },
   async signOut() {
     localStorage.removeItem("token");
