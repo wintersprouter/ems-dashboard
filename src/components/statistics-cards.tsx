@@ -5,14 +5,14 @@ type StatisticsCardsProps = {
   realtimeSmartMeterInfo?: z.infer<
     typeof overviewResponse
   >["realtimeSmartMeterInfo"];
-  currentAverageUsage?: z.infer<typeof overviewResponse>["currentAverageUsage"];
+  averagePowerUsage?: z.infer<typeof overviewResponse>["averagePowerUsage"];
   totalUsageKW: z.infer<typeof overviewResponse>["totalUsageKW"];
   monitorDeviceCount?: z.infer<typeof overviewResponse>["monitorDeviceCount"];
 };
 
 const StatisticsCards = ({
   realtimeSmartMeterInfo,
-  currentAverageUsage,
+  averagePowerUsage,
   totalUsageKW,
   monitorDeviceCount,
 }: StatisticsCardsProps) => {
@@ -107,12 +107,12 @@ const StatisticsCards = ({
           <h3 className='font-medium text-gray-500 text-lg'>Day</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
-              {currentAverageUsage?.day ?? 0}
+              {averagePowerUsage?.dayUsageKHW ?? 0}
             </p>
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
-            CO2 Saved：545.7kg
+            CO2 Saved：{averagePowerUsage?.dayCO2Saving ?? 0}kg
           </p>
         </div>
       </div>
@@ -121,12 +121,12 @@ const StatisticsCards = ({
           <h3 className='font-medium text-gray-500 text-lg'>month</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
-              {currentAverageUsage?.month ?? 0}
+              {averagePowerUsage?.monthUsageKHW ?? 0}
             </p>
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
-            CO2 Saved：545.7kg
+            CO2 Saved：{averagePowerUsage?.monthCO2Saving ?? 0}kg
           </p>
         </div>
       </div>
@@ -135,12 +135,12 @@ const StatisticsCards = ({
           <h3 className='font-medium text-gray-500 text-lg'>Year</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
-              {currentAverageUsage?.year ?? 0}
+              {averagePowerUsage?.yearUsageKHW ?? 0}
             </p>
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
-            CO2 Saved：545.7kg
+            CO2 Saved： {averagePowerUsage?.yearCO2Saving ?? 0}kg
           </p>
         </div>
       </div>

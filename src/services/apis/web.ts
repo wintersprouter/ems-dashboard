@@ -14,18 +14,25 @@ const realtimeSmartMeterInfoSchema = z.object({
   chCUsageKW: z.number(),
 });
 
-const currentAverageUsageSchema = z.object({
-  day: z.number(),
-  month: z.number(),
-  year: z.number(),
+const averagePowerUsageSchema = z.object({
+  dayUsageKHW: z.number(),
+  dayCO2Saving: z.number(),
+  monthUsageKHW: z.number(),
+  monthCO2Saving: z.number(),
+  yearUsageKHW: z.number(),
+  yearCO2Saving: z.number(),
 });
 
-const monitorDeviceUsageListSchema = z.array(z.object({}));
+const monitorDeviceUsageListSchema = z.object({
+  "0": z.array(z.number()),
+  "1": z.array(z.number()),
+  "2": z.array(z.number()),
+});
 
 export const overviewResponse = z.object({
   mainDeviceId: z.number(),
   realtimeSmartMeterInfo: realtimeSmartMeterInfoSchema,
-  currentAverageUsage: currentAverageUsageSchema,
+  averagePowerUsage: averagePowerUsageSchema,
   totalUsageKW: z.number(),
   monitorDeviceCount: z.number(),
   monitorPeriodMinute: z.number(),
