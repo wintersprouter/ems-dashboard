@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { signInParamsSchema } from "../routes/login";
 import { Api } from "../services/apis";
-import { StatusCode, userAuthResponse } from "../services/apis/user";
+import { StatusCode } from "../services/apis/types";
+import { userAuthResponse } from "../services/apis/user";
 
 type SignInParams = z.infer<typeof signInParamsSchema>;
 

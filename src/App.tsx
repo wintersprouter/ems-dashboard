@@ -89,6 +89,9 @@ function App() {
         {
           ...ProtectedRoute({ element: <Overview /> }),
           path: "overview",
+          errorElement: (
+            <p>Error loading overview data. Please try again later.</p>
+          ),
         },
         {
           ...ProtectedRoute({ element: <Tree /> }),
