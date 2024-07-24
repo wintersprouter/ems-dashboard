@@ -1,3 +1,63 @@
 import { makeApi } from "@zodios/core";
+import { z } from "zod";
+import { basicRequestParamsSchema, StatusCode } from "./types";
 
-export const webApi = makeApi([]);
+const realtimeSmartMeterInfoSchema = z.object({
+  chAVoltage: z.number(),
+  chACurrent: z.number(),
+  chAUsageKW: z.number(),
+  chBVoltage: z.number(),
+  chBCurrent: z.number(),
+  chBUsageKW: z.number(),
+  chCVoltage: z.number(),
+  chCCurrent: z.number(),
+  chCUsageKW: z.number(),
+});
+
+const averagePowerUsageSchema = z.object({
+  dayUsageKHW: z.number(),
+  dayCO2Saving: z.number(),
+  monthUsageKHW: z.number(),
+  monthCO2Saving: z.number(),
+  yearUsageKHW: z.number(),
+  yearCO2Saving: z.number(),
+});
+
+const monitorDeviceUsageListSchema = z.object({
+  "0": z.array(z.number()),
+  "1": z.array(z.number()),
+  "2": z.array(z.number()),
+});
+
+export const overviewResponse = z.object({
+  mainDeviceId: z.number(),
+  realtimeSmartMeterInfo: realtimeSmartMeterInfoSchema,
+  averagePowerUsage: averagePowerUsageSchema,
+  totalUsageKW: z.number(),
+  monitorDeviceCount: z.number(),
+  monitorPeriodMinute: z.number(),
+  monitorDeviceUsageList: monitorDeviceUsageListSchema,
+  email: z.string().email(),
+  username: z.string(),
+  action: z.string(),
+  token: z.null(),
+  dtTokenExpire: z.string(),
+  statusCode: z.nativeEnum(StatusCode),
+});
+
+export const webApi = makeApi([
+  {
+    method: "post",
+    path: "/Web/Overview",
+    alias: "overview",
+    description: "get overview data",
+    response: overviewResponse,
+    parameters: [
+      {
+        name: "body",
+        type: "Body",
+        schema: basicRequestParamsSchema,
+      },
+    ],
+  },
+]);

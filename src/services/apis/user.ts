@@ -1,14 +1,10 @@
 import { makeApi } from "@zodios/core";
 
 import { z } from "zod";
-
-export enum StatusCode {
-  OK = 200,
-  EMailOrPasswordError = 1002,
-}
+import { basicRequestParamsSchema, StatusCode } from "./types";
 
 export const userAuthResponse = z.object({
-  email: z.string(),
+  email: z.string().email(),
   username: z.string(),
   action: z.string(),
   token: z.string(),
@@ -65,11 +61,7 @@ export const userApi = makeApi([
       {
         name: "body",
         type: "Body",
-        schema: z.object({
-          email: z.string().trim().email().min(5),
-          action: z.string(),
-          token: z.string(),
-        }),
+        schema: basicRequestParamsSchema,
       },
     ],
   },
