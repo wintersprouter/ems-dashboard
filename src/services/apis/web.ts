@@ -1,6 +1,6 @@
 import { makeApi } from "@zodios/core";
 import { z } from "zod";
-import { basicRequestParamsSchema, StatusCode } from ".";
+import { basicRequestParamsSchema, StatusCode } from "./types";
 
 const realtimeSmartMeterInfoSchema = z.object({
   chAVoltage: z.number(),

@@ -1,7 +1,7 @@
 import { makeApi } from "@zodios/core";
 
 import { z } from "zod";
-import { basicRequestParamsSchema, StatusCode } from ".";
+import { basicRequestParamsSchema, StatusCode } from "./types";
 
 export const userAuthResponse = z.object({
   email: z.string().email(),

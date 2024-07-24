@@ -20,6 +20,7 @@
     "react-hook-form": "^7.52.1",
     "react-router-dom": "^6.24.1",
     "recharts": "^2.12.7",
+    "ts-pattern": "^5.2.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
