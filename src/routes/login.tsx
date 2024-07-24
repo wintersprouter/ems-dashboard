@@ -2,17 +2,19 @@ import { ErrorMessage } from "@hookform/error-message";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { Api } from "../services/apis";
+import { AuthProvider } from "../context/authProvider";
 import { StatusCode } from "../services/apis/user";
+
+export const signInParamsSchema = z.object({
+  email: z.string().trim().email().min(5),
+  password: z.string().min(8),
+});
 
 function Login() {
   const navigate = useNavigate();
-  const validationSchema = z.object({
-    email: z.string().trim().email().min(5),
-    password: z.string().min(8),
-  });
-  type ValidationSchema = z.infer<typeof validationSchema>;
-  const methods = useForm<ValidationSchema>();
+
+  type SignInParamsSchema = z.infer<typeof signInParamsSchema>;
+  const methods = useForm<SignInParamsSchema>();
   const {
     handleSubmit,
     register,
@@ -20,21 +22,18 @@ function Login() {
     setError,
   } = methods;
 
-  const onSubmit: SubmitHandler<ValidationSchema> = async (reqData, e?) => {
+  const onSubmit: SubmitHandler<SignInParamsSchema> = async (reqData, e?) => {
     try {
       e?.persist();
-      const res = await Api.signIn({
-        email: reqData.email,
-        password: reqData.password,
-        action: "signIn",
-        token: "",
-      });
+      const res = await AuthProvider.signIn(reqData);
       if (res.statusCode === StatusCode.EMailOrPasswordError) {
         setError("password", {
           type: "manual",
           message: "Email or password is incorrect.",
         });
       } else if (res.statusCode === StatusCode.OK) {
+        console.log("Logged in");
+        console.log(res);
         return navigate("/", { replace: true });
       }
     } catch (error) {

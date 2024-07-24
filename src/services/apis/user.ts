@@ -7,12 +7,12 @@ export enum StatusCode {
   EMailOrPasswordError = 1002,
 }
 
-const userAuthResponse = z.object({
+export const userAuthResponse = z.object({
   email: z.string(),
   username: z.string(),
   action: z.string(),
   token: z.string(),
-  dtTokenExpire: z.string().datetime(),
+  dtTokenExpire: z.string(),
   statusCode: z.nativeEnum(StatusCode),
 });
 
