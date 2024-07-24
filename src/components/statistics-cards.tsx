@@ -122,7 +122,7 @@ const StatisticsCards = ({
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
-            CO2 Saved：
+            CO₂ e：
             {limitDecimalToOnePlace(averagePowerUsage?.dayCO2Saving) ?? 0}kg
           </p>
         </div>
@@ -137,7 +137,7 @@ const StatisticsCards = ({
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
-            CO2 Saved：
+            CO₂ e：
             {limitDecimalToOnePlace(averagePowerUsage?.monthCO2Saving) ?? 0}kg
           </p>
         </div>
@@ -152,7 +152,7 @@ const StatisticsCards = ({
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
-            CO2 Saved：
+            CO₂ e：
             {limitDecimalToOnePlace(averagePowerUsage?.yearCO2Saving) ?? 0}kg
           </p>
         </div>
