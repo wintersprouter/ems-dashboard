@@ -4,4 +4,5 @@ function limitDecimalToOnePlace(value?: number) {
   }
   return parseFloat(value.toFixed(1));
 }
+
 export { limitDecimalToOnePlace };

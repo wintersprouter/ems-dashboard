@@ -1,3 +1,5 @@
+import { add } from "mathjs";
+import { useCallback, useEffect, useState } from "react";
 import {
   Bar,
   CartesianGrid,
@@ -9,24 +11,87 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-
-const generateData = () => {
-  const data = [];
-  for (let i = 0; i < 25; i++) {
-    const time = `${i.toString().padStart(2, "0")}:00`;
-    const chA = Math.floor(Math.random() * 20);
-    const chB = Math.floor(Math.random() * 20);
-    const chC = Math.floor(Math.random() * 20);
-    const kWh = chA + chB + chC;
-    const kW = Math.floor(Math.random() * 110);
-    const average_kW = Math.floor(Math.random() * 50);
-    const max_kW = Math.floor(Math.random() * 100);
-    data.push({ time, kWh, chA, chB, chC, kW, average_kW, max_kW });
-  }
-  return data;
+import { z } from "zod";
+import { overviewResponse } from "../services/apis/web";
+import { limitDecimalToOnePlace } from "../util/limitDecimalToOnePlace";
+type Props = {
+  monitorDeviceUsageList?: z.infer<
+    typeof overviewResponse
+  >["monitorDeviceUsageList"];
+  monitorPeriodMinute: z.infer<typeof overviewResponse>["monitorPeriodMinute"];
 };
-const data = generateData();
-function Charts() {
+
+// const generateData = () => {
+//   const data = [];
+//   for (let i = 0; i < 25; i++) {
+//     const time = `${i.toString().padStart(2, "0")}:00`;
+//     const ch0 = Math.floor(Math.random() * 20);
+//     const ch1 = Math.floor(Math.random() * 20);
+//     const ch2 = Math.floor(Math.random() * 20);
+//     const kWh = ch0 + ch1 + ch2;
+//     const kW = Math.floor(Math.random() * 110);
+//     const average_kW = Math.floor(Math.random() * 50);
+//     const max_kW = Math.floor(Math.random() * 100);
+//     data.push({ time, kWh, ch0, ch1, ch2, kW, average_kW, max_kW });
+//   }
+//   return data;
+// };
+// const data = generateData();
+
+type Data = {
+  ch0: number;
+  ch1: number;
+  ch2: number;
+  time: string;
+  kWh: number;
+  average_kW: number;
+  max_kW: number;
+};
+function Charts({ monitorDeviceUsageList, monitorPeriodMinute }: Props) {
+  const [chartData, setChartData] = useState<Data[]>([]);
+
+  const handleChartData = useCallback(() => {
+    if (monitorDeviceUsageList) {
+      const dataList: Data[] = [];
+      for (const [key, value] of Object.entries(monitorDeviceUsageList)) {
+        if (key === "0") {
+          value.forEach((element, index) => {
+            dataList.push({
+              ch0: limitDecimalToOnePlace(element),
+              ch1: 0,
+              ch2: 0,
+              time: `${index * monitorPeriodMinute} min`,
+              kWh: 0,
+              average_kW: 0,
+              max_kW: 0,
+            });
+          });
+        }
+        if (key === "1") {
+          value.forEach((element, index) => {
+            dataList[index].ch1 = limitDecimalToOnePlace(element);
+          });
+        }
+        if (key === "2") {
+          value.forEach((element, index) => {
+            dataList[index].ch2 = limitDecimalToOnePlace(element);
+          });
+        }
+      }
+      dataList.map((data) => {
+        data.kWh = limitDecimalToOnePlace(add(data.ch0, data.ch1, data.ch2));
+        //data.average_kW = Math.round(data.kWh / 3);
+        //data.max_kW = Math.round(Math.max(data.ch0, data.ch1, data.ch2));
+        return data;
+      });
+      setChartData(dataList);
+    }
+  }, [monitorDeviceUsageList, monitorPeriodMinute]);
+
+  useEffect(() => {
+    handleChartData();
+  }, [handleChartData]);
+
   return (
     <section
       id='chart'
@@ -37,7 +102,7 @@ function Charts() {
         <ComposedChart
           width={500}
           height={400}
-          data={data}
+          data={chartData}
           margin={{
             top: 20,
             right: 20,
@@ -75,25 +140,25 @@ function Charts() {
 
           <Legend verticalAlign='top' align='right' iconType='line' />
           <Bar
-            dataKey='chC'
+            dataKey='ch2'
             stackId='time'
             fill='#15803D'
             yAxisId='left'
-            name='chC'
+            name='ch2'
           />
           <Bar
-            dataKey='chB'
+            dataKey='ch1'
             stackId='time'
             fill='#22C55E'
             yAxisId='left'
-            name='chB'
+            name='ch1'
           />
           <Bar
-            dataKey='chA'
+            dataKey='ch0'
             stackId='time'
             fill='#4ADE80'
             yAxisId='left'
-            name='chA'
+            name='ch0'
           />
           <Line
             type='linear'

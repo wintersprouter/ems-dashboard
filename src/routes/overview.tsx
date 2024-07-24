@@ -6,7 +6,7 @@ import StatisticsCards from "../components/statistics-cards";
 import { AuthProvider } from "../context/authProvider";
 import { Api } from "../services/apis";
 function Overview() {
-  const { status, data, failureReason } = useQuery({
+  const { status, data } = useQuery({
     queryKey: ["overview"],
     queryFn: () =>
       Api.overview({
@@ -16,9 +16,8 @@ function Overview() {
       }),
     enabled: AuthProvider.isAuthenticated,
   });
-  console.log("status", status);
-  console.log("failureReason", failureReason);
-  console.log("data", JSON.stringify(data));
+
+  console.log("data", JSON.stringify(data, null, 2));
   return (
     <>
       <Sidebar />
@@ -36,7 +35,10 @@ function Overview() {
                 totalUsageKW={data?.totalUsageKW ?? 0}
                 monitorDeviceCount={data?.monitorDeviceCount ?? 0}
               />
-              <Charts />
+              <Charts
+                monitorDeviceUsageList={data?.monitorDeviceUsageList}
+                monitorPeriodMinute={data?.monitorPeriodMinute ?? 0}
+              />
             </>
           ))
           .exhaustive()}
