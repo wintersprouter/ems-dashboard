@@ -32,6 +32,7 @@ function Overview() {
                 }
                 currentAverageUsage={data?.currentAverageUsage ?? undefined}
                 totalUsageKW={data?.totalUsageKW ?? 0}
+                monitorDeviceCount={data?.monitorDeviceCount ?? 0}
               />
               <Charts />
             </>
