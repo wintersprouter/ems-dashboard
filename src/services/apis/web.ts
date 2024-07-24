@@ -22,7 +22,7 @@ const currentAverageUsageSchema = z.object({
 
 const monitorDeviceUsageListSchema = z.array(z.object({}));
 
-const overviewResponse = z.object({
+export const overviewResponse = z.object({
   mainDeviceId: z.number(),
   realtimeSmartMeterInfo: realtimeSmartMeterInfoSchema,
   currentAverageUsage: currentAverageUsageSchema,

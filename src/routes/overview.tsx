@@ -16,7 +16,7 @@ function Overview() {
       }),
     enabled: AuthProvider.isAuthenticated,
   });
-  console.log("data", JSON.stringify(data, null, 2));
+  console.log("datad", JSON.stringify(data, null, 2));
   return (
     <>
       <Sidebar />
@@ -26,7 +26,13 @@ function Overview() {
           .with("error", () => <p>Error</p>)
           .with("success", () => (
             <>
-              <StatisticsCards />
+              <StatisticsCards
+                realtimeSmartMeterInfo={
+                  data?.realtimeSmartMeterInfo ?? undefined
+                }
+                currentAverageUsage={data?.currentAverageUsage ?? undefined}
+                totalUsageKW={data?.totalUsageKW ?? 0}
+              />
               <Charts />
             </>
           ))
