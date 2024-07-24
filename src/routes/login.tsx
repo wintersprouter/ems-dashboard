@@ -34,7 +34,7 @@ function Login() {
       } else if (res.statusCode === StatusCode.OK) {
         console.log("Logged in");
         console.log(res);
-        return navigate("/", { replace: true });
+        return navigate("/dashboard", { replace: true });
       }
     } catch (error) {
       console.error(error);

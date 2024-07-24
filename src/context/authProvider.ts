@@ -58,11 +58,25 @@ export const AuthProvider: AuthProvider = {
     }
   },
   async signOut() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    AuthProvider.isAuthenticated = false;
-    AuthProvider.username = null;
-    AuthProvider.token = null;
-    AuthProvider.email = null;
+    try {
+      console.log("Signing out");
+      if (AuthProvider.token && AuthProvider.email) {
+        const res = await Api.signOut({
+          email: AuthProvider.email,
+          action: "signOut",
+          token: AuthProvider.token,
+        });
+        if (res.statusCode === StatusCode.OK) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("email");
+          AuthProvider.isAuthenticated = false;
+          AuthProvider.username = null;
+          AuthProvider.token = null;
+          AuthProvider.email = null;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   },
 };

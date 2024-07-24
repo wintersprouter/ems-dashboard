@@ -22,7 +22,6 @@ export const userApi = makeApi([
     path: "/User/SignIn",
     alias: "signIn",
     description: "Sign in",
-
     parameters: [
       {
         name: "body",
@@ -54,6 +53,24 @@ export const userApi = makeApi([
     path: "/User/SignOut",
     alias: "signOut",
     description: "Sign out",
-    response: userAuthResponse,
+    response: z.object({
+      email: z.string(),
+      username: z.string(),
+      action: z.string(),
+      token: z.null(),
+      dtTokenExpire: z.string(),
+      statusCode: z.nativeEnum(StatusCode),
+    }),
+    parameters: [
+      {
+        name: "body",
+        type: "Body",
+        schema: z.object({
+          email: z.string().trim().email().min(5),
+          action: z.string(),
+          token: z.string(),
+        }),
+      },
+    ],
   },
 ]);
