@@ -1,14 +1,22 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import UsernameIcon from "../assets/username.svg";
+import { AuthProvider } from "../context/authProvider";
 const defaultNavStyle = "rounded-[32rem] py-2 px-6";
 const activeNavStyle = "rounded-[32rem] py-2 px-6 bg-green-600";
 const navTextStyle = "text-black font-normal text-base";
 const navActiveTextStyle = "text-white font-normal text-base";
 function Header() {
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    await AuthProvider.signOut();
+    return navigate("/dashboard/login");
+  }
+
   return (
     <header
       id='header'
-      className='flex flex-wrap justify-between px-5 py-3 lg:py-2 lg:px-2 bg-white border-l rounded-full items-center mx-auto lg:mx-2 mt-2 z-40 overflow-y-auto gap-4 z-30'
+      className='flex flex-wrap justify-between px-5 py-3 lg:py-2 lg:px-2 bg-white border-l rounded-full items-center mx-auto lg:mx-2 mt-2 overflow-y-auto gap-4 z-40'
     >
       <div className='flex gap-8 items-center justify-between'>
         <h1 className='logo text-3xl text-green-600 font-semibold'>
@@ -49,10 +57,27 @@ function Header() {
           </NavLink>
         </div>
       </div>
-      <div className='flex justify-items-center gap-2 items-center'>
-        <img src={UsernameIcon} alt='Username' />
-        <p className='text-black text-base font-normal'>Username</p>
-      </div>
+      {AuthProvider.isAuthenticated ? (
+        <div className='flex gap-4 divide-x divide-gray-400'>
+          <button
+            onClick={handleLogout}
+            className='font-normal text-gray-800 text-sm'
+          >
+            Logout
+          </button>
+          <div className='flex gap-2 items-center'>
+            <img src={UsernameIcon} alt='Username' className='ml-2' />
+            <p className='text-gray-800 text-sm font-normal'>Username</p>
+          </div>
+        </div>
+      ) : (
+        <NavLink
+          to={"/dashboard/login"}
+          className='font-normal text-gray-800 text-sm'
+        >
+          <p>Login</p>
+        </NavLink>
+      )}
     </header>
   );
 }

@@ -1,35 +1,107 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {
+  createBrowserRouter,
+  LoaderFunction,
+  LoaderFunctionArgs,
+  Navigate,
+  redirect,
+  RouterProvider,
+} from "react-router-dom";
+import "./App.css";
+import { AuthProvider } from "./context/authProvider";
+import ErrorPage from "./error-page";
+import Home from "./routes/home";
+import Login from "./routes/login";
+import MonitoringPoint from "./routes/monitoring-point";
+import Overview from "./routes/overview";
+import Root from "./routes/root";
+import Tree from "./routes/tree";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+export function Fallback() {
+  return <p>Performing initial data load</p>;
 }
 
-export default App
+async function loginLoader() {
+  AuthProvider.getAuthStatus();
+  if (AuthProvider.isAuthenticated) {
+    return redirect("/");
+  }
+  return null;
+}
+
+async function requireAuth() {
+  await AuthProvider.getAuthStatus();
+  if (!AuthProvider.isAuthenticated) {
+    return redirect("/dashboard/login");
+  }
+  return null;
+}
+
+function ProtectedRoute({
+  element,
+  loader,
+}: {
+  element: JSX.Element;
+  loader?: LoaderFunction;
+}) {
+  return {
+    element,
+    loader: async (args: LoaderFunctionArgs) => {
+      const redirectResult = requireAuth();
+      if (redirectResult) {
+        return redirectResult;
+      }
+      if (loader) {
+        return await loader(args);
+      }
+      return null;
+    },
+  };
+}
+
+function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Root />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          element: <Home />,
+          path: "/",
+          index: true,
+        },
+      ],
+    },
+    {
+      element: <Root />,
+      path: "dashboard",
+      children: [
+        {
+          path: "",
+          ...ProtectedRoute({ element: <Navigate to='overview' /> }),
+        },
+        {
+          path: "login",
+          element: <Login />,
+          loader: loginLoader,
+          index: true,
+        },
+        {
+          ...ProtectedRoute({ element: <Overview /> }),
+          path: "overview",
+        },
+        {
+          ...ProtectedRoute({ element: <Tree /> }),
+          path: "tree",
+        },
+        {
+          ...ProtectedRoute({ element: <MonitoringPoint /> }),
+          path: "monitoring-point",
+        },
+      ],
+    },
+  ]);
+  return <RouterProvider router={router} />;
+}
+
+export default App;
