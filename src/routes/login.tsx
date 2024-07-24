@@ -50,8 +50,7 @@ function Login() {
     <FormProvider {...methods}>
       <main className='w-full h-screen flex justify-center items-start md:items-center'>
         <form
-          className='space-y-5 max-w-sm w-full text-gray-600
-          bg-white p-5 rounded-lg shadow-lg'
+          className='space-y-5 max-w-sm w-full text-gray-600 p-5 '
           onSubmit={handleSubmit(onSubmit)}
         >
           <label className='font-medium' htmlFor='email'>
@@ -61,7 +60,7 @@ function Login() {
               type='email'
               required
               autoComplete='email'
-              className='w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border  shadow-sm rounded-lg'
+              className='w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border  shadow-sm rounded-lg mb-2 border-b-2 border-gray-800 h-12'
               {...register("email")}
               placeholder='Example@email.com'
               autoFocus
@@ -75,12 +74,16 @@ function Login() {
               type='password'
               required
               autoComplete='current-password'
-              className='w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border  shadow-sm rounded-lg'
+              className='w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border  shadow-sm rounded-lg border-b-2 border-gray-800 h-12'
               placeholder='at least 8 characters'
               {...register("password")}
             />
           </label>
-
+          <div className='flex justify-end'>
+            <a className='text-green-600 text-sm'>
+              Forgot Password? (reserved)
+            </a>
+          </div>
           <ErrorMessage
             errors={errors}
             name='password'
@@ -94,9 +97,11 @@ function Login() {
           <button
             type='submit'
             disabled={isLoading}
-            className='w-full  py-4 text-white font-medium bg-gray-800 rounded-full duration-150'
+            className='w-full py-4 text-white font-medium bg-gray-800 rounded-full duration-150 ease-in-out'
           >
-            <p className='text-xl'>{isLoading ? "Logging in..." : "Sign in"}</p>
+            <p className='text-xl'>
+              {isLoading ? "Logging in..." : "Login in"}
+            </p>
           </button>
         </form>
       </main>
