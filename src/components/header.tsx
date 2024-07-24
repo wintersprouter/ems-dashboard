@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import UsernameIcon from "../assets/username.svg";
+import { AuthProvider } from "../context/authProvider";
 const defaultNavStyle = "rounded-[32rem] py-2 px-6";
 const activeNavStyle = "rounded-[32rem] py-2 px-6 bg-green-600";
 const navTextStyle = "text-black font-normal text-base";
@@ -49,10 +50,24 @@ function Header() {
           </NavLink>
         </div>
       </div>
-      <div className='flex justify-items-center gap-2 items-center'>
-        <img src={UsernameIcon} alt='Username' />
-        <p className='text-black text-base font-normal'>Username</p>
-      </div>
+      {AuthProvider.isAuthenticated ? (
+        <div className='flex gap-4 divide-x divide-gray-400'>
+          <button type='submit' className='font-normal text-gray-800 text-sm'>
+            Logout
+          </button>
+          <div className='flex gap-2 items-center'>
+            <img src={UsernameIcon} alt='Username' className='ml-2' />
+            <p className='text-gray-800 text-sm font-normal'>Username</p>
+          </div>
+        </div>
+      ) : (
+        <NavLink
+          to={"/dashboard/login"}
+          className='font-normal text-gray-800 text-sm'
+        >
+          <p>Login</p>
+        </NavLink>
+      )}
     </header>
   );
 }
