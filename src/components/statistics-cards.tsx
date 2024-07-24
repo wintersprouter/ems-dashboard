@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { limitDecimalToOnePlace } from "../util/limitDecimalToOnePlace";
 import { overviewResponse } from "./../services/apis/web";
 
 type StatisticsCardsProps = {
@@ -27,19 +28,22 @@ const StatisticsCards = ({
             </li>
             <li className='flex'>
               <p className='text-sm font-medium text-green-700'>
-                {realtimeSmartMeterInfo?.chAVoltage ?? 0}
+                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chAVoltage) ??
+                  0}
               </p>
               <p className='text-sm font-medium text-green-700'>V</p>
             </li>
             <li className='flex'>
               <p className='text-sm font-medium text-green-700'>
-                {realtimeSmartMeterInfo?.chACurrent ?? 0}
+                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chACurrent) ??
+                  0}
               </p>
               <p className='text-sm font-medium text-green-700'>A</p>
             </li>
             <li className='flex'>
               <p className='text-sm font-medium text-green-700'>
-                {realtimeSmartMeterInfo?.chAUsageKW ?? 0}
+                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chAUsageKW) ??
+                  0}
               </p>
               <p className='text-sm font-medium text-green-700'>kW</p>
             </li>
@@ -50,19 +54,22 @@ const StatisticsCards = ({
             </li>
             <li className='flex'>
               <p className='text-sm font-medium text-red-600'>
-                {realtimeSmartMeterInfo?.chBVoltage ?? 0}
+                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chBVoltage) ??
+                  0}
               </p>
               <p className='text-sm font-medium text-red-600'>V</p>
             </li>
             <li className='flex'>
               <p className='text-sm font-medium text-red-600'>
-                {realtimeSmartMeterInfo?.chBCurrent ?? 0}
+                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chBCurrent) ??
+                  0}
               </p>
               <p className='text-sm font-medium text-red-600'>A</p>
             </li>
             <li className='flex'>
               <p className='text-sm font-medium text-red-600'>
-                {realtimeSmartMeterInfo?.chBUsageKW ?? 0}
+                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chBUsageKW) ??
+                  0}
               </p>
               <p className='text-sm font-medium text-red-600'>kW</p>
             </li>
@@ -73,19 +80,22 @@ const StatisticsCards = ({
             </li>
             <li className='flex'>
               <p className='text-sm font-medium text-blue-700'>
-                {realtimeSmartMeterInfo?.chCVoltage ?? 0}
+                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chCVoltage) ??
+                  0}
               </p>
               <p className='text-sm font-medium text-blue-700'>V</p>
             </li>
             <li className='flex'>
               <p className='text-sm font-medium text-blue-700'>
-                {realtimeSmartMeterInfo?.chCCurrent ?? 0}
+                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chCCurrent) ??
+                  0}
               </p>
               <p className='text-sm font-medium text-blue-700'>A</p>
             </li>
             <li className='flex'>
               <p className='text-sm font-medium text-blue-700'>
-                {realtimeSmartMeterInfo?.chCUsageKW ?? 0}
+                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chCUsageKW) ??
+                  0}
               </p>
               <p className='text-sm font-medium text-blue-700'>kW</p>
             </li>
@@ -96,7 +106,7 @@ const StatisticsCards = ({
             </li>
             <li>
               <p className='font-semibold text-3xl text-gray-800 text-nowrap'>
-                {totalUsageKW} kW
+                {limitDecimalToOnePlace(totalUsageKW)} kW
               </p>
             </li>
           </ul>
@@ -107,12 +117,13 @@ const StatisticsCards = ({
           <h3 className='font-medium text-gray-500 text-lg'>Day</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
-              {averagePowerUsage?.dayUsageKHW ?? 0}
+              {limitDecimalToOnePlace(averagePowerUsage?.dayUsageKHW) ?? 0}
             </p>
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
-            CO2 Saved：{averagePowerUsage?.dayCO2Saving ?? 0}kg
+            CO2 Saved：
+            {limitDecimalToOnePlace(averagePowerUsage?.dayCO2Saving) ?? 0}kg
           </p>
         </div>
       </div>
@@ -121,12 +132,13 @@ const StatisticsCards = ({
           <h3 className='font-medium text-gray-500 text-lg'>month</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
-              {averagePowerUsage?.monthUsageKHW ?? 0}
+              {limitDecimalToOnePlace(averagePowerUsage?.monthUsageKHW) ?? 0}
             </p>
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
-            CO2 Saved：{averagePowerUsage?.monthCO2Saving ?? 0}kg
+            CO2 Saved：
+            {limitDecimalToOnePlace(averagePowerUsage?.monthCO2Saving) ?? 0}kg
           </p>
         </div>
       </div>
@@ -135,12 +147,13 @@ const StatisticsCards = ({
           <h3 className='font-medium text-gray-500 text-lg'>Year</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
-              {averagePowerUsage?.yearUsageKHW ?? 0}
+              {limitDecimalToOnePlace(averagePowerUsage?.yearUsageKHW) ?? 0}
             </p>
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
-            CO2 Saved： {averagePowerUsage?.yearCO2Saving ?? 0}kg
+            CO2 Saved：
+            {limitDecimalToOnePlace(averagePowerUsage?.yearCO2Saving) ?? 0}kg
           </p>
         </div>
       </div>
