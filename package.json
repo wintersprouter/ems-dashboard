@@ -23,6 +23,7 @@
     "react-use-websocket": "^4.8.1",
     "recharts": "^2.12.7",
     "ts-pattern": "^5.2.0",
+    "websocket": "^1.0.35",
     "zod": "^3.23.8"
   },
   "devDependencies": {

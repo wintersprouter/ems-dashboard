@@ -23,11 +23,13 @@ const averagePowerUsageSchema = z.object({
   yearCO2Saving: z.number(),
 });
 
-const monitorDeviceUsageListSchema = z.object({
-  "0": z.array(z.number()),
-  "1": z.array(z.number()),
-  "2": z.array(z.number()),
-});
+const monitorDeviceUsageListSchema = z
+  .object({
+    "0": z.array(z.number()),
+    "1": z.array(z.number()),
+    "2": z.array(z.number()),
+  })
+  .or(z.object({}));
 
 export const overviewResponse = z.object({
   mainDeviceId: z.number(),
