@@ -141,7 +141,14 @@ function Overview() {
   return (
     <>
       <Sidebar />
-      <section className='absolute top-20 left-0 lg:left-56 lg:top-[88px] flex-1 flex-grow flex-col w-full mx-auto lg:max-w-[1270px]'>
+      <section
+        className='relative top-20 left-0 
+        flex-col mx-auto container 
+        lg:max-w-[calc(100%-13.5rem)]
+        lg:left-[6.5rem] lg:top-2 
+        xl:max-w-[calc(100%-14.5rem)]
+        xl:left-28 xl:top-2'
+      >
         {match(status)
           .with("pending", () => <p>Loading...</p>)
           .with("idle", () => <p>idle...</p>)

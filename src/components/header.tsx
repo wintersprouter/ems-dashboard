@@ -16,7 +16,9 @@ function Header() {
   return (
     <header
       id='header'
-      className='flex flex-wrap justify-between px-5 py-3 lg:py-2 lg:px-2 bg-white border-l rounded-full items-center mx-auto lg:mx-2 mt-2 overflow-y-auto gap-4 z-40'
+      className='flex flex-wrap justify-between px-5 py-3  bg-white border-l rounded-full items-center overflow-y-auto gap-4 z-40 min-w-max
+      mt-2 container mx-auto
+      lg:max-w-[calc(100%-1rem)]'
     >
       <div className='flex gap-8 items-center justify-between'>
         <h1 className='logo text-3xl text-green-600 font-semibold'>
@@ -58,7 +60,7 @@ function Header() {
         </div>
       </div>
       {AuthProvider.isAuthenticated ? (
-        <div className='flex gap-4 divide-x divide-gray-400'>
+        <div className='flex gap-4 divide-x divide-gray-400 mr-2'>
           <button
             onClick={handleLogout}
             className='font-normal text-gray-800 text-sm'
@@ -73,7 +75,7 @@ function Header() {
       ) : (
         <NavLink
           to={"/dashboard/login"}
-          className='font-normal text-gray-800 text-sm'
+          className='font-normal text-gray-800 text-sm mr-2'
         >
           <p>Login</p>
         </NavLink>
