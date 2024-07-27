@@ -3,6 +3,7 @@ import { z } from "zod";
 import { basicRequestParamsSchema, StatusCode } from "./types";
 
 const realtimeSmartMeterInfoSchema = z.object({
+  usedChannel: z.array(z.boolean()),
   chAVoltage: z.number(),
   chACurrent: z.number(),
   chAUsageKW: z.number(),
