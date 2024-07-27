@@ -3,7 +3,7 @@ import Header from "../components/header";
 
 function Root() {
   return (
-    <main>
+    <main className='mx-auto'>
       <Header />
       <Outlet />
     </main>
