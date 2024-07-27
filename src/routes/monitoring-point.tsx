@@ -1,11 +1,9 @@
-import Sidebar from "../components/sidebar";
 import ToolBar from "../components/toolbar";
 
 function MonitoringPoint() {
   return (
     <section className='flex container'>
       <>
-        <Sidebar />
         <ToolBar />
         <section className='relative top-0 left-0 lg:left-48 lg:top-4  flex-col w-full mx-auto'>
           {/* <StatisticsCards />
