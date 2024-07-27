@@ -6,6 +6,7 @@ import {
   ComposedChart,
   Legend,
   Line,
+  Rectangle,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -20,7 +21,33 @@ type Props = {
   >["monitorDeviceUsageList"];
   monitorPeriodMinute: z.infer<typeof overviewResponse>["monitorPeriodMinute"];
 };
+function CustomCursor(props: {
+  stroke?: string;
+  pointerEvents?: string | number;
+  height?: number;
+  points: { x: number; y: number }[];
+  className?: string;
+}) {
+  const { stroke, pointerEvents, height, points, className } = props;
 
+  const { x, y } = points[0];
+  return (
+    <>
+      <Rectangle
+        x={x + 2.5}
+        y={y}
+        fillOpacity={0}
+        stroke={stroke}
+        pointerEvents={pointerEvents}
+        width={1}
+        height={height}
+        points={JSON.stringify(points)}
+        className={className}
+        type='linear'
+      />
+    </>
+  );
+}
 // const generateData = () => {
 //   const data = [];
 //   for (let i = 0; i < 25; i++) {
@@ -95,7 +122,7 @@ function Charts({ monitorDeviceUsageList, monitorPeriodMinute }: Props) {
   return (
     <section
       id='chart'
-      className='bg-white rounded-xl my-6 py-3 px-8 mx-2 pt-12 h-[528px]'
+      className='bg-white rounded-xl my-6 py-3 px-8 mx-2 pt-12 h-full'
     >
       <h1 className='font-semibold text-gray-800 text-3xl'>Energy Charts</h1>
       <ResponsiveContainer width='100%' height='100%' aspect={1250 / 444}>
@@ -110,7 +137,34 @@ function Charts({ monitorDeviceUsageList, monitorPeriodMinute }: Props) {
             left: 20,
           }}
         >
-          <Tooltip />
+          <Tooltip
+            cursor={<CustomCursor points={[]} />}
+            active={true}
+            wrapperStyle={{
+              backgroundColor: "#1F2937",
+              borderRadius: "10px",
+              fontSize: "14px",
+              lineHeight: "1.5",
+              width: "243px",
+              padding: "12px 16px",
+            }}
+            contentStyle={{
+              backgroundColor: "#1F2937",
+              color: "#fff",
+              border: "none",
+            }}
+            formatter={(value, name) => {
+              if (name === "time") {
+                return `${value}mins `;
+              } else if (name === "ch2" || name === "ch1" || name === "ch0") {
+                return `${value}kwh`;
+              } else if (name === "Max(kW)" || name === "Average(kW)") {
+                return `${value}kw`;
+              }
+            }}
+            filterNull={false}
+            allowEscapeViewBox={{ x: true, y: true }}
+          />
           <CartesianGrid vertical={false} />
           <XAxis dataKey='time' scale='band' type='category' name='time' />
           <YAxis
