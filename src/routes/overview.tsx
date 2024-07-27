@@ -59,20 +59,55 @@ function Overview() {
       ? "CLOSED"
       : "UNINSTANTIATED"
   );
+
+  const {
+    chACurrent,
+    chAUsageKW,
+    chAVoltage,
+    chBCurrent,
+    chBUsageKW,
+    chBVoltage,
+    chCCurrent,
+    chCUsageKW,
+    chCVoltage,
+  } = realtimeSmartMeterInfo;
+
   useEffect(() => {
     console.log(
       `Got a new message: ${JSON.stringify(lastJsonMessage, null, 2)}`
     );
-
     if (lastJsonMessage) {
       setRealtimeSmartMeterInfo({
-        ...realtimeSmartMeterInfo,
         ...(lastJsonMessage as MainSmartMeterInfoMessage).mainSmartMeterInfo,
+        chAVoltage,
+        chACurrent,
+        chAUsageKW,
+        chBVoltage,
+        chBCurrent,
+        chBUsageKW,
+        chCVoltage,
+        chCCurrent,
+        chCUsageKW,
+        usedChannel: [
+          ...(lastJsonMessage as MainSmartMeterInfoMessage).mainSmartMeterInfo
+            .usedChannel,
+        ],
       });
     }
-  }, [lastJsonMessage, realtimeSmartMeterInfo]);
+  }, [
+    chACurrent,
+    chAUsageKW,
+    chAVoltage,
+    chBCurrent,
+    chBUsageKW,
+    chBVoltage,
+    chCCurrent,
+    chCUsageKW,
+    chCVoltage,
+    lastJsonMessage,
+  ]);
 
-  const { status, mutate, data } = useMutation({
+  const { status, mutate } = useMutation({
     mutationFn: () => {
       return Api.overview({
         email: AuthProvider.email ?? "",
@@ -137,7 +172,7 @@ function Overview() {
     mutate();
   }, [mutate]);
 
-  console.log("data", JSON.stringify(data, null, 2));
+  // console.log("data", JSON.stringify(data, null, 2));
   return (
     <>
       <Sidebar />
@@ -162,7 +197,7 @@ function Overview() {
                 monitorDeviceCount={overviewData?.monitorDeviceCount ?? 0}
               />
               <Charts
-                monitorDeviceUsageList={overviewData?.monitorDeviceUsageList}
+                deviceUsageList={overviewData?.deviceUsageList}
                 monitorPeriodMinute={overviewData?.monitorPeriodMinute ?? 0}
               />
             </>

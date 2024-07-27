@@ -16,9 +16,7 @@ import { z } from "zod";
 import { overviewResponse } from "../services/apis/web";
 import { limitDecimalToOnePlace } from "../util/limitDecimalToOnePlace";
 type Props = {
-  monitorDeviceUsageList?: z.infer<
-    typeof overviewResponse
-  >["monitorDeviceUsageList"];
+  deviceUsageList?: z.infer<typeof overviewResponse>["deviceUsageList"];
   monitorPeriodMinute: z.infer<typeof overviewResponse>["monitorPeriodMinute"];
 };
 function CustomCursor(props: {
@@ -48,22 +46,6 @@ function CustomCursor(props: {
     </>
   );
 }
-// const generateData = () => {
-//   const data = [];
-//   for (let i = 0; i < 25; i++) {
-//     const time = `${i.toString().padStart(2, "0")}:00`;
-//     const ch0 = Math.floor(Math.random() * 20);
-//     const ch1 = Math.floor(Math.random() * 20);
-//     const ch2 = Math.floor(Math.random() * 20);
-//     const kWh = ch0 + ch1 + ch2;
-//     const kW = Math.floor(Math.random() * 110);
-//     const average_kW = Math.floor(Math.random() * 50);
-//     const max_kW = Math.floor(Math.random() * 100);
-//     data.push({ time, kWh, ch0, ch1, ch2, kW, average_kW, max_kW });
-//   }
-//   return data;
-// };
-// const data = generateData();
 
 type Data = {
   ch0: number;
@@ -74,46 +56,48 @@ type Data = {
   average_kW: number;
   max_kW: number;
 };
-function Charts({ monitorDeviceUsageList, monitorPeriodMinute }: Props) {
+type Item = {
+  id: number;
+  name: string;
+  usage: number[];
+};
+
+function getTimeFormat(minute: number) {
+  const hour = Math.floor(minute / 60);
+  const min = minute % 60;
+  return `${hour > 9 ? "" : "0"}${hour}:${min > 9 ? "" : "0"}${min}`;
+}
+function Charts({ deviceUsageList, monitorPeriodMinute }: Props) {
   const [chartData, setChartData] = useState<Data[]>([]);
 
   const handleChartData = useCallback(() => {
-    if (monitorDeviceUsageList) {
-      const dataList: Data[] = [];
-      for (const [key, value] of Object.entries(monitorDeviceUsageList)) {
-        if (key === "0") {
-          value.forEach((element, index) => {
-            dataList.push({
-              ch0: limitDecimalToOnePlace(element),
-              ch1: 0,
-              ch2: 0,
-              time: `${index * monitorPeriodMinute} min`,
-              kWh: 0,
-              average_kW: 0,
-              max_kW: 0,
-            });
-          });
-        }
-        if (key === "1") {
-          value.forEach((element, index) => {
-            dataList[index].ch1 = limitDecimalToOnePlace(element);
-          });
-        }
-        if (key === "2") {
-          value.forEach((element, index) => {
-            dataList[index].ch2 = limitDecimalToOnePlace(element);
-          });
-        }
+    if (deviceUsageList) {
+      const itemList: Item[] = [];
+      for (const [key, value] of Object.entries(deviceUsageList)) {
+        console.log("key", key);
+        itemList.push(value);
       }
-      dataList.map((data) => {
-        data.kWh = limitDecimalToOnePlace(add(data.ch0, data.ch1, data.ch2));
-        //data.average_kW = Math.round(data.kWh / 3);
-        //data.max_kW = Math.round(Math.max(data.ch0, data.ch1, data.ch2));
-        return data;
+      console.log("itemList", JSON.stringify(itemList, null, 2));
+      const dataList = itemList[0].usage.map((_, index) => {
+        const ch0 = itemList[0].usage[index];
+        const ch1 = itemList[1].usage[index];
+        const ch2 = itemList[2].usage[index];
+        const kWh = limitDecimalToOnePlace(add(ch0, ch1, ch2));
+        const average_kW = 0;
+        const max_kW = 0;
+        return {
+          ch0,
+          ch1,
+          ch2,
+          time: getTimeFormat(index * monitorPeriodMinute),
+          kWh,
+          average_kW,
+          max_kW,
+        };
       });
       setChartData(dataList);
     }
-  }, [monitorDeviceUsageList, monitorPeriodMinute]);
+  }, [deviceUsageList, monitorPeriodMinute]);
 
   useEffect(() => {
     handleChartData();
@@ -155,11 +139,13 @@ function Charts({ monitorDeviceUsageList, monitorPeriodMinute }: Props) {
             }}
             formatter={(value, name) => {
               if (name === "time") {
-                return `${value}mins `;
+                //format time
+                //00:00
+                return `${value}:00`;
               } else if (name === "ch2" || name === "ch1" || name === "ch0") {
-                return `${value}kwh`;
+                return `${limitDecimalToOnePlace(Number(value) ?? 0)} kwh`;
               } else if (name === "Max(kW)" || name === "Average(kW)") {
-                return `${value}kw`;
+                return `${value} kw`;
               }
             }}
             filterNull={false}
