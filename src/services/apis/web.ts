@@ -29,6 +29,17 @@ const monitorDeviceUsageListSchema = z.object({
   "2": z.array(z.number()),
 });
 
+const deviceUsageSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  usage: z.array(z.number()),
+});
+const deviceUsageListSchema = z.object({
+  "0": deviceUsageSchema,
+  "1": deviceUsageSchema,
+  "2": deviceUsageSchema,
+});
+
 export const overviewResponse = z.object({
   mainDeviceId: z.number(),
   realtimeSmartMeterInfo: realtimeSmartMeterInfoSchema,
@@ -37,6 +48,7 @@ export const overviewResponse = z.object({
   monitorDeviceCount: z.number(),
   monitorPeriodMinute: z.number(),
   monitorDeviceUsageList: monitorDeviceUsageListSchema,
+  deviceUsageList: deviceUsageListSchema,
   email: z.string().email(),
   username: z.string(),
   action: z.string(),
