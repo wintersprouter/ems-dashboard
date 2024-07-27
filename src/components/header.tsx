@@ -1,10 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import logo from "../assets/logo.svg";
 import UsernameIcon from "../assets/username.svg";
 import { AuthProvider } from "../context/authProvider";
 const defaultNavStyle = "rounded-[32rem] py-2 px-6";
 const activeNavStyle = "rounded-[32rem] py-2 px-6 bg-green-600";
 const navTextStyle = "text-black font-normal text-base";
 const navActiveTextStyle = "text-white font-normal text-base";
+
 function Header() {
   const navigate = useNavigate();
 
@@ -21,9 +23,7 @@ function Header() {
       lg:max-w-[calc(100%-1rem)]'
     >
       <div className='flex gap-8 items-center justify-between'>
-        <h1 className='logo text-3xl text-green-600 font-semibold'>
-          Epower OS
-        </h1>
+        <img src={logo} alt='logo' className='w-full' />
         <div className='rounded-full bg-green-50  hidden lg:flex lg:opacity-100'>
           <NavLink
             to={"/"}
