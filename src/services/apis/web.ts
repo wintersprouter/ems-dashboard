@@ -77,7 +77,7 @@ const monitorDeviceResponse = z.object({
   email: z.string().email(),
   username: z.string(),
   action: z.string(),
-  token: z.string(),
+  token: z.string().nullable(),
   dtTokenExpire: z.string(),
   statusCode: z.nativeEnum(StatusCode),
   factoryId: z.number(),
