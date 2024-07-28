@@ -18,9 +18,9 @@ const navActiveTextStyle =
   "p-2 text-base text-green-800 font-normal hidden lg:flex ";
 
 const defaultDateStyle =
-  "relative left-0 rounded-lg border border-gray-300 p-2 text-sm text-gray-300 font-normal active:border-gray-800 active:text-gray-800 focus:border-gray-800 focus:text-gray-800";
+  "relative left-0 rounded-lg border border-gray-300 p-2 text-sm text-gray-300 font-normal active:border-gray-800 active:text-gray-800";
 const hasDateStyle =
-  "relative left-0 rounded-lg border p-2 text-sm font-normal border-gray-800 active:text-gray-800 border-gray-800 text-gray-800";
+  "relative left-0 rounded-lg border p-2 text-sm font-normal border-gray-800 text-gray-800";
 
 const navigation = [
   {
@@ -126,9 +126,15 @@ const ToolBar = ({
           <div className='gap-2'>
             <label
               htmlFor='start'
-              className=' bg-white text-xs font-normal text-gray-800'
+              className={
+                "bg-white text-xs font-normal" + dtStart
+                  ? "text-gray-800"
+                  : "text-gray-400"
+              }
             >
-              <p className='relative top-2 left-2 z-20 bg-white w-fit'>Start</p>
+              <p className='relative top-2 left-2 z-20 bg-white w-fit text-xs '>
+                Start
+              </p>
               <input
                 id='start'
                 aria-label='Date and time from'
@@ -138,11 +144,10 @@ const ToolBar = ({
                 className={dtStart ? hasDateStyle : defaultDateStyle}
               />
             </label>
-            <label
-              htmlFor='end'
-              className=' bg-white text-xs font-normal text-gray-800'
-            >
-              <p className='relative top-2 left-2 z-20 bg-white w-fit'>End</p>
+            <label htmlFor='end' className={"bg-white text-xs font-normal"}>
+              <p className='relative top-2 left-2 z-20 bg-white w-fit text-xs'>
+                End
+              </p>
               <input
                 id='end'
                 aria-label='Date and time to'
