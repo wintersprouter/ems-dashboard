@@ -15,6 +15,7 @@
     "@zodios/core": "^10.9.6",
     "@zodios/react": "^10.4.5",
     "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
     "mathjs": "^13.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

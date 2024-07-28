@@ -1,3 +1,4 @@
+import { format } from "date-fns/format";
 import { NavLink } from "react-router-dom";
 import { z } from "zod";
 import monitoring_point_active_icon from "../assets/monitoring_point_active_icon.svg";
@@ -6,6 +7,7 @@ import overview_active_icon from "../assets/overview_active_icon.svg";
 import overview_icon from "../assets/overview_icon.svg";
 import tree_active_icon from "../assets/tree_active_icon.svg";
 import tree_icon from "../assets/tree_icon.svg";
+import { DeviceUsageInfo } from "../routes/monitoring-point";
 import { monitorDeviceResponse } from "../services/apis/web";
 const navLinkStyle =
   "flex px-1 pl-2 hover:bg-green-100 hover:rounded duration-150 ease-in-out";
@@ -50,6 +52,7 @@ type ToolBarProps = {
   setDtEnd: React.Dispatch<React.SetStateAction<string | null>>;
   dtStart: string | null;
   dtEnd: string | null;
+  device?: DeviceUsageInfo;
 };
 
 const ToolBar = ({
@@ -58,6 +61,7 @@ const ToolBar = ({
   setDtStart,
   dtStart,
   dtEnd,
+  device,
 }: ToolBarProps) => {
   const handleStartTimeChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -109,17 +113,31 @@ const ToolBar = ({
           </ul>
         </nav>
       </div>
-      <div className='flex flex-col divide-y-[1px] divide-gray-300 p-4 gap-4 w-60'>
+      <div className='flex flex-col divide-y-[1px] divide-gray-300 p-4 gap-4 w-72'>
         <div className='grid grid-cols-2 gap-1'>
-          {deviceList.map((device, idx) => (
-            <button
-              key={`device-${idx}`}
-              type='button'
-              className='rounded-lg border border-gray-300 p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
-            >
-              {device.name}
-            </button>
-          ))}
+          {deviceList.map((item, idx) => {
+            if (item.id === device?.id) {
+              return (
+                <button
+                  key={`device-${idx}`}
+                  type='button'
+                  className='rounded-lg border border-gray-300 p-2 text-xs  font-normal text-white bg-green-600'
+                >
+                  {item.name}
+                </button>
+              );
+            } else {
+              return (
+                <button
+                  key={`device-${idx}`}
+                  type='button'
+                  className='rounded-lg border border-gray-300 p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
+                >
+                  {item.name}
+                </button>
+              );
+            }
+          })}
         </div>
         <div>
           <h4 className='my-4 font-medium text-gray-800'>Date Range</h4>
@@ -169,9 +187,12 @@ const ToolBar = ({
               <p className='text-sm text-gray-800'>CT</p>
             </div>
             <div>
-              <p className='text-sm text-gray-800'>2024/9</p>
-              <p className='text-sm text-gray-800'>S</p>
-              <p className='text-sm text-gray-800'>A</p>
+              <p className='text-sm text-gray-800'>
+                {device?.dtBuilt &&
+                  format(new Date(device?.dtBuilt), "yyyy/MM/dd")}
+              </p>
+              <p className='text-sm text-gray-800'>{device?.side}</p>
+              <p className='text-sm text-gray-800'>{device?.ct}</p>
             </div>
           </div>
           <div>

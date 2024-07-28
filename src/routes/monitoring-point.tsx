@@ -6,13 +6,17 @@ import ToolBar from "../components/toolbar";
 import { AuthProvider } from "../context/authProvider";
 import { Api } from "../services/apis";
 import { monitorDeviceResponse } from "../services/apis/web";
-
+export type DeviceUsageInfo = Pick<
+  z.infer<typeof monitorDeviceResponse>["deviceUsageInfo"],
+  "id" | "name" | "dtBuilt" | "side" | "ct"
+>;
 function MonitoringPoint() {
   const [deviceList, setDeviceList] = useState<
     z.infer<typeof monitorDeviceResponse>["deviceList"]
   >([]);
   const [dtStart, setDtStart] = useState<string | null>(null);
   const [dtEnd, setDtEnd] = useState<string | null>(null);
+  const [device, setDevice] = useState<DeviceUsageInfo>();
 
   const { status, mutate, failureReason } = useMutation({
     mutationFn: () => {
@@ -27,7 +31,13 @@ function MonitoringPoint() {
       });
     },
     onSuccess(data) {
-      console.log("data", JSON.stringify(data.deviceList, null, 2));
+      console.log("data", JSON.stringify(data, null, 2));
+      setDtStart(data.deviceUsageInfo.dtStart);
+      setDtEnd(data.deviceUsageInfo.dtEnd);
+      setDevice({
+        ...device,
+        ...data.deviceUsageInfo,
+      });
       setDeviceList(
         deviceList.length === 0
           ? [...data.deviceList]
@@ -72,6 +82,7 @@ function MonitoringPoint() {
               setDtEnd={setDtEnd}
               dtStart={dtStart}
               dtEnd={dtEnd}
+              device={device}
             />
             <section className='relative top-0 left-0 lg:left-48 lg:top-4  flex-col w-full mx-auto'>
               {/* <StatisticsCards />
