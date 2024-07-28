@@ -124,44 +124,26 @@ function Overview() {
           ...data.averagePowerUsage,
         },
         monitorDeviceUsageList: {
-          "0": [
-            ...(overviewData?.monitorDeviceUsageList["0"] ?? []),
-            ...data.monitorDeviceUsageList["0"],
-          ],
-          "1": [
-            ...(overviewData?.monitorDeviceUsageList["1"] ?? []),
-            ...data.monitorDeviceUsageList["1"],
-          ],
-          "2": [
-            ...(overviewData?.monitorDeviceUsageList["2"] ?? []),
-            ...data.monitorDeviceUsageList["2"],
-          ],
+          "0": [...data.monitorDeviceUsageList["0"]],
+          "1": [...data.monitorDeviceUsageList["1"]],
+          "2": [...data.monitorDeviceUsageList["2"]],
         },
         deviceUsageList: {
           ...overviewData?.deviceUsageList,
           "0": {
             ...overviewData?.deviceUsageList["0"],
             ...data.deviceUsageList["0"],
-            usage: [
-              ...(overviewData?.deviceUsageList["0"]?.usage ?? []),
-              ...data.deviceUsageList["0"].usage,
-            ],
+            usage: [...data.deviceUsageList["0"].usage],
           },
           "1": {
             ...overviewData?.deviceUsageList["1"],
             ...data.deviceUsageList["1"],
-            usage: [
-              ...(overviewData?.deviceUsageList["1"]?.usage ?? []),
-              ...data.deviceUsageList["1"].usage,
-            ],
+            usage: [...data.deviceUsageList["1"].usage],
           },
           "2": {
             ...overviewData?.deviceUsageList["2"],
             ...data.deviceUsageList["2"],
-            usage: [
-              ...(overviewData?.deviceUsageList["2"]?.usage ?? []),
-              ...data.deviceUsageList["2"].usage,
-            ],
+            usage: [...data.deviceUsageList["2"].usage],
           },
         },
       });

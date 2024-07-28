@@ -3,12 +3,7 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { AuthProvider } from "../context/authProvider";
-import { StatusCode } from "../services/apis/types";
-
-export const signInParamsSchema = z.object({
-  email: z.string().trim().email().min(5),
-  password: z.string().min(8),
-});
+import { signInParamsSchema, StatusCode } from "../services/apis/types";
 
 function Login() {
   const navigate = useNavigate();
