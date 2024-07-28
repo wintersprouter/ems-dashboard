@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { z } from "zod";
 import monitoring_point_active_icon from "../assets/monitoring_point_active_icon.svg";
 import monitoring_point_icon from "../assets/monitoring_point_icon.svg";
 import overview_active_icon from "../assets/overview_active_icon.svg";
 import overview_icon from "../assets/overview_icon.svg";
 import tree_active_icon from "../assets/tree_active_icon.svg";
 import tree_icon from "../assets/tree_icon.svg";
+import { monitorDeviceResponse } from "../services/apis/web";
 const navLinkStyle =
   "flex px-1 pl-2 hover:bg-green-100 hover:rounded duration-150 ease-in-out";
 const activeNavLinkStyle =
@@ -37,7 +39,12 @@ const navigation = [
     activeIcon: monitoring_point_active_icon,
   },
 ];
-const ToolBar = () => {
+
+type ToolBarProps = {
+  deviceList: z.infer<typeof monitorDeviceResponse>["deviceList"];
+};
+
+const ToolBar = ({ deviceList }: ToolBarProps) => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
@@ -62,7 +69,7 @@ const ToolBar = () => {
           <h2 className='text-left text-xs text-gray-400'>General</h2>
           <ul className='flex flex-col gap-3 my-3'>
             {navigation.map((item, idx) => (
-              <NavLink to={item.navigation}>
+              <NavLink to={item.navigation} key={`navigation-${idx}`}>
                 {({ isActive, isPending }) => (
                   <li
                     key={idx}
@@ -93,54 +100,15 @@ const ToolBar = () => {
       </div>
       <div className='flex flex-col divide-y-[1px] divide-gray-300 p-4 gap-4 w-56'>
         <div className='grid grid-cols-2 gap-1'>
-          <button
-            type='button'
-            className='rounded-lg border border-gray-300 p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
-          >
-            CH Name
-          </button>
-          <button
-            type='button'
-            className='rounded-lg border  p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
-          >
-            CH Name
-          </button>
-          <button
-            type='button'
-            className='rounded-lg border border-gray-300 p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
-          >
-            CH Name
-          </button>
-          <button
-            type='button'
-            className='rounded-lg border  p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
-          >
-            CH Name
-          </button>
-          <button
-            type='button'
-            className='rounded-lg border border-gray-300 p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
-          >
-            CH Name
-          </button>
-          <button
-            type='button'
-            className='rounded-lg border  p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
-          >
-            CH Name
-          </button>
-          <button
-            type='button'
-            className='rounded-lg border border-gray-300 p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
-          >
-            CH Name
-          </button>
-          <button
-            type='button'
-            className='rounded-lg border  p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
-          >
-            CH Name
-          </button>
+          {deviceList.map((device, idx) => (
+            <button
+              key={`device-${idx}`}
+              type='button'
+              className='rounded-lg border border-gray-300 p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
+            >
+              {device.name}
+            </button>
+          ))}
         </div>
         <div>
           <h4 className='my-4 font-medium text-gray-800'>Date Range</h4>

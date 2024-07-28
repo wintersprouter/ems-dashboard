@@ -1,12 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { match } from "ts-pattern";
+import { z } from "zod";
 import ToolBar from "../components/toolbar";
 import { AuthProvider } from "../context/authProvider";
 import { Api } from "../services/apis";
+import { monitorDeviceResponse } from "../services/apis/web";
 
 function MonitoringPoint() {
-  const { status, mutate, failureReason } = useMutation({
+  const [deviceList, setDeviceList] = useState<
+    z.infer<typeof monitorDeviceResponse>["deviceList"]
+  >([]);
+
+  const { status, mutate, failureReason, data } = useMutation({
     mutationFn: () => {
       return Api.monitorDevice({
         email: AuthProvider.email ?? "",
@@ -19,7 +25,29 @@ function MonitoringPoint() {
       });
     },
     onSuccess(data) {
-      console.log(JSON.stringify(data, null, 2));
+      console.log("data", JSON.stringify(data.deviceList, null, 2));
+      setDeviceList(
+        deviceList.length === 0
+          ? [...data.deviceList]
+          : [
+              //保留舊資料中新資料也有的
+              ...deviceList.filter((device) => {
+                const newDevice = data.deviceList.find(
+                  (d) => d.id === device.id
+                );
+                if (newDevice) {
+                  return {
+                    ...device,
+                    ...newDevice,
+                  };
+                }
+              }),
+              //加入新資料中有舊資料沒有的
+              ...data.deviceList.filter(
+                (newDevice) => !deviceList.some((d) => d.id === newDevice.id)
+              ),
+            ]
+      );
     },
   });
 
@@ -36,7 +64,7 @@ function MonitoringPoint() {
         ))
         .with("success", () => (
           <>
-            <ToolBar />
+            <ToolBar deviceList={deviceList} />
             <section className='relative top-0 left-0 lg:left-48 lg:top-4  flex-col w-full mx-auto'>
               {/* <StatisticsCards />
           <Charts /> */}

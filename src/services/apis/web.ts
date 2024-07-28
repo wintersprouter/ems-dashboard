@@ -73,7 +73,7 @@ const deviceSchema = z.object({
   name: z.string(),
 });
 
-const monitorDeviceResponse = z.object({
+export const monitorDeviceResponse = z.object({
   email: z.string().email(),
   username: z.string(),
   action: z.string(),
