@@ -109,7 +109,7 @@ const ToolBar = ({
           </ul>
         </nav>
       </div>
-      <div className='flex flex-col divide-y-[1px] divide-gray-300 p-4 gap-4 w-56'>
+      <div className='flex flex-col divide-y-[1px] divide-gray-300 p-4 gap-4 w-60'>
         <div className='grid grid-cols-2 gap-1'>
           {deviceList.map((device, idx) => (
             <button
