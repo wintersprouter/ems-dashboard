@@ -18,3 +18,8 @@ export enum StatusCode {
   UserAlreadyExisted = 1000,
   Fail = 201,
 }
+
+export const signInParamsSchema = z.object({
+  email: z.string().trim().email().min(5),
+  password: z.string().min(8),
+});

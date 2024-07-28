@@ -8,7 +8,7 @@ body {
   background-color: #f3f4f6;
 }
 input {
-  border: none;
+  /* border: none; */
 }
 input:focus {
   outline: none;

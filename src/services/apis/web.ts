@@ -58,6 +58,51 @@ export const overviewResponse = z.object({
   statusCode: z.nativeEnum(StatusCode),
 });
 
+const monitorDeviceRequestParamsSchema = z.object({
+  email: z.string().email(),
+  action: z.string(),
+  token: z.string(),
+  factoryId: z.number(),
+  deviceId: z.number(),
+  dtStart: z.string(),
+  dtEnd: z.string(),
+});
+
+const deviceSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+
+export const monitorDeviceResponse = z.object({
+  email: z.string().email(),
+  username: z.string(),
+  action: z.string(),
+  token: z.string().nullable(),
+  dtTokenExpire: z.string(),
+  statusCode: z.nativeEnum(StatusCode),
+  factoryId: z.number(),
+  factoryName: z.string(),
+  deviceList: z.array(deviceSchema),
+  deviceUsageInfo: z.object({
+    id: z.number(),
+    name: z.string(),
+    dtStart: z.string(),
+    dtEnd: z.string(),
+    dtBuilt: z.string(),
+    side: z.string(),
+    ct: z.string(),
+    realtimeSmartMeterInfo: realtimeSmartMeterInfoSchema,
+    averagePowerUsage: averagePowerUsageSchema,
+    totalUsageKW: z.number(),
+    deviceUsage: z.object({
+      id: z.number(),
+      name: z.string(),
+      usage: z.array(z.number()),
+      monitorPeriodMinute: z.number(),
+    }),
+  }),
+});
+
 export const webApi = makeApi([
   {
     method: "post",
@@ -70,6 +115,20 @@ export const webApi = makeApi([
         name: "body",
         type: "Body",
         schema: basicRequestParamsSchema,
+      },
+    ],
+  },
+  {
+    method: "post",
+    path: "/Web/Monitor/Device",
+    alias: "monitorDevice",
+    description: "get monitor device data",
+    response: monitorDeviceResponse,
+    parameters: [
+      {
+        name: "body",
+        type: "Body",
+        schema: monitorDeviceRequestParamsSchema,
       },
     ],
   },
