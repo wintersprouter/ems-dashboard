@@ -11,8 +11,10 @@ function MonitoringPoint() {
   const [deviceList, setDeviceList] = useState<
     z.infer<typeof monitorDeviceResponse>["deviceList"]
   >([]);
+  const [dtStart, setDtStart] = useState<string | null>(null);
+  const [dtEnd, setDtEnd] = useState<string | null>(null);
 
-  const { status, mutate, failureReason, data } = useMutation({
+  const { status, mutate, failureReason } = useMutation({
     mutationFn: () => {
       return Api.monitorDevice({
         email: AuthProvider.email ?? "",
@@ -20,8 +22,8 @@ function MonitoringPoint() {
         token: AuthProvider.token ?? "",
         factoryId: 1,
         deviceId: 1,
-        dtStart: "2021-09-01T00:00:00",
-        dtEnd: "2021-09-01T23:59:59",
+        dtStart: dtStart ?? "2021-09-01 00:00:00",
+        dtEnd: dtEnd ?? "2021-09-30 23:59:59",
       });
     },
     onSuccess(data) {
@@ -64,7 +66,13 @@ function MonitoringPoint() {
         ))
         .with("success", () => (
           <>
-            <ToolBar deviceList={deviceList} />
+            <ToolBar
+              deviceList={deviceList}
+              setDtStart={setDtStart}
+              setDtEnd={setDtEnd}
+              dtStart={dtStart}
+              dtEnd={dtEnd}
+            />
             <section className='relative top-0 left-0 lg:left-48 lg:top-4  flex-col w-full mx-auto'>
               {/* <StatisticsCards />
           <Charts /> */}

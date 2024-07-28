@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { z } from "zod";
 import monitoring_point_active_icon from "../assets/monitoring_point_active_icon.svg";
@@ -17,6 +16,11 @@ const navTextStyle =
   "p-2 text-base text-gray-800 font-normal hover:text-green-800 hidden lg:flex ";
 const navActiveTextStyle =
   "p-2 text-base text-green-800 font-normal hidden lg:flex ";
+
+const defaultDateStyle =
+  "relative left-0 rounded-lg border border-gray-300 p-2 text-sm text-gray-300 font-normal active:border-gray-800 active:text-gray-800 focus:border-gray-800 focus:text-gray-800";
+const hasDateStyle =
+  "relative left-0 rounded-lg border p-2 text-sm font-normal border-gray-800 active:text-gray-800 border-gray-800 text-gray-800";
 
 const navigation = [
   {
@@ -42,24 +46,31 @@ const navigation = [
 
 type ToolBarProps = {
   deviceList: z.infer<typeof monitorDeviceResponse>["deviceList"];
+  setDtStart: React.Dispatch<React.SetStateAction<string | null>>;
+  setDtEnd: React.Dispatch<React.SetStateAction<string | null>>;
+  dtStart: string | null;
+  dtEnd: string | null;
 };
 
-const ToolBar = ({ deviceList }: ToolBarProps) => {
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-
+const ToolBar = ({
+  deviceList,
+  setDtEnd,
+  setDtStart,
+  dtStart,
+  dtEnd,
+}: ToolBarProps) => {
   const handleStartTimeChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const newStartTime: string = event.target.value;
-    setStartTime(newStartTime);
-    if (newStartTime > endTime) {
-      setEndTime(newStartTime);
+    setDtStart(newStartTime);
+    if (dtEnd !== null && newStartTime > dtEnd) {
+      setDtEnd(newStartTime);
     }
   };
 
   const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEndTime(event.target.value);
+    setDtEnd(event.target.value);
   };
 
   return (
@@ -115,32 +126,31 @@ const ToolBar = ({ deviceList }: ToolBarProps) => {
           <div className='gap-2'>
             <label
               htmlFor='start'
-              className=' bg-white text-gray-300 text-xs font-normal focus-within:text-gray-800'
+              className=' bg-white text-xs font-normal text-gray-800'
             >
               <p className='relative top-2 left-2 z-20 bg-white w-fit'>Start</p>
               <input
                 id='start'
                 aria-label='Date and time from'
-                value={startTime}
+                value={dtStart ?? ""}
                 onChange={handleStartTimeChange}
                 type='datetime-local'
-                className='relative left-0 rounded-lg border border-gray-300 p-2 text-sm text-gray-300
-          font-normal active:border-gray-800 active:text-gray-800 focus:border-gray-800 focus:text-gray-800'
+                className={dtStart ? hasDateStyle : defaultDateStyle}
               />
             </label>
             <label
               htmlFor='end'
-              className=' bg-white text-gray-300 text-xs font-normal focus-within:text-gray-800'
+              className=' bg-white text-xs font-normal text-gray-800'
             >
               <p className='relative top-2 left-2 z-20 bg-white w-fit'>End</p>
               <input
                 id='end'
                 aria-label='Date and time to'
-                min={startTime}
-                value={endTime}
+                min={dtStart ?? ""}
+                value={dtEnd ?? ""}
                 onChange={handleEndTimeChange}
                 type='datetime-local'
-                className='relative left-0 rounded-lg border border-gray-300 p-2 text-sm text-gray-300 font-normal active:border-gray-800 active:text-gray-800 focus:border-gray-800 focus:text-gray-800'
+                className={dtEnd ? hasDateStyle : defaultDateStyle}
               />
             </label>
           </div>
