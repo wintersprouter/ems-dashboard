@@ -2,7 +2,7 @@ import { makeApi } from "@zodios/core";
 import { z } from "zod";
 import { basicRequestParamsSchema, StatusCode } from "./types";
 
-const realtimeSmartMeterInfoSchema = z.object({
+export const realtimeSmartMeterInfoSchema = z.object({
   usedChannel: z.array(z.boolean()),
   chAVoltage: z.number(),
   chACurrent: z.number(),
@@ -24,17 +24,12 @@ const averagePowerUsageSchema = z.object({
   yearCO2Saving: z.number(),
 });
 
-const monitorDeviceUsageListSchema = z.object({
-  "0": z.array(z.number()),
-  "1": z.array(z.number()),
-  "2": z.array(z.number()),
-});
-
 const deviceUsageSchema = z.object({
   id: z.number(),
   name: z.string(),
   usage: z.array(z.number()),
 });
+
 const deviceUsageListSchema = z.object({
   "0": deviceUsageSchema,
   "1": deviceUsageSchema,
@@ -48,12 +43,11 @@ export const overviewResponse = z.object({
   totalUsageKW: z.number(),
   monitorDeviceCount: z.number(),
   monitorPeriodMinute: z.number(),
-  monitorDeviceUsageList: monitorDeviceUsageListSchema,
   deviceUsageList: deviceUsageListSchema,
   email: z.string().email(),
   username: z.string(),
   action: z.string(),
-  token: z.null(),
+  token: z.string(),
   dtTokenExpire: z.string(),
   statusCode: z.nativeEnum(StatusCode),
 });
@@ -87,7 +81,7 @@ export const monitorDeviceResponse = z.object({
     id: z.number(),
     name: z.string(),
     dtStart: z.string(),
-    dtEnd: z.string(),
+    dtEnd: z.string().nullable(),
     dtBuilt: z.string(),
     side: z.string(),
     ct: z.string(),
