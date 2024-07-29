@@ -107,7 +107,7 @@ function Overview() {
     lastJsonMessage,
   ]);
 
-  const { status, mutate } = useMutation({
+  const { status, mutate, failureReason } = useMutation({
     mutationFn: () => {
       return Api.overview({
         email: AuthProvider.email ?? "",
@@ -122,11 +122,6 @@ function Overview() {
         averagePowerUsage: {
           ...overviewData?.averagePowerUsage,
           ...data.averagePowerUsage,
-        },
-        monitorDeviceUsageList: {
-          "0": [...data.monitorDeviceUsageList["0"]],
-          "1": [...data.monitorDeviceUsageList["1"]],
-          "2": [...data.monitorDeviceUsageList["2"]],
         },
         deviceUsageList: {
           ...overviewData?.deviceUsageList,
@@ -169,7 +164,7 @@ function Overview() {
         {match(status)
           .with("pending", () => <p>Loading...</p>)
           .with("idle", () => <p>idle...</p>)
-          .with("error", () => <p>Error</p>)
+          .with("error", () => <p>Error:{failureReason?.message}</p>)
           .with("success", () => (
             <>
               <StatisticsCards

@@ -10,6 +10,7 @@ export type DeviceUsageInfo = Pick<
   z.infer<typeof monitorDeviceResponse>["deviceUsageInfo"],
   "id" | "name" | "dtBuilt" | "side" | "ct"
 >;
+
 function MonitoringPoint() {
   const [deviceList, setDeviceList] = useState<
     z.infer<typeof monitorDeviceResponse>["deviceList"]
@@ -32,12 +33,18 @@ function MonitoringPoint() {
     },
     onSuccess(data) {
       console.log("data", JSON.stringify(data, null, 2));
-      setDtStart(data.deviceUsageInfo.dtStart);
-      setDtEnd(data.deviceUsageInfo.dtEnd);
-      setDevice({
-        ...device,
-        ...data.deviceUsageInfo,
-      });
+      setDtStart(data.deviceUsageInfo?.dtStart ?? null);
+      setDtEnd(data.deviceUsageInfo?.dtEnd ?? null);
+      setDevice(
+        device
+          ? {
+              ...device,
+              ...data.deviceUsageInfo,
+            }
+          : {
+              ...data.deviceUsageInfo,
+            }
+      );
       setDeviceList(
         deviceList.length === 0
           ? [...data.deviceList]
