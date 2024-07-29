@@ -2,10 +2,14 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { match } from "ts-pattern";
 import { z } from "zod";
+import StatisticsCards from "../components/statistics-cards";
 import ToolBar from "../components/toolbar";
 import { AuthProvider } from "../context/authProvider";
 import { Api } from "../services/apis";
-import { monitorDeviceResponse } from "../services/apis/web";
+import {
+  monitorDeviceResponse,
+  realtimeSmartMeterInfoSchema,
+} from "../services/apis/web";
 export type DeviceUsageInfo = Pick<
   z.infer<typeof monitorDeviceResponse>["deviceUsageInfo"],
   "id" | "name" | "dtBuilt" | "side" | "ct"
@@ -18,7 +22,15 @@ function MonitoringPoint() {
   const [dtStart, setDtStart] = useState<string | null>(null);
   const [dtEnd, setDtEnd] = useState<string | null>(null);
   const [device, setDevice] = useState<DeviceUsageInfo>();
-
+  const [realtimeSmartMeterInfo, setRealtimeSmartMeterInfo] =
+    useState<z.infer<typeof realtimeSmartMeterInfoSchema>>();
+  const [totalUsageKW, setTotalUsageKW] = useState<number>(0);
+  const [averagePowerUsage, setAveragePowerUsage] =
+    useState<
+      z.infer<
+        typeof monitorDeviceResponse
+      >["deviceUsageInfo"]["averagePowerUsage"]
+    >();
   const { status, mutate, failureReason } = useMutation({
     mutationFn: () => {
       return Api.monitorDevice({
@@ -67,6 +79,18 @@ function MonitoringPoint() {
               ),
             ]
       );
+      setRealtimeSmartMeterInfo({
+        ...realtimeSmartMeterInfo,
+        ...data.deviceUsageInfo.realtimeSmartMeterInfo,
+        usedChannel: [
+          ...data.deviceUsageInfo.realtimeSmartMeterInfo.usedChannel,
+        ],
+      });
+      setTotalUsageKW(data.deviceUsageInfo.totalUsageKW);
+      setAveragePowerUsage({
+        ...averagePowerUsage,
+        ...data.deviceUsageInfo.averagePowerUsage,
+      });
     },
   });
 
@@ -92,8 +116,12 @@ function MonitoringPoint() {
               device={device}
             />
             <section className='relative top-0 left-0 lg:left-48 lg:top-4  flex-col w-full mx-auto'>
-              {/* <StatisticsCards />
-          <Charts /> */}
+              <StatisticsCards
+                totalUsageKW={totalUsageKW}
+                realtimeSmartMeterInfo={realtimeSmartMeterInfo}
+                averagePowerUsage={averagePowerUsage}
+              />
+              {/*  <Charts /> */}
             </section>
           </>
         ))

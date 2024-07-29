@@ -1,13 +1,21 @@
 import { z } from "zod";
 import { limitDecimalToOnePlace } from "../util/limitDecimalToOnePlace";
-import { overviewResponse } from "./../services/apis/web";
+import {
+  monitorDeviceResponse,
+  overviewResponse,
+  realtimeSmartMeterInfoSchema,
+} from "./../services/apis/web";
 
 type StatisticsCardsProps = {
-  realtimeSmartMeterInfo?: z.infer<
-    typeof overviewResponse
-  >["realtimeSmartMeterInfo"];
-  averagePowerUsage?: z.infer<typeof overviewResponse>["averagePowerUsage"];
-  totalUsageKW: z.infer<typeof overviewResponse>["totalUsageKW"];
+  realtimeSmartMeterInfo?: z.infer<typeof realtimeSmartMeterInfoSchema>;
+  averagePowerUsage?:
+    | z.infer<typeof overviewResponse>["averagePowerUsage"]
+    | z.infer<
+        typeof monitorDeviceResponse
+      >["deviceUsageInfo"]["averagePowerUsage"];
+  totalUsageKW:
+    | z.infer<typeof overviewResponse>["totalUsageKW"]
+    | z.infer<typeof monitorDeviceResponse>["deviceUsageInfo"]["totalUsageKW"];
   monitorDeviceCount?: z.infer<typeof overviewResponse>["monitorDeviceCount"];
 };
 
@@ -22,84 +30,90 @@ const StatisticsCards = ({
       <div className='flex flex-col col-span-4 md:col-span-5 lg:col-span-3'>
         <h3 className='font-medium text-gray-500 text-lg'>Real-time</h3>
         <div className='flex gap-4'>
-          <ul>
-            <li className='border-b border-gray-300'>
-              <p className='font-medium text-green-700 text-sm'>A</p>
-            </li>
-            <li className='flex'>
-              <p className='text-sm font-medium text-green-700'>
-                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chAVoltage) ??
-                  0}
-              </p>
-              <p className='text-sm font-medium text-green-700'>V</p>
-            </li>
-            <li className='flex'>
-              <p className='text-sm font-medium text-green-700'>
-                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chACurrent) ??
-                  0}
-              </p>
-              <p className='text-sm font-medium text-green-700'>A</p>
-            </li>
-            <li className='flex'>
-              <p className='text-sm font-medium text-green-700'>
-                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chAUsageKW) ??
-                  0}
-              </p>
-              <p className='text-sm font-medium text-green-700'>kW</p>
-            </li>
-          </ul>
-          <ul>
-            <li className='border-b border-gray-300'>
-              <p className='font-medium text-red-600 text-sm'>B</p>
-            </li>
-            <li className='flex'>
-              <p className='text-sm font-medium text-red-600'>
-                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chBVoltage) ??
-                  0}
-              </p>
-              <p className='text-sm font-medium text-red-600'>V</p>
-            </li>
-            <li className='flex'>
-              <p className='text-sm font-medium text-red-600'>
-                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chBCurrent) ??
-                  0}
-              </p>
-              <p className='text-sm font-medium text-red-600'>A</p>
-            </li>
-            <li className='flex'>
-              <p className='text-sm font-medium text-red-600'>
-                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chBUsageKW) ??
-                  0}
-              </p>
-              <p className='text-sm font-medium text-red-600'>kW</p>
-            </li>
-          </ul>
-          <ul>
-            <li className='border-b border-gray-300'>
-              <p className='text-sm font-medium text-blue-700'>C</p>
-            </li>
-            <li className='flex'>
-              <p className='text-sm font-medium text-blue-700'>
-                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chCVoltage) ??
-                  0}
-              </p>
-              <p className='text-sm font-medium text-blue-700'>V</p>
-            </li>
-            <li className='flex'>
-              <p className='text-sm font-medium text-blue-700'>
-                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chCCurrent) ??
-                  0}
-              </p>
-              <p className='text-sm font-medium text-blue-700'>A</p>
-            </li>
-            <li className='flex'>
-              <p className='text-sm font-medium text-blue-700'>
-                {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chCUsageKW) ??
-                  0}
-              </p>
-              <p className='text-sm font-medium text-blue-700'>kW</p>
-            </li>
-          </ul>
+          {realtimeSmartMeterInfo?.usedChannel[0] && (
+            <ul>
+              <li className='border-b border-gray-300'>
+                <p className='font-medium text-green-700 text-sm'>A</p>
+              </li>
+              <li className='flex'>
+                <p className='text-sm font-medium text-green-700'>
+                  {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chAVoltage) ??
+                    0}
+                </p>
+                <p className='text-sm font-medium text-green-700'>V</p>
+              </li>
+              <li className='flex'>
+                <p className='text-sm font-medium text-green-700'>
+                  {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chACurrent) ??
+                    0}
+                </p>
+                <p className='text-sm font-medium text-green-700'>A</p>
+              </li>
+              <li className='flex'>
+                <p className='text-sm font-medium text-green-700'>
+                  {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chAUsageKW) ??
+                    0}
+                </p>
+                <p className='text-sm font-medium text-green-700'>kW</p>
+              </li>
+            </ul>
+          )}
+          {realtimeSmartMeterInfo?.usedChannel[1] && (
+            <ul>
+              <li className='border-b border-gray-300'>
+                <p className='font-medium text-red-600 text-sm'>B</p>
+              </li>
+              <li className='flex'>
+                <p className='text-sm font-medium text-red-600'>
+                  {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chBVoltage) ??
+                    0}
+                </p>
+                <p className='text-sm font-medium text-red-600'>V</p>
+              </li>
+              <li className='flex'>
+                <p className='text-sm font-medium text-red-600'>
+                  {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chBCurrent) ??
+                    0}
+                </p>
+                <p className='text-sm font-medium text-red-600'>A</p>
+              </li>
+              <li className='flex'>
+                <p className='text-sm font-medium text-red-600'>
+                  {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chBUsageKW) ??
+                    0}
+                </p>
+                <p className='text-sm font-medium text-red-600'>kW</p>
+              </li>
+            </ul>
+          )}
+          {realtimeSmartMeterInfo?.usedChannel[2] && (
+            <ul>
+              <li className='border-b border-gray-300'>
+                <p className='text-sm font-medium text-blue-700'>C</p>
+              </li>
+              <li className='flex'>
+                <p className='text-sm font-medium text-blue-700'>
+                  {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chCVoltage) ??
+                    0}
+                </p>
+                <p className='text-sm font-medium text-blue-700'>V</p>
+              </li>
+              <li className='flex'>
+                <p className='text-sm font-medium text-blue-700'>
+                  {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chCCurrent) ??
+                    0}
+                </p>
+                <p className='text-sm font-medium text-blue-700'>A</p>
+              </li>
+              <li className='flex'>
+                <p className='text-sm font-medium text-blue-700'>
+                  {limitDecimalToOnePlace(realtimeSmartMeterInfo?.chCUsageKW) ??
+                    0}
+                </p>
+                <p className='text-sm font-medium text-blue-700'>kW</p>
+              </li>
+            </ul>
+          )}
           <ul>
             <li>
               <p className='text-sm font-medium text-gray-800'>Total</p>
@@ -157,16 +171,18 @@ const StatisticsCards = ({
           </p>
         </div>
       </div>
-      <div className='flex flex-col items-center justify-center md:border-s-2 border-gray-300  col-span-6 md:col-span-3 lg:col-span-2'>
-        <div className='mb-5'>
-          <h3 className='font-medium text-gray-500 text-lg text-nowrap'>
-            Monitoring Points
-          </h3>
-          <p className='text-5xl text-gray-800 font-semibold'>
-            {monitorDeviceCount}
-          </p>
+      {monitorDeviceCount && (
+        <div className='flex flex-col items-center justify-center md:border-s-2 border-gray-300  col-span-6 md:col-span-3 lg:col-span-2'>
+          <div className='mb-5'>
+            <h3 className='font-medium text-gray-500 text-lg text-nowrap'>
+              Monitoring Points
+            </h3>
+            <p className='text-5xl text-gray-800 font-semibold'>
+              {monitorDeviceCount}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };
