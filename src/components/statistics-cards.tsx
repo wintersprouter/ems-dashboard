@@ -26,8 +26,8 @@ const StatisticsCards = ({
   monitorDeviceCount,
 }: StatisticsCardsProps) => {
   return (
-    <section className='p-6 bg-white rounded-xl h-fit grid grid-flow-row-dense grid-cols-2 gap-4 md:grid-cols-6 lg:grid-cols-11 mx-2 '>
-      <div className='flex flex-col col-span-4 md:col-span-5 lg:col-span-3'>
+    <section className='p-6 bg-white rounded-xl h-fit flex mx-2 justify-around flex-wrap items-center'>
+      <div className='flex flex-col'>
         <h3 className='font-medium text-gray-500 text-lg'>Real-time</h3>
         <div className='flex gap-4'>
           {realtimeSmartMeterInfo?.usedChannel[0] && (
@@ -126,8 +126,9 @@ const StatisticsCards = ({
           </ul>
         </div>
       </div>
-      <div className='flex flex-col items-center justify-center lg:border-s-2 border-gray-300 col-span-6 md:col-span-3 lg:col-span-2'>
-        <div>
+      <div className='w-[1px] h-12 bg-[#D2D5DA]' />
+      <div className='flex flex-col items-center justify-center'>
+        <div className='mx-auto'>
           <h3 className='font-medium text-gray-500 text-lg'>Day</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
@@ -141,8 +142,9 @@ const StatisticsCards = ({
           </p>
         </div>
       </div>
-      <div className='flex flex-col items-center p-4 md:border-s-2 border-gray-300 col-span-6  md:col-span-3 lg:col-span-2'>
-        <div>
+      <div className='w-[1px] h-12 bg-[#D2D5DA]' />
+      <div className='flex flex-col items-center justify-center'>
+        <div className='mx-auto'>
           <h3 className='font-medium text-gray-500 text-lg'>month</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
@@ -156,8 +158,9 @@ const StatisticsCards = ({
           </p>
         </div>
       </div>
-      <div className='flex flex-col items-center justify-center  lg:border-s-2 border-gray-300 col-span-6  md:col-span-3 lg:col-span-2'>
-        <div>
+      <div className='w-[1px] h-12 bg-[#D2D5DA]' />
+      <div className='flex flex-col items-center justify-center'>
+        <div className='mx-auto'>
           <h3 className='font-medium text-gray-500 text-lg'>Year</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
@@ -172,16 +175,19 @@ const StatisticsCards = ({
         </div>
       </div>
       {monitorDeviceCount && (
-        <div className='flex flex-col items-center justify-center md:border-s-2 border-gray-300  col-span-6 md:col-span-3 lg:col-span-2'>
-          <div className='mb-5'>
-            <h3 className='font-medium text-gray-500 text-lg text-nowrap'>
-              Monitoring Points
-            </h3>
-            <p className='text-5xl text-gray-800 font-semibold'>
-              {monitorDeviceCount}
-            </p>
+        <>
+          <div className='w-[1px] h-12 bg-[#D2D5DA]' />
+          <div className='flex flex-col items-center justify-center px-4'>
+            <div className='mb-5 mx-auto'>
+              <h3 className='font-medium text-gray-500 text-lg text-nowrap'>
+                Monitoring Points
+              </h3>
+              <p className='text-5xl text-gray-800 font-semibold'>
+                {monitorDeviceCount}
+              </p>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </section>
   );

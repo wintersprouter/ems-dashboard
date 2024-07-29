@@ -115,7 +115,7 @@ function MonitoringPoint() {
               dtEnd={dtEnd}
               device={device}
             />
-            <section className='relative top-0 left-0 lg:left-48 lg:top-4  flex-col w-full mx-auto'>
+            <section className='relative top-0 left-0 lg:left-[21rem] lg:top-2  flex-col w-full lg:w-4/5 mx-auto'>
               <StatisticsCards
                 totalUsageKW={totalUsageKW}
                 realtimeSmartMeterInfo={realtimeSmartMeterInfo}
