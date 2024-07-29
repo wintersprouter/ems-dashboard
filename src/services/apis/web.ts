@@ -47,7 +47,7 @@ export const overviewResponse = z.object({
   email: z.string().email(),
   username: z.string(),
   action: z.string(),
-  token: z.null(),
+  token: z.string(),
   dtTokenExpire: z.string(),
   statusCode: z.nativeEnum(StatusCode),
 });
