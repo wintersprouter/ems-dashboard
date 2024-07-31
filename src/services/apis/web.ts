@@ -30,11 +30,13 @@ const deviceUsageSchema = z.object({
   usage: z.array(z.number()),
 });
 
-const deviceUsageListSchema = z.object({
-  "0": deviceUsageSchema,
-  "1": deviceUsageSchema,
-  "2": deviceUsageSchema,
-});
+const deviceUsageListSchema = z
+  .object({
+    "0": deviceUsageSchema,
+    "1": deviceUsageSchema,
+    "2": deviceUsageSchema,
+  })
+  .or(z.object({}));
 
 export const overviewResponse = z.object({
   mainDeviceId: z.number(),
