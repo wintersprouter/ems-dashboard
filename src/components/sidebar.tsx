@@ -50,10 +50,9 @@ function Sidebar() {
           <h2 className='text-left text-xs text-gray-400'>General</h2>
           <ul className='flex flex-col gap-3 my-3'>
             {navigation.map((item, idx) => (
-              <NavLink to={item.navigation}>
+              <NavLink key={`NavLink-${idx}`} to={item.navigation}>
                 {({ isActive, isPending }) => (
                   <li
-                    key={idx}
                     className={
                       isActive
                         ? activeNavLinkStyle
