@@ -28,8 +28,8 @@ function MonitoringPoint() {
         token: AuthProvider.token ?? "",
         factoryId: 1,
         deviceId: 1,
-        dtStart: dtStart ?? "2021-09-01 00:00:00",
-        dtEnd: dtEnd ?? "2021-09-30 23:59:59",
+        dtStart: dtStart ?? "2005-06-07T00:00Z",
+        dtEnd: dtEnd ?? "2015-06-07T00:00Z",
       });
     },
     onSuccess(data) {
