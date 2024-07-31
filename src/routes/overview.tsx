@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { match } from "ts-pattern";
 import { z } from "zod";
+import Charts from "../components/charts";
 import Sidebar from "../components/sidebar";
 import StatisticsCards from "../components/statistics-cards";
 import { AuthProvider } from "../context/authProvider";
@@ -122,25 +123,24 @@ function Overview() {
           ...overviewData?.averagePowerUsage,
           ...data.averagePowerUsage,
         },
-        // deviceUsageList: {
-        //   ...overviewData?.deviceUsageList,
-        //   "0": {
-        //     ...overviewData?.deviceUsageList["0"],
-        //     ...data.deviceUsageList["0"],
-        //     usage: [...data.deviceUsageList["0"].usage],
-        //   },
-        //   "1": {
-        //     ...overviewData?.deviceUsageList["1"],
-        //     ...data.deviceUsageList["1"],
-        //     usage: [...data.deviceUsageList["1"].usage],
-        //   },
-        //   "2": {
-        //     ...overviewData?.deviceUsageList["2"],
-        //     ...data.deviceUsageList["2"],
-        //     usage: [...data.deviceUsageList["2"].usage],
-        //   },
-        // },
-        deviceUsageList: {},
+        deviceUsageList: {
+          ...overviewData?.deviceUsageList,
+          "0": {
+            ...overviewData?.deviceUsageList?.["0"],
+            ...data.deviceUsageList?.["0"],
+            usage: [...data.deviceUsageList["0"].usage],
+          },
+          "1": {
+            ...(overviewData?.deviceUsageList?.["1"] ?? {}),
+            ...(data.deviceUsageList?.["1"] ?? {}),
+            usage: [...(data.deviceUsageList?.["1"]?.usage ?? [])],
+          },
+          "2": {
+            ...(overviewData?.deviceUsageList?.["2"] ?? {}),
+            ...(data.deviceUsageList?.["2"] ?? {}),
+            usage: [...(data.deviceUsageList?.["2"]?.usage ?? [])],
+          },
+        },
       });
     },
   });
@@ -173,10 +173,10 @@ function Overview() {
                 totalUsageKW={overviewData?.totalUsageKW ?? 0}
                 monitorDeviceCount={overviewData?.monitorDeviceCount ?? 0}
               />
-              {/* <Charts
+              <Charts
                 deviceUsageList={overviewData?.deviceUsageList}
                 monitorPeriodMinute={overviewData?.monitorPeriodMinute ?? 0}
-              /> */}
+              />
             </>
           ))
           .exhaustive()}
