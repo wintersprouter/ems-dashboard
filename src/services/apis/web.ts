@@ -24,7 +24,7 @@ const averagePowerUsageSchema = z.object({
   yearCO2Saving: z.number(),
 });
 
-const deviceUsageSchema = z.object({
+export const deviceUsageSchema = z.object({
   id: z.number(),
   name: z.string(),
   usage: z.array(z.number()),
@@ -88,12 +88,7 @@ export const monitorDeviceResponse = z.object({
     realtimeSmartMeterInfo: realtimeSmartMeterInfoSchema,
     averagePowerUsage: averagePowerUsageSchema,
     totalUsageKW: z.number(),
-    deviceUsage: z.object({
-      id: z.number(),
-      name: z.string(),
-      usage: z.array(z.number()),
-      monitorPeriodMinute: z.number(),
-    }),
+    deviceUsage: deviceUsageSchema,
   }),
 });
 

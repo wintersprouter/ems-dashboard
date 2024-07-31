@@ -2,18 +2,15 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { match } from "ts-pattern";
 import { z } from "zod";
+import Chart from "../components/chart";
 import StatisticsCards from "../components/statistics-cards";
 import ToolBar from "../components/toolbar";
 import { AuthProvider } from "../context/authProvider";
 import { Api } from "../services/apis";
-import {
-  monitorDeviceResponse,
-  realtimeSmartMeterInfoSchema,
-} from "../services/apis/web";
-export type DeviceUsageInfo = Pick<
-  z.infer<typeof monitorDeviceResponse>["deviceUsageInfo"],
-  "id" | "name" | "dtBuilt" | "side" | "ct"
->;
+import { monitorDeviceResponse } from "../services/apis/web";
+export type DeviceUsageInfo = z.infer<
+  typeof monitorDeviceResponse
+>["deviceUsageInfo"];
 
 function MonitoringPoint() {
   const [deviceList, setDeviceList] = useState<
@@ -22,15 +19,7 @@ function MonitoringPoint() {
   const [dtStart, setDtStart] = useState<string | null>(null);
   const [dtEnd, setDtEnd] = useState<string | null>(null);
   const [device, setDevice] = useState<DeviceUsageInfo>();
-  const [realtimeSmartMeterInfo, setRealtimeSmartMeterInfo] =
-    useState<z.infer<typeof realtimeSmartMeterInfoSchema>>();
-  const [totalUsageKW, setTotalUsageKW] = useState<number>(0);
-  const [averagePowerUsage, setAveragePowerUsage] =
-    useState<
-      z.infer<
-        typeof monitorDeviceResponse
-      >["deviceUsageInfo"]["averagePowerUsage"]
-    >();
+
   const { status, mutate, failureReason } = useMutation({
     mutationFn: () => {
       return Api.monitorDevice({
@@ -47,16 +36,25 @@ function MonitoringPoint() {
       console.log("data", JSON.stringify(data, null, 2));
       setDtStart(data.deviceUsageInfo?.dtStart ?? null);
       setDtEnd(data.deviceUsageInfo?.dtEnd ?? null);
-      setDevice(
-        device
-          ? {
-              ...device,
-              ...data.deviceUsageInfo,
-            }
-          : {
-              ...data.deviceUsageInfo,
-            }
-      );
+      setDevice({
+        ...device,
+        ...data.deviceUsageInfo,
+        realtimeSmartMeterInfo: {
+          ...device?.realtimeSmartMeterInfo,
+          ...data.deviceUsageInfo.realtimeSmartMeterInfo,
+          usedChannel: [
+            ...data.deviceUsageInfo.realtimeSmartMeterInfo.usedChannel,
+          ],
+        },
+        averagePowerUsage: {
+          ...device?.averagePowerUsage,
+          ...data.deviceUsageInfo.averagePowerUsage,
+        },
+        deviceUsage: {
+          ...device?.deviceUsage,
+          ...data.deviceUsageInfo.deviceUsage,
+        },
+      });
       setDeviceList(
         deviceList.length === 0
           ? [...data.deviceList]
@@ -79,18 +77,6 @@ function MonitoringPoint() {
               ),
             ]
       );
-      setRealtimeSmartMeterInfo({
-        ...realtimeSmartMeterInfo,
-        ...data.deviceUsageInfo.realtimeSmartMeterInfo,
-        usedChannel: [
-          ...data.deviceUsageInfo.realtimeSmartMeterInfo.usedChannel,
-        ],
-      });
-      setTotalUsageKW(data.deviceUsageInfo.totalUsageKW);
-      setAveragePowerUsage({
-        ...averagePowerUsage,
-        ...data.deviceUsageInfo.averagePowerUsage,
-      });
     },
   });
 
@@ -117,11 +103,19 @@ function MonitoringPoint() {
             />
             <section className='relative top-0 left-0 lg:left-[21rem] lg:top-2  flex-col w-full lg:w-4/5 mx-auto'>
               <StatisticsCards
-                totalUsageKW={totalUsageKW}
-                realtimeSmartMeterInfo={realtimeSmartMeterInfo}
-                averagePowerUsage={averagePowerUsage}
+                totalUsageKW={device?.totalUsageKW ?? 0}
+                realtimeSmartMeterInfo={device?.realtimeSmartMeterInfo}
+                averagePowerUsage={device?.averagePowerUsage}
               />
-              {/*  <Charts /> */}
+              <Chart
+                deviceUsage={
+                  device?.deviceUsage ?? {
+                    usage: [],
+                    id: 0,
+                    name: "",
+                  }
+                }
+              />
             </section>
           </>
         ))
