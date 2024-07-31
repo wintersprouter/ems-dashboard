@@ -160,6 +160,7 @@ const ToolBar = ({
                 onChange={handleStartTimeChange}
                 type='datetime-local'
                 className={dtStart ? hasDateStyle : defaultDateStyle}
+                required
               />
             </label>
             <label htmlFor='end' className={"bg-white text-xs font-normal"}>
@@ -173,6 +174,7 @@ const ToolBar = ({
                 value={dtEnd ?? ""}
                 onChange={handleEndTimeChange}
                 type='datetime-local'
+                required
                 className={dtEnd ? hasDateStyle : defaultDateStyle}
               />
             </label>

@@ -126,19 +126,19 @@ function Overview() {
         deviceUsageList: {
           ...overviewData?.deviceUsageList,
           "0": {
-            ...overviewData?.deviceUsageList["0"],
-            ...data.deviceUsageList["0"],
+            ...overviewData?.deviceUsageList?.["0"],
+            ...data.deviceUsageList?.["0"],
             usage: [...data.deviceUsageList["0"].usage],
           },
           "1": {
-            ...overviewData?.deviceUsageList["1"],
-            ...data.deviceUsageList["1"],
-            usage: [...data.deviceUsageList["1"].usage],
+            ...(overviewData?.deviceUsageList?.["1"] ?? {}),
+            ...(data.deviceUsageList?.["1"] ?? {}),
+            usage: [...(data.deviceUsageList?.["1"]?.usage ?? [])],
           },
           "2": {
-            ...overviewData?.deviceUsageList["2"],
-            ...data.deviceUsageList["2"],
-            usage: [...data.deviceUsageList["2"].usage],
+            ...(overviewData?.deviceUsageList?.["2"] ?? {}),
+            ...(data.deviceUsageList?.["2"] ?? {}),
+            usage: [...(data.deviceUsageList?.["2"]?.usage ?? [])],
           },
         },
       });

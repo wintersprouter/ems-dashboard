@@ -53,7 +53,7 @@ export const userApi = makeApi([
       email: z.string(),
       username: z.string(),
       action: z.string(),
-      token: z.null(),
+      token: z.null().or(z.string()),
       dtTokenExpire: z.string(),
       statusCode: z.nativeEnum(StatusCode),
     }),
