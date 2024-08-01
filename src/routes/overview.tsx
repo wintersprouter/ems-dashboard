@@ -138,6 +138,8 @@ function Overview() {
           "2": {
             ...(overviewData?.deviceUsageList?.["2"] ?? {}),
             ...(data.deviceUsageList?.["2"] ?? {}),
+            id: data.deviceUsageList?.["2"]?.id ?? 0,
+            name: data.deviceUsageList?.["2"]?.name ?? "",
             usage: [...(data.deviceUsageList?.["2"]?.usage ?? [])],
           },
         },
