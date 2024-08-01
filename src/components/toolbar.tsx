@@ -1,5 +1,6 @@
 import { format } from "date-fns/format";
-import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
+import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import monitoring_point_active_icon from "../assets/monitoring_point_active_icon.svg";
 import monitoring_point_icon from "../assets/monitoring_point_icon.svg";
@@ -63,6 +64,8 @@ const ToolBar = ({
   dtEnd,
   device,
 }: ToolBarProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const handleStartTimeChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -76,6 +79,24 @@ const ToolBar = ({
   const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDtEnd(event.target.value);
   };
+
+  useEffect(() => {
+    if(dtEnd !== null && dtStart !== null && dtStart > dtEnd){
+      setSearchParams({
+        ...searchParams,
+        startDate: dtEnd.toString(),
+        endDate: dtEnd.toString(),
+      });
+  
+      return navigate(`/dashboard/monitoring-point/${searchParams.toString()}`);
+    }else{
+      searchParams.delete('startDate');
+      searchParams.delete('endDate');
+      setSearchParams({
+        ...searchParams,
+      });
+    }
+  },[dtEnd, dtStart, navigate, searchParams, setSearchParams])
 
   return (
     <section className='fixed top-4 lg:top-20 lg:left-2 bg-white rounded-2xl  flex h-[48rem]'>

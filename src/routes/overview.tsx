@@ -143,6 +143,13 @@ function Overview() {
             usage: [...(data.deviceUsageList?.["2"]?.usage ?? [])],
           },
         },
+        
+      });
+      setRealtimeSmartMeterInfo({
+        ...realtimeSmartMeterInfo,
+        ...data.realtimeSmartMeterInfo,
+        usedChannel: [...data.realtimeSmartMeterInfo.usedChannel]
+        ,
       });
     },
   });

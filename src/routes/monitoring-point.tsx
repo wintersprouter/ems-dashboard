@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { match } from "ts-pattern";
 import { z } from "zod";
 import Chart from "../components/chart";
@@ -13,13 +14,18 @@ export type DeviceUsageInfo = z.infer<
 >["deviceUsageInfo"];
 
 function MonitoringPoint() {
+  const [searchParams] = useSearchParams();
+  const startDate = searchParams.get('startDate') ?? null;
+  const endDate = searchParams.get('endDate') ?? null;
   const [deviceList, setDeviceList] = useState<
     z.infer<typeof monitorDeviceResponse>["deviceList"]
   >([]);
-  const [dtStart, setDtStart] = useState<string | null>(null);
-  const [dtEnd, setDtEnd] = useState<string | null>(null);
+  const [dtStart, setDtStart] = useState<string | null>(startDate);
+  const [dtEnd, setDtEnd] = useState<string | null>(endDate);
   const [device, setDevice] = useState<DeviceUsageInfo>();
 
+
+  
   const { status, mutate, failureReason } = useMutation({
     mutationFn: () => {
       return Api.monitorDevice({
