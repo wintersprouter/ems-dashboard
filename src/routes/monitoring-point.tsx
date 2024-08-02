@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { match } from "ts-pattern";
 import { z } from "zod";
 import Chart from "../components/chart";
@@ -13,13 +14,18 @@ export type DeviceUsageInfo = z.infer<
 >["deviceUsageInfo"];
 
 function MonitoringPoint() {
+  const [searchParams] = useSearchParams();
+  const startDate = searchParams.get('startDate') ?? new Date().toISOString();
+  const endDate = searchParams.get('endDate') ?? new Date().toISOString();
+  const deviceId = Number(searchParams.get('deviceId')) ?? 0;
   const [deviceList, setDeviceList] = useState<
     z.infer<typeof monitorDeviceResponse>["deviceList"]
   >([]);
-  const [dtStart, setDtStart] = useState<string | null>(null);
-  const [dtEnd, setDtEnd] = useState<string | null>(null);
+  const [dtStart, setDtStart] = useState(startDate ?? "");
+  const [dtEnd, setDtEnd] = useState(endDate ?? "");
   const [device, setDevice] = useState<DeviceUsageInfo>();
 
+  const  navigate = useNavigate();
   const { status, mutate, failureReason } = useMutation({
     mutationFn: () => {
       return Api.monitorDevice({
@@ -27,15 +33,15 @@ function MonitoringPoint() {
         action: "monitorDevice",
         token: AuthProvider.token ?? "",
         factoryId: 1,
-        deviceId: 1,
-        dtStart: dtStart ?? "2005-06-07T00:00Z",
-        dtEnd: dtEnd ?? "2015-06-07T00:00Z",
+        deviceId: deviceId,
+        dtStart: dtStart ,
+        dtEnd: dtEnd ,
       });
     },
     onSuccess(data) {
-      console.log("data", JSON.stringify(data, null, 2));
-      setDtStart(data.deviceUsageInfo?.dtStart ?? null);
-      setDtEnd(data.deviceUsageInfo?.dtEnd ?? null);
+      // console.log("data", JSON.stringify(data, null, 2));
+      setDtStart(data.deviceUsageInfo?.dtStart?? "");
+      setDtEnd(data.deviceUsageInfo?.dtEnd?? "");
       setDevice({
         ...device,
         ...data.deviceUsageInfo,
@@ -77,6 +83,7 @@ function MonitoringPoint() {
               ),
             ]
       );
+      return navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
     },
   });
 
@@ -95,8 +102,8 @@ function MonitoringPoint() {
           <>
             <ToolBar
               deviceList={deviceList}
-              setDtStart={setDtStart}
-              setDtEnd={setDtEnd}
+              setDtStart={setDtStart?? ""}
+              setDtEnd={setDtEnd?? ""}
               dtStart={dtStart}
               dtEnd={dtEnd}
               device={device}

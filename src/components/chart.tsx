@@ -55,7 +55,7 @@ type Data = {
 
 function Chart({ deviceUsage }: Props) {
   const [chartData, setChartData] = useState<Data[]>([]);
-  console.log("deviceUsage", deviceUsage);
+  // console.log("deviceUsage", deviceUsage);
   const handleChartData = useCallback(() => {
     const data = deviceUsage.usage.map((i, index) => {
       const device = i;
@@ -72,7 +72,7 @@ function Chart({ deviceUsage }: Props) {
     });
     setChartData([...data]);
   }, [deviceUsage.usage]);
-  console.log("chartData", chartData);
+  // console.log("chartData", chartData);
   useEffect(() => {
     handleChartData();
   }, [handleChartData]);
