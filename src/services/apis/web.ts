@@ -33,7 +33,7 @@ export const deviceUsageSchema = z.object({
 const deviceUsageListSchema = z.object({
   "0": deviceUsageSchema,
   "1": deviceUsageSchema,
-  "2": deviceUsageSchema,
+  "2": deviceUsageSchema.optional(),
 });
 
 export const overviewResponse = z.object({
@@ -50,6 +50,8 @@ export const overviewResponse = z.object({
   token: z.string(),
   dtTokenExpire: z.string(),
   statusCode: z.nativeEnum(StatusCode),
+  id: z.number(),
+  name: z.string()
 });
 
 const monitorDeviceRequestParamsSchema = z.object({
