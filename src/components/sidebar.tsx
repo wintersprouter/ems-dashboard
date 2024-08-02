@@ -30,7 +30,7 @@ const navigation = [
     activeIcon: tree_active_icon,
   },
   {
-    navigation: "/dashboard/monitoring-point",
+    navigation: "/dashboard/monitoring-point?deviceId=0",
     name: "Monitoring Point",
     icon: monitoring_point_icon,
     activeIcon: monitoring_point_active_icon,

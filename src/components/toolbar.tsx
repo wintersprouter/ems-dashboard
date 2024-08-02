@@ -40,7 +40,7 @@ const navigation = [
     activeIcon: tree_active_icon,
   },
   {
-    navigation: "/dashboard/monitoring-point",
+    navigation: "/dashboard/monitoring-point?deviceId=0",
     name: "Monitoring Point",
     icon: monitoring_point_icon,
     activeIcon: monitoring_point_active_icon,
@@ -49,8 +49,8 @@ const navigation = [
 
 type ToolBarProps = {
   deviceList: z.infer<typeof monitorDeviceResponse>["deviceList"];
-  setDtStart: React.Dispatch<React.SetStateAction<string | null>>;
-  setDtEnd: React.Dispatch<React.SetStateAction<string | null>>;
+  setDtStart: React.Dispatch<React.SetStateAction<string>>;
+  setDtEnd: React.Dispatch<React.SetStateAction<string>>;
   dtStart: string | null;
   dtEnd: string | null;
   device?: DeviceUsageInfo;
@@ -65,6 +65,7 @@ const ToolBar = ({
   device,
 }: ToolBarProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const deviceId = searchParams.get('deviceId');
   const navigate = useNavigate();
   const handleStartTimeChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -77,26 +78,23 @@ const ToolBar = ({
   };
 
   const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDtEnd(event.target.value);
+    setDtEnd(event.target.value);    
   };
 
   useEffect(() => {
-    if(dtEnd !== null && dtStart !== null && dtStart > dtEnd){
-      setSearchParams({
-        ...searchParams,
-        startDate: dtEnd.toString(),
-        endDate: dtEnd.toString(),
-      });
-  
-      return navigate(`/dashboard/monitoring-point/${searchParams.toString()}`);
+    if(dtEnd !== null && dtStart !== null){
+       searchParams.set('startDate', dtStart);
+       searchParams.set('endDate', dtEnd);
+      return navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
     }else{
-      searchParams.delete('startDate');
-      searchParams.delete('endDate');
-      setSearchParams({
-        ...searchParams,
-      });
+      setSearchParams(params => {
+        const queryParams = Object.fromEntries(params)
+        delete queryParams['startDate']
+        delete queryParams['endDate']
+        return queryParams
+      })
     }
-  },[dtEnd, dtStart, navigate, searchParams, setSearchParams])
+  }, [dtEnd, dtStart, navigate, searchParams, setSearchParams]);
 
   return (
     <section className='fixed top-4 lg:top-20 lg:left-2 bg-white rounded-2xl  flex h-[48rem]'>
@@ -105,7 +103,8 @@ const ToolBar = ({
           <h2 className='text-left text-xs text-gray-400'>General</h2>
           <ul className='flex flex-col gap-3 my-3'>
             {navigation.map((item, idx) => (
-              <NavLink to={item.navigation} key={`navigation-${idx}`}>
+              <NavLink to={item.navigation} key={`navigation-${idx}`}
+              >
                 {({ isActive, isPending }) => (
                   <li
                     key={idx}
@@ -137,12 +136,16 @@ const ToolBar = ({
       <div className='flex flex-col divide-y-[1px] divide-gray-300 p-4 gap-4 w-64'>
         <div className='grid grid-cols-2 gap-1'>
           {deviceList.map((item, idx) => {
-            if (item.id === device?.id) {
+            if (item.id === Number(deviceId)) {
               return (
                 <button
                   key={`device-${idx}`}
                   type='button'
                   className='rounded-lg border border-gray-300 p-2 text-xs  font-normal text-white bg-green-600'
+                  onClick={() => {
+                    searchParams.set('deviceId', item.id.toString());
+                    navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
+                  }}
                 >
                   {item.name}
                 </button>
@@ -153,6 +156,10 @@ const ToolBar = ({
                   key={`device-${idx}`}
                   type='button'
                   className='rounded-lg border border-gray-300 p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
+                  onClick={() => {
+                    searchParams.set('deviceId', item.id.toString());
+                    navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
+                  }}
                 >
                   {item.name}
                 </button>
