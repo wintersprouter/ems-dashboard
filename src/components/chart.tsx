@@ -97,7 +97,6 @@ function Chart({ deviceUsage }: Props) {
         >
           <Tooltip
             cursor={<CustomCursor points={[]} />}
-            active={true}
             wrapperStyle={{
               backgroundColor: "#1F2937",
               borderRadius: "10px",
@@ -122,8 +121,7 @@ function Chart({ deviceUsage }: Props) {
                 return `${value} kw`;
               }
             }}
-            filterNull={false}
-            allowEscapeViewBox={{ x: true, y: true }}
+            filterNull={true}
           />
           <CartesianGrid vertical={false} />
           <XAxis dataKey='time' scale='band' type='category' name='time' />
