@@ -80,7 +80,7 @@ function Chart({ deviceUsage }: Props) {
   return (
     <section
       id='chart'
-      className='bg-white rounded-xl my-6 py-3 px-8 mx-2 pt-12 h-full'
+      className='bg-white rounded-xl my-6 py-3 px-8 mx-2 pt-12'
     >
       <h1 className='font-semibold text-gray-800 text-3xl'>Energy Charts</h1>
       <ResponsiveContainer width='100%' height='100%' aspect={1250 / 444}>
@@ -97,7 +97,6 @@ function Chart({ deviceUsage }: Props) {
         >
           <Tooltip
             cursor={<CustomCursor points={[]} />}
-            active={true}
             wrapperStyle={{
               backgroundColor: "#1F2937",
               borderRadius: "10px",
@@ -122,8 +121,7 @@ function Chart({ deviceUsage }: Props) {
                 return `${value} kw`;
               }
             }}
-            filterNull={false}
-            allowEscapeViewBox={{ x: true, y: true }}
+            filterNull={true}
           />
           <CartesianGrid vertical={false} />
           <XAxis dataKey='time' scale='band' type='category' name='time' />
