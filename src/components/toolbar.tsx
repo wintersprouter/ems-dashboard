@@ -6,13 +6,10 @@ import { DeviceUsageInfo } from "../routes/monitoring-point";
 import { monitorDeviceResponse } from "../services/apis/web";
 import Navbar from "./navbar";
 
-
 const defaultDateStyle =
   "relative left-0 rounded-lg border border-gray-300 p-2 text-sm text-gray-300 font-normal active:border-gray-800 active:text-gray-800";
 const hasDateStyle =
   "relative left-0 rounded-lg border p-2 text-sm font-normal border-gray-800 text-gray-800";
-
-
 
 type ToolBarProps = {
   deviceList: z.infer<typeof monitorDeviceResponse>["deviceList"];
@@ -32,7 +29,7 @@ const ToolBar = ({
   device,
 }: ToolBarProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const deviceId = searchParams.get('deviceId');
+  const deviceId = searchParams.get("deviceId");
   const navigate = useNavigate();
   const handleStartTimeChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -45,28 +42,28 @@ const ToolBar = ({
   };
 
   const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDtEnd(event.target.value);    
+    setDtEnd(event.target.value);
   };
 
   useEffect(() => {
-    if(dtEnd !== null && dtStart !== null){
-       searchParams.set('startDate', dtStart);
-       searchParams.set('endDate', dtEnd);
+    if (dtEnd !== null && dtStart !== null) {
+      searchParams.set("startDate", dtStart);
+      searchParams.set("endDate", dtEnd);
       return navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
-    }else{
-      setSearchParams(params => {
-        const queryParams = Object.fromEntries(params)
-        delete queryParams['startDate']
-        delete queryParams['endDate']
-        return queryParams
-      })
+    } else {
+      setSearchParams((params) => {
+        const queryParams = Object.fromEntries(params);
+        delete queryParams["startDate"];
+        delete queryParams["endDate"];
+        return queryParams;
+      });
     }
   }, [dtEnd, dtStart, navigate, searchParams, setSearchParams]);
 
   return (
-    <section className='fixed top-4 lg:top-20 lg:left-2 bg-white rounded-2xl  flex h-[48rem]'>
+    <section className='fixed top-4 lg:top-20 lg:left-2 bg-white rounded-2xl  flex h-[calc(100vh-6rem)]'>
       <div className='rounded-2xl border border-white shadow min-w-28 py-6 px-3 overflow-y-auto bg-gray-50 grid grid-cols-1 divide-y-2 divide-gray-200 gap-6 h-full '>
-        <Navbar/>
+        <Navbar />
       </div>
       <div className='flex flex-col divide-y-[1px] divide-gray-300 p-4 gap-4 w-64'>
         <div className='grid grid-cols-2 gap-1'>
@@ -78,8 +75,10 @@ const ToolBar = ({
                   type='button'
                   className='rounded-lg border border-gray-300 p-2 text-xs  font-normal text-white bg-green-600'
                   onClick={() => {
-                    searchParams.set('deviceId', item.id.toString());
-                    navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
+                    searchParams.set("deviceId", item.id.toString());
+                    navigate(
+                      `/dashboard/monitoring-point?${searchParams.toString()}`
+                    );
                   }}
                 >
                   {item.name}
@@ -92,8 +91,10 @@ const ToolBar = ({
                   type='button'
                   className='rounded-lg border border-gray-300 p-2 text-xs text-gray-400 font-normal active:text-white active:bg-green-600 active:border-green-700'
                   onClick={() => {
-                    searchParams.set('deviceId', item.id.toString());
-                    navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
+                    searchParams.set("deviceId", item.id.toString());
+                    navigate(
+                      `/dashboard/monitoring-point?${searchParams.toString()}`
+                    );
                   }}
                 >
                   {item.name}
