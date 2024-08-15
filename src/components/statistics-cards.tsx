@@ -132,13 +132,13 @@ const StatisticsCards = ({
           <h3 className='font-medium text-gray-500 text-lg'>Day</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
-              {limitDecimalToOnePlace(averagePowerUsage?.dayUsageKHW) ?? 0}
+              {limitDecimalToOnePlace(averagePowerUsage?.dayUsageKWH) ?? 0}
             </p>
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
             CO₂ e：
-            {limitDecimalToOnePlace(averagePowerUsage?.dayCO2Saving) ?? 0}kg
+            {limitDecimalToOnePlace(averagePowerUsage?.dayCO2SavingKG) ?? 0}kg
           </p>
         </div>
       </div>
@@ -148,13 +148,13 @@ const StatisticsCards = ({
           <h3 className='font-medium text-gray-500 text-lg'>month</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
-              {limitDecimalToOnePlace(averagePowerUsage?.monthUsageKHW) ?? 0}
+              {limitDecimalToOnePlace(averagePowerUsage?.monthUsageKWH) ?? 0}
             </p>
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
             CO₂ e：
-            {limitDecimalToOnePlace(averagePowerUsage?.monthCO2Saving) ?? 0}kg
+            {limitDecimalToOnePlace(averagePowerUsage?.monthCO2SavingKG) ?? 0}kg
           </p>
         </div>
       </div>
@@ -164,13 +164,13 @@ const StatisticsCards = ({
           <h3 className='font-medium text-gray-500 text-lg'>Year</h3>
           <div className='flex items-baseline'>
             <p className='text-5xl text-gray-800 font-semibold mr-1'>
-              {limitDecimalToOnePlace(averagePowerUsage?.yearUsageKHW) ?? 0}
+              {limitDecimalToOnePlace(averagePowerUsage?.yearUsageKWH) ?? 0}
             </p>
             <p className='text-base text-gray-500 font-medium'>kW/h</p>
           </div>
           <p className='text-sm text-green-700 font-normal'>
             CO₂ e：
-            {limitDecimalToOnePlace(averagePowerUsage?.yearCO2Saving) ?? 0}kg
+            {limitDecimalToOnePlace(averagePowerUsage?.yearCO2SavingKG) ?? 0}kg
           </p>
         </div>
       </div>

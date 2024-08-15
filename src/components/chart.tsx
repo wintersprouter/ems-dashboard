@@ -60,8 +60,8 @@ function Chart({ deviceUsage }: Props) {
     const data = deviceUsage.usage.map((i, index) => {
       const device = i;
       const kWh = limitDecimalToOnePlace(i);
-      const average_kW = 0;
-      const max_kW = 0;
+      const average_kW = limitDecimalToOnePlace(deviceUsage.powerAverageKW);
+      const max_kW = limitDecimalToOnePlace(deviceUsage.powerMaxKW);
       return {
         device,
         time: index.toString(),
@@ -71,7 +71,7 @@ function Chart({ deviceUsage }: Props) {
       };
     });
     setChartData([...data]);
-  }, [deviceUsage.usage]);
+  }, [deviceUsage.powerAverageKW, deviceUsage.powerMaxKW, deviceUsage.usage]);
   // console.log("chartData", chartData);
   useEffect(() => {
     handleChartData();
@@ -83,7 +83,7 @@ function Chart({ deviceUsage }: Props) {
       className='bg-white rounded-xl my-6 py-3 px-8 mx-2 pt-12'
     >
       <h1 className='font-semibold text-gray-800 text-3xl'>Energy Charts</h1>
-      <ResponsiveContainer width='100%' height='100%' aspect={1250 / 444}>
+      <ResponsiveContainer width='100%' height='100%' aspect={1250 / 596}>
         <ComposedChart
           width={500}
           height={400}

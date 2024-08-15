@@ -15,9 +15,9 @@ export type DeviceUsageInfo = z.infer<
 
 function MonitoringPoint() {
   const [searchParams] = useSearchParams();
-  const startDate = searchParams.get('startDate') ?? new Date().toISOString();
-  const endDate = searchParams.get('endDate') ?? new Date().toISOString();
-  const deviceId = Number(searchParams.get('deviceId')) ?? 0;
+  const startDate = searchParams.get("startDate") ?? new Date().toISOString();
+  const endDate = searchParams.get("endDate") ?? new Date().toISOString();
+  const deviceId = Number(searchParams.get("deviceId")) ?? 0;
   const [deviceList, setDeviceList] = useState<
     z.infer<typeof monitorDeviceResponse>["deviceList"]
   >([]);
@@ -25,7 +25,7 @@ function MonitoringPoint() {
   const [dtEnd, setDtEnd] = useState(endDate ?? "");
   const [device, setDevice] = useState<DeviceUsageInfo>();
 
-  const  navigate = useNavigate();
+  const navigate = useNavigate();
   const { status, mutate, failureReason } = useMutation({
     mutationFn: () => {
       return Api.monitorDevice({
@@ -34,14 +34,14 @@ function MonitoringPoint() {
         token: AuthProvider.token ?? "",
         factoryId: 1,
         deviceId: deviceId,
-        dtStart: dtStart ,
-        dtEnd: dtEnd ,
+        dtStart: dtStart,
+        dtEnd: dtEnd,
       });
     },
     onSuccess(data) {
       // console.log("data", JSON.stringify(data, null, 2));
-      setDtStart(data.deviceUsageInfo?.dtStart?? "");
-      setDtEnd(data.deviceUsageInfo?.dtEnd?? "");
+      setDtStart(data.deviceUsageInfo?.dtStart ?? "");
+      setDtEnd(data.deviceUsageInfo?.dtEnd ?? "");
       setDevice({
         ...device,
         ...data.deviceUsageInfo,
@@ -92,7 +92,7 @@ function MonitoringPoint() {
   }, [mutate]);
 
   return (
-    <section className='flex container'>
+    <section className='flex'>
       {match(status)
         .with("pending", () => <p>Loading...</p>)
         .with("error", () => (
@@ -102,13 +102,13 @@ function MonitoringPoint() {
           <>
             <ToolBar
               deviceList={deviceList}
-              setDtStart={setDtStart?? ""}
-              setDtEnd={setDtEnd?? ""}
+              setDtStart={setDtStart ?? ""}
+              setDtEnd={setDtEnd ?? ""}
               dtStart={dtStart}
               dtEnd={dtEnd}
               device={device}
             />
-            <section className='relative top-0 left-0 lg:left-[21rem] lg:top-2  flex-col w-full lg:w-4/5 mx-auto'>
+            <section className='relative top-0 left-0 flex-col w-full mx-auto lg:left-[21.5rem] lg:top-2 lg:max-w-[calc(100%-17rem)] lg:w-4/5  xl:left-[14.5rem] xl:w-[calc(100%-30rem)]'>
               <StatisticsCards
                 totalUsageKW={device?.totalUsageKW ?? 0}
                 realtimeSmartMeterInfo={device?.realtimeSmartMeterInfo}
@@ -120,6 +120,8 @@ function MonitoringPoint() {
                     usage: [],
                     id: 0,
                     name: "",
+                    powerMaxKW: 0,
+                    powerAverageKW: 0,
                   }
                 }
               />
