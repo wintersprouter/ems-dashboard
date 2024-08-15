@@ -16,12 +16,12 @@ export const realtimeSmartMeterInfoSchema = z.object({
 });
 
 const averagePowerUsageSchema = z.object({
-  dayUsageKHW: z.number(),
-  dayCO2Saving: z.number(),
-  monthUsageKHW: z.number(),
-  monthCO2Saving: z.number(),
-  yearUsageKHW: z.number(),
-  yearCO2Saving: z.number(),
+  dayUsageKWH: z.number(),
+  dayCO2SavingKG: z.number(),
+  monthUsageKWH: z.number(),
+  monthCO2SavingKG: z.number(),
+  yearUsageKWH: z.number(),
+  yearCO2SavingKG: z.number(),
 });
 
 export const deviceUsageSchema = z.object({
@@ -51,7 +51,7 @@ export const overviewResponse = z.object({
   dtTokenExpire: z.string(),
   statusCode: z.nativeEnum(StatusCode),
   id: z.number(),
-  name: z.string()
+  name: z.string(),
 });
 
 const monitorDeviceRequestParamsSchema = z.object({
