@@ -61,6 +61,8 @@ type Item = {
   id: number;
   name: string;
   usage: number[];
+  powerMaxKW: number;
+  powerAverageKW: number;
 };
 
 function getTimeFormat(minute: number) {
@@ -84,8 +86,20 @@ function Charts({ deviceUsageList, monitorPeriodMinute }: Props) {
         const ch1 = itemList[1].usage[index];
         const ch2 = itemList[2].usage[index];
         const kWh = limitDecimalToOnePlace(add(ch0, ch1, ch2));
-        const average_kW = 0;
-        const max_kW = 0;
+        const average_kW = limitDecimalToOnePlace(
+          add(
+            itemList[0].powerAverageKW,
+            itemList[1].powerAverageKW,
+            itemList[2].powerAverageKW
+          ) / 3
+        );
+        const max_kW = limitDecimalToOnePlace(
+          Math.max(
+            itemList[0].powerMaxKW,
+            itemList[1].powerMaxKW,
+            itemList[2].powerMaxKW
+          )
+        );
         return {
           ch0,
           ch1,
