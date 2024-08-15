@@ -166,9 +166,7 @@ function Overview() {
         className='relative top-20 left-0 
         flex-col mx-auto container 
         lg:max-w-[calc(100%-13.5rem)]
-        lg:left-[6.5rem] lg:top-2 
-        xl:max-w-[calc(100%-14.5rem)]
-        xl:left-28 xl:top-2'
+        lg:left-[6.5rem] lg:top-2'
       >
         {match(status)
           .with("pending", () => <p>Loading...</p>)

@@ -14,6 +14,7 @@ import {
 import { z } from "zod";
 import { deviceUsageSchema } from "../services/apis/web";
 import { limitDecimalToOnePlace } from "../util/limitDecimalToOnePlace";
+import RoundedBar from "./rounedBar";
 type Props = {
   deviceUsage: z.infer<typeof deviceUsageSchema>;
 };
@@ -156,6 +157,7 @@ function Chart({ deviceUsage }: Props) {
             fill='#16A34A'
             yAxisId='left'
             name='device'
+            shape={<RoundedBar dataKey='device' />}
           />
           <Line
             type='linear'
