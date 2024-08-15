@@ -15,6 +15,7 @@ import {
 import { z } from "zod";
 import { overviewResponse } from "../services/apis/web";
 import { limitDecimalToOnePlace } from "../util/limitDecimalToOnePlace";
+import RoundedBar from "./rounedBar";
 type Props = {
   deviceUsageList?: z.infer<typeof overviewResponse>["deviceUsageList"];
   monitorPeriodMinute: z.infer<typeof overviewResponse>["monitorPeriodMinute"];
@@ -197,6 +198,7 @@ function Charts({ deviceUsageList, monitorPeriodMinute }: Props) {
             fill='#4ADE80'
             yAxisId='left'
             name='ch0'
+            shape={<RoundedBar dataKey='ch0' />}
           />
           <Line
             type='linear'
