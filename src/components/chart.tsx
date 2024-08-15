@@ -60,8 +60,8 @@ function Chart({ deviceUsage }: Props) {
     const data = deviceUsage.usage.map((i, index) => {
       const device = i;
       const kWh = limitDecimalToOnePlace(i);
-      const average_kW = 0;
-      const max_kW = 0;
+      const average_kW = limitDecimalToOnePlace(deviceUsage.powerAverageKW);
+      const max_kW = limitDecimalToOnePlace(deviceUsage.powerMaxKW);
       return {
         device,
         time: index.toString(),
@@ -71,7 +71,7 @@ function Chart({ deviceUsage }: Props) {
       };
     });
     setChartData([...data]);
-  }, [deviceUsage.usage]);
+  }, [deviceUsage.powerAverageKW, deviceUsage.powerMaxKW, deviceUsage.usage]);
   // console.log("chartData", chartData);
   useEffect(() => {
     handleChartData();

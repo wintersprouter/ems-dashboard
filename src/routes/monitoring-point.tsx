@@ -120,6 +120,8 @@ function MonitoringPoint() {
                     usage: [],
                     id: 0,
                     name: "",
+                    powerMaxKW: 0,
+                    powerAverageKW: 0,
                   }
                 }
               />

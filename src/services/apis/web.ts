@@ -28,6 +28,8 @@ export const deviceUsageSchema = z.object({
   id: z.number(),
   name: z.string(),
   usage: z.array(z.number()),
+  powerMaxKW: z.number(),
+  powerAverageKW: z.number(),
 });
 
 const deviceUsageListSchema = z.object({
