@@ -141,8 +141,6 @@ function Overview() {
             id: data.deviceUsageList?.["2"]?.id ?? 0,
             name: data.deviceUsageList?.["2"]?.name ?? "",
             usage: [...(data.deviceUsageList?.["2"]?.usage ?? [])],
-            powerMaxKW: data.deviceUsageList?.["2"]?.powerMaxKW ?? 0,
-            powerAverageKW: data.deviceUsageList?.["2"]?.powerAverageKW ?? 0,
           },
         },
       });
@@ -181,6 +179,8 @@ function Overview() {
                 monitorDeviceCount={overviewData?.monitorDeviceCount ?? 0}
               />
               <Charts
+                listPowerMaxKW={overviewData?.listPowerMaxKW ?? []}
+                listPowerAverageKW={overviewData?.listPowerAverageKW ?? []}
                 deviceUsageList={overviewData?.deviceUsageList}
                 monitorPeriodMinute={overviewData?.monitorPeriodMinute ?? 0}
               />
