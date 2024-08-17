@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import { z } from "zod";
 import { deviceUsageSchema } from "../services/apis/web";
+import { getTimeFormat } from "../util/getTime";
 import { limitDecimalToOnePlace } from "../util/limitDecimalToOnePlace";
 import RoundedBar from "./rounedBar";
 type Props = {
@@ -48,7 +49,7 @@ function CustomCursor(props: {
 
 type Data = {
   device: number;
-  time: string;
+  time: number | string;
   kWh: number;
   average_kW: number;
   max_kW: number;
@@ -58,21 +59,35 @@ function Chart({ deviceUsage }: Props) {
   const [chartData, setChartData] = useState<Data[]>([]);
   // console.log("deviceUsage", deviceUsage);
   const handleChartData = useCallback(() => {
-    const data = deviceUsage.usage.map((i, index) => {
-      const device = i;
-      const kWh = limitDecimalToOnePlace(i);
-      const average_kW = limitDecimalToOnePlace(deviceUsage.powerAverageKW);
-      const max_kW = limitDecimalToOnePlace(deviceUsage.powerMaxKW);
-      return {
-        device,
-        time: index.toString(),
-        kWh,
-        average_kW,
-        max_kW,
-      };
-    });
+    const data = deviceUsage.usage
+      .map((i, index) => {
+        const device = i;
+        const kWh = limitDecimalToOnePlace(i);
+        return {
+          device,
+          time:
+            deviceUsage.monitorPeriodMinute > 0
+              ? getTimeFormat(index * deviceUsage.monitorPeriodMinute)
+              : index,
+          kWh,
+        };
+      })
+      .map((item, index) => {
+        return {
+          ...item,
+          average_kW: limitDecimalToOnePlace(
+            deviceUsage.listPowerAverageKW[index]
+          ),
+          max_kW: limitDecimalToOnePlace(deviceUsage.listPowerMaxKW[index]),
+        };
+      });
     setChartData([...data]);
-  }, [deviceUsage.powerAverageKW, deviceUsage.powerMaxKW, deviceUsage.usage]);
+  }, [
+    deviceUsage.listPowerAverageKW,
+    deviceUsage.listPowerMaxKW,
+    deviceUsage.monitorPeriodMinute,
+    deviceUsage.usage,
+  ]);
   // console.log("chartData", chartData);
   useEffect(() => {
     handleChartData();
@@ -81,7 +96,7 @@ function Chart({ deviceUsage }: Props) {
   return (
     <section id='chart' className='bg-white rounded-xl my-6 px-8 mx-2 py-6'>
       <h1 className='font-semibold text-gray-800 text-3xl'>Energy Charts</h1>
-      <ResponsiveContainer width='100%' height='100%' aspect={16 / 6}>
+      <ResponsiveContainer width='100%' height='100%' aspect={16 / 7.9}>
         <ComposedChart
           width={500}
           height={400}
@@ -136,6 +151,18 @@ function Chart({ deviceUsage }: Props) {
             axisLine={false}
           />
           <YAxis
+            dataKey='max_kW'
+            yAxisId='right'
+            orientation='right'
+            scale='auto'
+            type='number'
+            unit='kW'
+            stroke='#9CA3AF'
+            name='kW'
+            tickCount={12}
+            axisLine={false}
+          />
+          <YAxis
             dataKey='kW'
             yAxisId='right'
             scale='pow'
@@ -147,7 +174,35 @@ function Chart({ deviceUsage }: Props) {
             tickCount={12}
             axisLine={false}
           />
-          <Legend verticalAlign='top' align='right' iconType='line' />
+          <Legend
+            wrapperStyle={{
+              position: "absolute",
+              top: -30,
+            }}
+            verticalAlign='top'
+            align='right'
+            iconType='line'
+            payload={[
+              {
+                value: "kWh",
+                type: "circle",
+                id: "device",
+                color: "#16A34A",
+              },
+              {
+                value: "Average(kW)",
+                type: "line",
+                id: "average_kW",
+                color: "#FACC15",
+              },
+              {
+                value: "Max(kW)",
+                type: "line",
+                id: "max_kW",
+                color: "#3B82F6",
+              },
+            ]}
+          />
           <Bar
             dataKey='device'
             stackId='time'

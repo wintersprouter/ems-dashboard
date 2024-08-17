@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import { z } from "zod";
 import { overviewResponse } from "../services/apis/web";
+import { getTimeFormat } from "../util/getTime";
 import { limitDecimalToOnePlace } from "../util/limitDecimalToOnePlace";
 import RoundedBar from "./rounedBar";
 type Props = {
@@ -65,11 +66,6 @@ type Item = {
   usage: number[];
 };
 
-function getTimeFormat(minute: number) {
-  const hour = Math.floor(minute / 60);
-  const min = minute % 60;
-  return `${hour > 9 ? "" : "0"}${hour}:${min > 9 ? "" : "0"}${min}`;
-}
 function Charts({
   deviceUsageList,
   monitorPeriodMinute,

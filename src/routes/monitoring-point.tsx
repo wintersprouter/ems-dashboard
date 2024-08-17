@@ -122,6 +122,9 @@ function MonitoringPoint() {
                     name: "",
                     powerMaxKW: 0,
                     powerAverageKW: 0,
+                    listPowerMaxKW: [],
+                    listPowerAverageKW: [],
+                    monitorPeriodMinute: 0,
                   }
                 }
               />
