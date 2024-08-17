@@ -28,8 +28,6 @@ export const deviceUsageSchema = z.object({
   id: z.number(),
   name: z.string(),
   usage: z.array(z.number()),
-  powerMaxKW: z.number(),
-  powerAverageKW: z.number(),
 });
 
 const deviceUsageListSchema = z.object({
@@ -54,6 +52,8 @@ export const overviewResponse = z.object({
   statusCode: z.nativeEnum(StatusCode),
   id: z.number(),
   name: z.string(),
+  listPowerMaxKW: z.array(z.number()),
+  listPowerAverageKW: z.array(z.number()),
 });
 
 const monitorDeviceRequestParamsSchema = z.object({

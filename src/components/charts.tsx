@@ -17,6 +17,8 @@ import { overviewResponse } from "../services/apis/web";
 import { limitDecimalToOnePlace } from "../util/limitDecimalToOnePlace";
 import RoundedBar from "./rounedBar";
 type Props = {
+  listPowerMaxKW: z.infer<typeof overviewResponse>["listPowerMaxKW"];
+  listPowerAverageKW: z.infer<typeof overviewResponse>["listPowerAverageKW"];
   deviceUsageList?: z.infer<typeof overviewResponse>["deviceUsageList"];
   monitorPeriodMinute: z.infer<typeof overviewResponse>["monitorPeriodMinute"];
 };
@@ -61,8 +63,6 @@ type Item = {
   id: number;
   name: string;
   usage: number[];
-  powerMaxKW: number;
-  powerAverageKW: number;
 };
 
 function getTimeFormat(minute: number) {
@@ -70,7 +70,12 @@ function getTimeFormat(minute: number) {
   const min = minute % 60;
   return `${hour > 9 ? "" : "0"}${hour}:${min > 9 ? "" : "0"}${min}`;
 }
-function Charts({ deviceUsageList, monitorPeriodMinute }: Props) {
+function Charts({
+  deviceUsageList,
+  monitorPeriodMinute,
+  listPowerAverageKW,
+  listPowerMaxKW,
+}: Props) {
   const [chartData, setChartData] = useState<Data[]>([]);
 
   const handleChartData = useCallback(() => {
@@ -81,43 +86,42 @@ function Charts({ deviceUsageList, monitorPeriodMinute }: Props) {
         itemList.push(value);
       }
       console.log("itemList", JSON.stringify(itemList, null, 2));
-      const dataList = itemList[0].usage.map((_, index) => {
-        const ch0 = itemList[0].usage[index];
-        const ch1 = itemList[1].usage[index];
-        const ch2 = itemList[2].usage[index];
-        const kWh = limitDecimalToOnePlace(add(ch0, ch1, ch2));
-        const average_kW = limitDecimalToOnePlace(
-          add(
-            itemList[0].powerAverageKW,
-            itemList[1].powerAverageKW,
-            itemList[2].powerAverageKW
-          ) / 3
-        );
-        const max_kW = limitDecimalToOnePlace(
-          Math.max(
-            itemList[0].powerMaxKW,
-            itemList[1].powerMaxKW,
-            itemList[2].powerMaxKW
-          )
-        );
-        return {
-          ch0,
-          ch1,
-          ch2,
-          time: getTimeFormat(index * monitorPeriodMinute),
-          kWh,
-          average_kW,
-          max_kW,
-        };
-      });
+      const dataList = itemList[0].usage
+        .map((_, index) => {
+          const ch0 = itemList[0].usage[index];
+          const ch1 = itemList[1].usage[index];
+          const ch2 = itemList[2].usage[index];
+          const kWh = limitDecimalToOnePlace(add(ch0, ch1, ch2));
+
+          return {
+            ch0,
+            ch1,
+            ch2,
+            time: getTimeFormat(index * monitorPeriodMinute),
+            kWh,
+          };
+        })
+        .map((item, index) => {
+          return {
+            ...item,
+            average_kW: limitDecimalToOnePlace(listPowerAverageKW[index]),
+            max_kW: limitDecimalToOnePlace(listPowerMaxKW[index]),
+          };
+        });
       setChartData(dataList);
     }
-  }, [deviceUsageList, monitorPeriodMinute]);
+  }, [
+    deviceUsageList,
+    listPowerAverageKW,
+    listPowerMaxKW,
+    monitorPeriodMinute,
+  ]);
 
   useEffect(() => {
     handleChartData();
   }, [handleChartData]);
 
+  console.log("chartData", JSON.stringify(chartData, null, 2));
   return (
     <section
       id='charts'
@@ -153,8 +157,6 @@ function Charts({ deviceUsageList, monitorPeriodMinute }: Props) {
             }}
             formatter={(value, name) => {
               if (name === "time") {
-                //format time
-                //00:00
                 return `${value}:00`;
               } else if (name === "ch2" || name === "ch1" || name === "ch0") {
                 return `${limitDecimalToOnePlace(Number(value) ?? 0)} kwh`;
@@ -179,19 +181,58 @@ function Charts({ deviceUsageList, monitorPeriodMinute }: Props) {
             axisLine={false}
           />
           <YAxis
-            dataKey='kW'
+            dataKey='max_kW'
             yAxisId='right'
-            scale='pow'
+            orientation='right'
+            scale='auto'
             type='number'
             unit='kW'
-            orientation='right'
             stroke='#9CA3AF'
             name='kW'
             tickCount={12}
             axisLine={false}
           />
-
-          <Legend verticalAlign='top' align='right' iconType='line' />
+          <Legend
+            verticalAlign='top'
+            align='right'
+            layout='horizontal'
+            wrapperStyle={{
+              position: "absolute",
+              top: -30,
+            }}
+            payload={[
+              {
+                value: "ch0 kwh",
+                type: "circle",
+                id: "ch0",
+                color: "#4ADE80",
+              },
+              {
+                value: "ch1 kwh",
+                type: "circle",
+                id: "ch1",
+                color: "#22C55E",
+              },
+              {
+                value: "ch2 kwh",
+                type: "circle",
+                id: "ch2",
+                color: "#15803D",
+              },
+              {
+                value: "Average(kW)",
+                type: "line",
+                id: "Average(kW)",
+                color: "#FACC15",
+              },
+              {
+                value: "Max(kW)",
+                type: "line",
+                id: "Max(kW)",
+                color: "#3B82F6",
+              },
+            ]}
+          />
           <Bar
             dataKey='ch2'
             stackId='time'
@@ -219,7 +260,7 @@ function Charts({ deviceUsageList, monitorPeriodMinute }: Props) {
             dataKey='average_kW'
             strokeWidth={3}
             stroke='#FACC15'
-            yAxisId='left'
+            yAxisId='right'
             dot={{ stroke: "#CA8A04", strokeWidth: 2 }}
             name='Average(kW)'
           />
