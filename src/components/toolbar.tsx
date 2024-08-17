@@ -1,4 +1,4 @@
-import { format } from "date-fns/format";
+import { format, parseISO } from "date-fns";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
@@ -35,14 +35,24 @@ const ToolBar = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const newStartTime: string = event.target.value;
-    setDtStart(newStartTime);
-    if (dtEnd !== null && newStartTime > dtEnd) {
-      setDtEnd(newStartTime);
+    // 先解析 ISO 字符串，然後格式化
+    const formattedStartTime = format(
+      parseISO(newStartTime),
+      "yyyy-MM-dd HH:mm"
+    );
+    setDtStart(formattedStartTime);
+    if (dtEnd !== null && formattedStartTime > dtEnd) {
+      setDtEnd(formattedStartTime);
     }
   };
 
   const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDtEnd(event.target.value);
+    // 先解析 ISO 字符串，然後格式化
+    const formattedEndTime = format(
+      parseISO(event.target.value),
+      "yyyy-MM-dd HH:mm"
+    );
+    setDtEnd(formattedEndTime);
   };
 
   useEffect(() => {
@@ -125,6 +135,7 @@ const ToolBar = ({
                 type='datetime-local'
                 className={dtStart ? hasDateStyle : defaultDateStyle}
                 required
+                step='60'
               />
             </label>
             <label htmlFor='end' className={"bg-white text-xs font-normal"}>
@@ -140,6 +151,7 @@ const ToolBar = ({
                 type='datetime-local'
                 required
                 className={dtEnd ? hasDateStyle : defaultDateStyle}
+                step='60'
               />
             </label>
           </div>
