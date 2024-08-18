@@ -10,7 +10,7 @@ import { AuthProvider } from "../context/authProvider";
 import { Api } from "../services/apis";
 import { StatusCode } from "../services/apis/types";
 import { overviewResponse } from "../services/apis/web";
-const socketUrl = "wss://epoweros.greenwiz.com.tw:32443/WSS";
+const socketUrl = "wss://epoweros.greenwiz.com.tw:32443/WS";
 type MainSmartMeterInfo = z.infer<
   typeof overviewResponse
 >["realtimeSmartMeterInfo"];
