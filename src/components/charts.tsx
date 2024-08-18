@@ -81,7 +81,7 @@ function Charts({
         console.log("key", key);
         itemList.push(value);
       }
-      console.log("itemList", JSON.stringify(itemList, null, 2));
+
       const dataList = itemList[0].usage
         .map((_, index) => {
           const ch0 = itemList[0].usage[index];
@@ -117,7 +117,6 @@ function Charts({
     handleChartData();
   }, [handleChartData]);
 
-  console.log("chartData", JSON.stringify(chartData, null, 2));
   return (
     <section
       id='charts'

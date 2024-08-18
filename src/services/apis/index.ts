@@ -5,7 +5,7 @@ import { userApi } from "./user";
 import { webApi } from "./web";
 
 const baseUrl = "https://epoweros.greenwiz.com.tw:32443/api";
-
+export const socketUrl = "wss://epoweros.greenwiz.com.tw:32443/WS";
 export const Api = new Zodios(baseUrl, [...userApi, ...webApi]);
 
 Api.axios.interceptors.response.use(

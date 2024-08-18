@@ -96,7 +96,7 @@ function Chart({ deviceUsage }: Props) {
   return (
     <section id='chart' className='bg-white rounded-xl my-6 px-8 mx-2 py-6'>
       <h1 className='font-semibold text-gray-800 text-3xl'>Energy Charts</h1>
-      <ResponsiveContainer width='100%' height='100%' aspect={16 / 7.9}>
+      <ResponsiveContainer width='100%' height='100%' aspect={16 / 8.1}>
         <ComposedChart
           width={500}
           height={400}
