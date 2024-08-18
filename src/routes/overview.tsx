@@ -7,10 +7,10 @@ import Charts from "../components/charts";
 import Sidebar from "../components/sidebar";
 import StatisticsCards from "../components/statistics-cards";
 import { AuthProvider } from "../context/authProvider";
-import { Api } from "../services/apis";
+import { Api, socketUrl } from "../services/apis";
 import { StatusCode } from "../services/apis/types";
 import { overviewResponse } from "../services/apis/web";
-const socketUrl = "wss://epoweros.greenwiz.com.tw:32443/WSS";
+
 type MainSmartMeterInfo = z.infer<
   typeof overviewResponse
 >["realtimeSmartMeterInfo"];
@@ -31,7 +31,7 @@ function Overview() {
     socketUrl,
     {
       share: false,
-      shouldReconnect: () => false,
+      shouldReconnect: () => true,
       onOpen: () => console.log("WebSocket connection opened!"),
       onClose: () => console.log("WebSocket connection closed!"),
       onError: (event: Event) => console.error("WebSocket error:", event),
@@ -60,52 +60,22 @@ function Overview() {
       : "UNINSTANTIATED"
   );
 
-  const {
-    chACurrent,
-    chAUsageKW,
-    chAVoltage,
-    chBCurrent,
-    chBUsageKW,
-    chBVoltage,
-    chCCurrent,
-    chCUsageKW,
-    chCVoltage,
-  } = realtimeSmartMeterInfo;
-
   useEffect(() => {
     console.log(
       `Got a new message: ${JSON.stringify(lastJsonMessage, null, 2)}`
     );
-    if (lastJsonMessage) {
+    if (lastJsonMessage !== null && lastJsonMessage) {
+      const { mainSmartMeterInfo } =
+        lastJsonMessage as MainSmartMeterInfoMessage;
+      const { usedChannel, ...rest } = mainSmartMeterInfo;
       setRealtimeSmartMeterInfo({
-        ...(lastJsonMessage as MainSmartMeterInfoMessage).mainSmartMeterInfo,
-        chAVoltage,
-        chACurrent,
-        chAUsageKW,
-        chBVoltage,
-        chBCurrent,
-        chBUsageKW,
-        chCVoltage,
-        chCCurrent,
-        chCUsageKW,
-        usedChannel: [
-          ...(lastJsonMessage as MainSmartMeterInfoMessage).mainSmartMeterInfo
-            .usedChannel,
-        ],
+        ...realtimeSmartMeterInfo,
+        ...rest,
+        usedChannel: Array.isArray(usedChannel) ? [...usedChannel] : [],
       });
     }
-  }, [
-    chACurrent,
-    chAUsageKW,
-    chAVoltage,
-    chBCurrent,
-    chBUsageKW,
-    chBVoltage,
-    chCCurrent,
-    chCUsageKW,
-    chCVoltage,
-    lastJsonMessage,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastJsonMessage]);
 
   const { status, mutate, failureReason } = useMutation({
     mutationFn: () => {
