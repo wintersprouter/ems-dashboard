@@ -140,7 +140,14 @@ function Overview() {
             ...(data.deviceUsageList?.["2"] ?? {}),
             id: data.deviceUsageList?.["2"]?.id ?? 0,
             name: data.deviceUsageList?.["2"]?.name ?? "",
-            usage: [...(data.deviceUsageList?.["2"]?.usage ?? [])],
+            usage: data.deviceUsageList?.["2"]?.usage ?? [],
+            monitorPeriodMinute:
+              data.deviceUsageList?.["2"]?.monitorPeriodMinute ?? 0,
+            listPowerAverageKW:
+              data.deviceUsageList?.["2"]?.listPowerAverageKW ?? [],
+            listPowerMaxKW: data.deviceUsageList?.["2"]?.listPowerMaxKW ?? [],
+            powerMaxKW: data.deviceUsageList?.["2"]?.powerMaxKW ?? 0,
+            powerAverageKW: data.deviceUsageList?.["2"]?.powerAverageKW ?? 0,
           },
         },
       });
