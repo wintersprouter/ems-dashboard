@@ -17,6 +17,11 @@ export enum StatusCode {
   UserNotFound = 1001,
   UserAlreadyExisted = 1000,
   Fail = 201,
+  FactoryNotFound = 1008,
+  IoTDeviceNotFound = 1009,
+  SmartMeterNotFound = 1010,
+  DataNotFound = 1011,
+  WSActionNotFound = 1100,
 }
 
 export const signInParamsSchema = z.object({

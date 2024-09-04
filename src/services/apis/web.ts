@@ -48,7 +48,7 @@ export const overviewResponse = z.object({
   totalUsageKW: z.number(),
   monitorDeviceCount: z.number(),
   monitorPeriodMinute: z.number(),
-  deviceUsageList: deviceUsageListSchema,
+  deviceUsageList: deviceUsageListSchema.nullable(),
   email: z.string().email(),
   username: z.string(),
   action: z.string(),

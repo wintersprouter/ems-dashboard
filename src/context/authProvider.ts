@@ -50,6 +50,21 @@ export const AuthProvider: AuthProvider = {
         AuthProvider.email
       ) {
         //Todo: get user info
+        const response = await Api.overview({
+          email: AuthProvider.email ?? "",
+          action: "overview",
+          token: AuthProvider.token ?? "",
+        });
+        //check if token is valid
+        const dtTokenExpire = new Date(response.dtTokenExpire);
+        const dtNow = new Date();
+        if (dtTokenExpire < dtNow) {
+          AuthProvider.isAuthenticated = false;
+          AuthProvider.token = null;
+          AuthProvider.email = null;
+          localStorage.removeItem("token");
+          localStorage.removeItem("email");
+        }
       } else {
         console.log("No Auth");
       }
