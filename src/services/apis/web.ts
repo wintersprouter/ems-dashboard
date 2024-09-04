@@ -57,8 +57,8 @@ export const overviewResponse = z.object({
   statusCode: z.nativeEnum(StatusCode),
   id: z.number(),
   name: z.string(),
-  listPowerMaxKW: z.array(z.number()),
-  listPowerAverageKW: z.array(z.number()),
+  listPowerMaxKW: z.array(z.number()).nullable(),
+  listPowerAverageKW: z.array(z.number()).nullable(),
 });
 
 const monitorDeviceRequestParamsSchema = z.object({
