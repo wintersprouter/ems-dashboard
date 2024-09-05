@@ -1,21 +1,15 @@
 import { z } from "zod";
 import { limitDecimalToOnePlace } from "../util/limitDecimalToOnePlace";
 import {
-  monitorDeviceResponse,
   overviewResponse,
   realtimeSmartMeterInfoSchema,
 } from "./../services/apis/web";
 
 type StatisticsCardsProps = {
   realtimeSmartMeterInfo?: z.infer<typeof realtimeSmartMeterInfoSchema>;
-  averagePowerUsage?:
-    | z.infer<typeof overviewResponse>["averagePowerUsage"]
-    | z.infer<
-        typeof monitorDeviceResponse
-      >["deviceUsageInfo"]["averagePowerUsage"];
-  totalUsageKW:
-    | z.infer<typeof overviewResponse>["totalUsageKW"]
-    | z.infer<typeof monitorDeviceResponse>["deviceUsageInfo"]["totalUsageKW"];
+  averagePowerUsage?: z.infer<typeof overviewResponse>["averagePowerUsage"];
+
+  totalUsageKW: z.infer<typeof overviewResponse>["totalUsageKW"] | number;
   monitorDeviceCount?: z.infer<typeof overviewResponse>["monitorDeviceCount"];
 };
 
