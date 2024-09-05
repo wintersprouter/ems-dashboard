@@ -167,7 +167,16 @@ function MonitoringPoint() {
               <StatisticsCards
                 totalUsageKW={data?.deviceUsageInfo?.totalUsageKW ?? 0}
                 realtimeSmartMeterInfo={realtimeSmartMeterInfo ?? undefined}
-                averagePowerUsage={data?.deviceUsageInfo?.averagePowerUsage}
+                averagePowerUsage={
+                  data?.deviceUsageInfo?.averagePowerUsage ?? {
+                    dayCO2SavingKG: 0,
+                    monthCO2SavingKG: 0,
+                    yearCO2SavingKG: 0,
+                    monthUsageKWH: 0,
+                    dayUsageKWH: 0,
+                    yearUsageKWH: 0,
+                  }
+                }
               />
               <Chart
                 deviceUsage={
