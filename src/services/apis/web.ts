@@ -31,16 +31,9 @@ export const deviceUsageSchema = z.object({
   listPowerAverageKW: z.array(z.number()),
   listPowerMaxKW: z.array(z.number()),
   monitorPeriodMinute: z.number(),
-  powerMaxKW: z.number(),
-  powerAverageKW: z.number(),
 });
 
-const deviceUsageListSchema = z.object({
-  "0": deviceUsageSchema,
-  "1": deviceUsageSchema,
-  "2": deviceUsageSchema.optional(),
-});
-
+const deviceUsageListSchema = z.array(deviceUsageSchema);
 export const overviewResponse = z.object({
   mainDeviceId: z.number(),
   realtimeSmartMeterInfo: realtimeSmartMeterInfoSchema,
@@ -57,8 +50,8 @@ export const overviewResponse = z.object({
   statusCode: z.nativeEnum(StatusCode),
   id: z.number(),
   name: z.string(),
-  listPowerMaxKW: z.array(z.number()),
-  listPowerAverageKW: z.array(z.number()),
+  listPowerMaxKW: z.array(z.number()).nullable(),
+  listPowerAverageKW: z.array(z.number()).nullable(),
 });
 
 const monitorDeviceRequestParamsSchema = z.object({
@@ -85,20 +78,22 @@ export const monitorDeviceResponse = z.object({
   statusCode: z.nativeEnum(StatusCode),
   factoryId: z.number(),
   factoryName: z.string(),
-  deviceList: z.array(deviceSchema),
-  deviceUsageInfo: z.object({
-    id: z.number(),
-    name: z.string(),
-    dtStart: z.string(),
-    dtEnd: z.string().nullable(),
-    dtBuilt: z.string(),
-    side: z.string(),
-    ct: z.string(),
-    realtimeSmartMeterInfo: realtimeSmartMeterInfoSchema,
-    averagePowerUsage: averagePowerUsageSchema,
-    totalUsageKW: z.number(),
-    deviceUsage: deviceUsageSchema,
-  }),
+  deviceList: z.array(deviceSchema).nullable(),
+  deviceUsageInfo: z
+    .object({
+      id: z.number(),
+      name: z.string(),
+      dtStart: z.string(),
+      dtEnd: z.string().nullable(),
+      dtBuilt: z.string(),
+      side: z.string(),
+      ct: z.string(),
+      realtimeSmartMeterInfo: realtimeSmartMeterInfoSchema,
+      averagePowerUsage: averagePowerUsageSchema.nullable(),
+      totalUsageKW: z.number(),
+      deviceUsage: deviceUsageSchema,
+    })
+    .nullable(),
 });
 
 export const webApi = makeApi([
