@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { match } from "ts-pattern";
 import { z } from "zod";
+import Charts from "../components/charts";
 import Sidebar from "../components/sidebar";
 import StatisticsCards from "../components/statistics-cards";
 import { AuthProvider } from "../context/authProvider";
@@ -128,12 +129,12 @@ function Overview() {
                 totalUsageKW={overviewData?.totalUsageKW ?? 0}
                 monitorDeviceCount={overviewData?.monitorDeviceCount ?? 0}
               />
-              {/* <Charts
+              <Charts
                 listPowerMaxKW={overviewData?.listPowerMaxKW ?? []}
                 listPowerAverageKW={overviewData?.listPowerAverageKW ?? []}
                 deviceUsageList={overviewData?.deviceUsageList}
                 monitorPeriodMinute={overviewData?.monitorPeriodMinute ?? 0}
-              /> */}
+              />
             </>
           ))
           .exhaustive()}

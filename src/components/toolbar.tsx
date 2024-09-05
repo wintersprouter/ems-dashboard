@@ -77,7 +77,7 @@ const ToolBar = ({
       </div>
       <div className='flex flex-col divide-y-[1px] divide-gray-300 p-4 gap-4 w-64'>
         <div className='grid grid-cols-2 gap-1'>
-          {deviceList.map((item, idx) => {
+          {deviceList?.map((item, idx) => {
             if (item.id === Number(deviceId)) {
               return (
                 <button
