@@ -1,4 +1,3 @@
-import { add } from "mathjs";
 import { useCallback, useEffect, useState } from "react";
 import {
   Bar,
@@ -51,60 +50,64 @@ function CustomCursor(props: {
   );
 }
 
-type Data = {
-  ch0: number;
-  ch1: number;
-  ch2: number;
+interface FormattedData {
+  [key: string]: number | string;
   time: string;
   kWh: number;
   average_kW: number;
   max_kW: number;
-};
-type Item = {
-  id: number;
-  name: string;
-  usage: number[];
-};
+}
 
 function Charts({
   deviceUsageList,
   monitorPeriodMinute,
-  listPowerAverageKW,
   listPowerMaxKW,
+  listPowerAverageKW,
 }: Props) {
-  const [chartData, setChartData] = useState<Data[]>([]);
+  const [chartData, setChartData] = useState<FormattedData[]>([]);
+  function formatDeviceUsageList(
+    deviceUsageList: z.infer<typeof overviewResponse>["deviceUsageList"],
+    monitorPeriodMinute: number,
+    listPowerMaxKW: z.infer<typeof overviewResponse>["listPowerMaxKW"],
+    listPowerAverageKW: z.infer<typeof overviewResponse>["listPowerAverageKW"]
+  ): FormattedData[] {
+    const result: FormattedData[] = [];
 
+    // 假設所有 usage 的長度相同
+    const usageLength = deviceUsageList?.[0]?.usage.length || 0;
+
+    for (let i = 0; i < usageLength; i++) {
+      const entry: FormattedData = {
+        time: getTimeFormat(i * monitorPeriodMinute),
+        kWh: 0,
+        average_kW: 0,
+        max_kW: 0,
+      };
+
+      deviceUsageList?.forEach((deviceUsage, index) => {
+        entry[`ch${index}`] = deviceUsage.usage[i];
+        entry.kWh += limitDecimalToOnePlace(deviceUsage.usage[i]);
+        entry.average_kW == limitDecimalToOnePlace(listPowerAverageKW?.[i]);
+        entry.max_kW === limitDecimalToOnePlace(listPowerMaxKW?.[i]);
+      });
+
+      entry.average_kW /= deviceUsageList?.length || 1;
+      entry.max_kW /= deviceUsageList?.length || 1;
+
+      result.push(entry);
+    }
+
+    return result;
+  }
   const handleChartData = useCallback(() => {
     if (deviceUsageList) {
-      const itemList: Item[] = [];
-      for (const [key, value] of Object.entries(deviceUsageList)) {
-        console.log("key", key);
-        itemList.push(value);
-      }
-
-      const dataList = itemList[0].usage
-        .map((_, index) => {
-          const ch0 = itemList[0].usage[index];
-          const ch1 = itemList[1].usage[index];
-          const ch2 = itemList[2].usage[index];
-          const kWh = limitDecimalToOnePlace(add(ch0, ch1, ch2));
-
-          return {
-            ch0,
-            ch1,
-            ch2,
-            time: getTimeFormat(index * monitorPeriodMinute),
-            kWh,
-          };
-        })
-        .map((item, index) => {
-          return {
-            ...item,
-            average_kW: limitDecimalToOnePlace(listPowerAverageKW[index]),
-            max_kW: limitDecimalToOnePlace(listPowerMaxKW[index]),
-          };
-        });
-      setChartData(dataList);
+      const result = formatDeviceUsageList(
+        deviceUsageList,
+        monitorPeriodMinute,
+        listPowerMaxKW,
+        listPowerAverageKW
+      );
+      setChartData(result);
     }
   }, [
     deviceUsageList,
@@ -228,6 +231,7 @@ function Charts({
               },
             ]}
           />
+
           <Bar
             dataKey='ch2'
             stackId='time'
