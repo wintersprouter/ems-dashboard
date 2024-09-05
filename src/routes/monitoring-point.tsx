@@ -13,7 +13,20 @@ import { monitorDeviceResponse } from "../services/apis/web";
 
 export type DeviceUsageInfo = z.infer<
   typeof monitorDeviceResponse
->["deviceUsageInfo"];
+>["deviceUsageInfo"] & {
+  realtimeSmartMeterInfo: {
+    usedChannel: boolean[];
+    chAVoltage: number;
+    chACurrent: number;
+    chAUsageKW: number;
+    chBVoltage: number;
+    chBCurrent: number;
+    chBUsageKW: number;
+    chCVoltage: number;
+    chCCurrent: number;
+    chCUsageKW: number;
+  };
+};
 
 function MonitoringPoint() {
   const [searchParams] = useSearchParams();
@@ -49,8 +62,8 @@ function MonitoringPoint() {
         token: AuthProvider.token ?? "",
         factoryId: 1,
         deviceId: deviceId,
-        dtStart: dtStart,
-        dtEnd: dtEnd,
+        dtStart: new Date(dtStart).toISOString(),
+        dtEnd: new Date(dtEnd).toISOString(),
       }),
     enabled: !!AuthProvider.email && !!AuthProvider.token,
   });
@@ -98,11 +111,12 @@ function MonitoringPoint() {
       setDtStart(data.deviceUsageInfo?.dtStart ?? "");
       setDtEnd(data.deviceUsageInfo?.dtEnd ?? "");
       setDeviceList(
-        deviceList.length === 0
-          ? [...data.deviceList]
+        deviceList?.length === 0
+          ? [...(data.deviceList ?? [])]
           : [
-              ...deviceList.filter((device) => {
-                const newDevice = data.deviceList.find(
+              // eslint-disable-next-line no-unsafe-optional-chaining
+              ...(deviceList?.filter((device) => {
+                const newDevice = data.deviceList?.find(
                   (d) => d.id === device.id
                 );
                 if (newDevice) {
@@ -111,9 +125,10 @@ function MonitoringPoint() {
                     ...newDevice,
                   };
                 }
-              }),
-              ...data.deviceList.filter(
-                (newDevice) => !deviceList.some((d) => d.id === newDevice.id)
+              }) ?? []),
+              // eslint-disable-next-line no-unsafe-optional-chaining
+              ...(data.deviceList ?? []).filter(
+                (newDevice) => !deviceList?.some((d) => d.id === newDevice.id)
               ),
             ]
       );
@@ -146,22 +161,20 @@ function MonitoringPoint() {
               setDtEnd={setDtEnd ?? ""}
               dtStart={dtStart}
               dtEnd={dtEnd}
-              device={data?.deviceUsageInfo}
+              device={data?.deviceUsageInfo ?? undefined}
             />
             <section className='relative top-0 left-0 flex-col w-full mx-auto lg:left-[21.5rem] lg:top-2 lg:max-w-[calc(100%-17rem)] lg:w-4/5  xl:left-[14.5rem] xl:w-[calc(100%-30rem)]'>
               <StatisticsCards
-                totalUsageKW={data?.deviceUsageInfo.totalUsageKW ?? 0}
+                totalUsageKW={data?.deviceUsageInfo?.totalUsageKW ?? 0}
                 realtimeSmartMeterInfo={realtimeSmartMeterInfo ?? undefined}
-                averagePowerUsage={data?.deviceUsageInfo.averagePowerUsage}
+                averagePowerUsage={data?.deviceUsageInfo?.averagePowerUsage}
               />
               <Chart
                 deviceUsage={
-                  data?.deviceUsageInfo.deviceUsage ?? {
+                  data?.deviceUsageInfo?.deviceUsage ?? {
                     usage: [],
                     id: 0,
                     name: "",
-                    powerMaxKW: 0,
-                    powerAverageKW: 0,
                     listPowerMaxKW: [],
                     listPowerAverageKW: [],
                     monitorPeriodMinute: 0,

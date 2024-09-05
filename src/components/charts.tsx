@@ -100,8 +100,12 @@ function Charts({
         .map((item, index) => {
           return {
             ...item,
-            average_kW: limitDecimalToOnePlace(listPowerAverageKW[index]),
-            max_kW: limitDecimalToOnePlace(listPowerMaxKW[index]),
+            average_kW: listPowerAverageKW
+              ? limitDecimalToOnePlace(listPowerAverageKW[index])
+              : 0,
+            max_kW: listPowerMaxKW
+              ? limitDecimalToOnePlace(listPowerMaxKW[index])
+              : 0,
           };
         });
       setChartData(dataList);
