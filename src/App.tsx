@@ -69,6 +69,13 @@ function App() {
           element: <Home />,
           path: "/",
           index: true,
+          loader: () => {
+            AuthProvider.getAuthStatus();
+            if (AuthProvider.isAuthenticated) {
+              return redirect("/dashboard");
+            }
+            return null;
+          },
         },
       ],
     },
