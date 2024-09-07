@@ -48,6 +48,7 @@ export const overviewResponse = z.object({
   token: z.string(),
   dtTokenExpire: z.string(),
   statusCode: z.nativeEnum(StatusCode),
+  mainDeviceUsage: deviceUsageSchema,
   id: z.number(),
   name: z.string(),
   listPowerMaxKW: z.array(z.number()).nullable(),
