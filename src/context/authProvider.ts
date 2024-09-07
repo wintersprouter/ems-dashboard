@@ -36,6 +36,7 @@ export const AuthProvider: AuthProvider = {
       AuthProvider.isAuthenticated = true;
       AuthProvider.email = email;
       AuthProvider.token = res.token;
+      AuthProvider.username = res.username;
     }
     return res;
   },
@@ -55,6 +56,7 @@ export const AuthProvider: AuthProvider = {
           action: "overview",
           token: AuthProvider.token ?? "",
         });
+        AuthProvider.username = response.username;
         //check if token is valid
         const dtTokenExpire = new Date(response.dtTokenExpire);
         const dtNow = new Date();
@@ -62,6 +64,7 @@ export const AuthProvider: AuthProvider = {
           AuthProvider.isAuthenticated = false;
           AuthProvider.token = null;
           AuthProvider.email = null;
+          AuthProvider.username = null;
           localStorage.removeItem("token");
           localStorage.removeItem("email");
         }
