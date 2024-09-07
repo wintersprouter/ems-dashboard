@@ -69,7 +69,9 @@ function Header() {
           </button>
           <div className='flex gap-2 items-center'>
             <img src={UsernameIcon} alt='Username' className='ml-2' />
-            <p className='text-gray-800 text-sm font-normal'>Username</p>
+            <p className='text-gray-800 text-sm font-normal'>
+              {AuthProvider.username ?? "No username"}
+            </p>
           </div>
         </div>
       ) : (
