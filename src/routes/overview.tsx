@@ -132,7 +132,20 @@ function Overview() {
               <Charts
                 listPowerMaxKW={overviewData?.listPowerMaxKW ?? []}
                 listPowerAverageKW={overviewData?.listPowerAverageKW ?? []}
-                deviceUsageList={overviewData?.deviceUsageList}
+                deviceUsageList={overviewData?.deviceUsageList ?? []}
+                mainDeviceUsage={
+                  overviewData?.mainDeviceUsage ?? {
+                    name: "",
+                    monitorPeriodMinute: 0,
+                    id: 0,
+                    usage: [],
+                    listPowerAverageKW: [],
+                    listPowerMaxKW: [],
+                  }
+                }
+                // deviceUsageList={mockDeviceUsageList}
+                // // deviceUsageList={[]}
+                // mainDeviceUsage={mockMainDeviceUsage}
                 monitorPeriodMinute={overviewData?.monitorPeriodMinute ?? 0}
               />
             </>

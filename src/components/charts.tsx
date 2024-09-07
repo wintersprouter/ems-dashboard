@@ -1,3 +1,4 @@
+import { add, subtract } from "mathjs";
 import { useCallback, useEffect, useState } from "react";
 import {
   Bar,
@@ -15,13 +16,63 @@ import { z } from "zod";
 import { overviewResponse } from "../services/apis/web";
 import { getTimeFormat } from "../util/getTime";
 import { limitDecimalToOnePlace } from "../util/limitDecimalToOnePlace";
-import RoundedBar from "./rounedBar";
+
+interface CustomBarShapeProps {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  fill?: string;
+  dataKey: string;
+}
+
+const CustomBarShape: React.FC<CustomBarShapeProps> = (props) => {
+  const { x, y, width, height, fill } = props;
+
+  return (
+    <g>
+      <rect x={x} y={y} width={width} height={height} fill={fill} />
+      <line
+        x1={x}
+        y1={y}
+        x2={x ?? 0 + (width ?? 0)}
+        y2={y}
+        stroke='#8e8e8e'
+        strokeWidth={0.1}
+      />
+      <line
+        x1={x}
+        y1={y ?? 0 + (height ?? 0)}
+        x2={x ?? 0 + (width ?? 0)}
+        y2={(y ?? 0) + (height ?? 0)}
+        stroke='#8e8e8e'
+        strokeWidth={0.1}
+      />
+    </g>
+  );
+};
+
 type Props = {
+  mainDeviceUsage: z.infer<typeof overviewResponse>["mainDeviceUsage"];
   listPowerMaxKW: z.infer<typeof overviewResponse>["listPowerMaxKW"];
   listPowerAverageKW: z.infer<typeof overviewResponse>["listPowerAverageKW"];
   deviceUsageList?: z.infer<typeof overviewResponse>["deviceUsageList"];
   monitorPeriodMinute: z.infer<typeof overviewResponse>["monitorPeriodMinute"];
 };
+const mainColor = "#93ff93";
+const subColors = [
+  "#79ff79",
+  "#53ff53",
+  "#28ff28",
+  "#00ec00",
+  "#00db00",
+  "#00bb00",
+  "#00a600",
+  "#009100",
+  "#007500",
+  "#006000",
+];
+// const subColors = ["#8884d8", "#ffc658", "#ff8042", "#ff4d4f", "#ff85c0"];
 function CustomCursor(props: {
   stroke?: string;
   pointerEvents?: string | number;
@@ -51,11 +102,13 @@ function CustomCursor(props: {
 }
 
 interface FormattedData {
-  [key: string]: number | string;
-  time: string;
-  kWh: number;
+  [key: string]: number;
+  time: number;
   average_kW: number;
   max_kW: number;
+  main: number;
+  diff: number;
+  subSum: number;
 }
 
 function Charts({
@@ -63,63 +116,130 @@ function Charts({
   monitorPeriodMinute,
   listPowerMaxKW,
   listPowerAverageKW,
+  mainDeviceUsage,
 }: Props) {
   const [chartData, setChartData] = useState<FormattedData[]>([]);
-  function formatDeviceUsageList(
-    deviceUsageList: z.infer<typeof overviewResponse>["deviceUsageList"],
-    monitorPeriodMinute: number,
-    listPowerMaxKW: z.infer<typeof overviewResponse>["listPowerMaxKW"],
-    listPowerAverageKW: z.infer<typeof overviewResponse>["listPowerAverageKW"]
-  ): FormattedData[] {
-    const result: FormattedData[] = [];
 
-    // 假設所有 usage 的長度相同
-    const usageLength = deviceUsageList?.[0]?.usage.length || 0;
-
-    for (let i = 0; i < usageLength; i++) {
-      const entry: FormattedData = {
-        time: getTimeFormat(i * monitorPeriodMinute),
-        kWh: 0,
-        average_kW: 0,
+  const formatDeviceUsageList = useCallback(
+    (
+      mainDeviceUsage: z.infer<typeof overviewResponse>["mainDeviceUsage"],
+      deviceUsageList: z.infer<typeof overviewResponse>["deviceUsageList"],
+      monitorPeriodMinute: number,
+      listPowerMaxKW: z.infer<typeof overviewResponse>["listPowerMaxKW"],
+      listPowerAverageKW: z.infer<typeof overviewResponse>["listPowerAverageKW"]
+    ): FormattedData[] => {
+      const result: FormattedData[] = [];
+      const barData: FormattedData = {
+        time: 0,
         max_kW: 0,
+        average_kW: 0,
+        main: 0,
+        diff: 0,
+        subSum: 0,
       };
+      if (deviceUsageList?.length === 0) {
+        return mainDeviceUsage.usage.map((usage, i) => {
+          return {
+            diff: 0,
+            subSum: 0,
+            time: monitorPeriodMinute > 0 ? i * monitorPeriodMinute : i,
+            main: limitDecimalToOnePlace(usage),
+            average_kW: limitDecimalToOnePlace(listPowerAverageKW?.[i] ?? 0),
+            max_kW: limitDecimalToOnePlace(listPowerMaxKW?.[i] ?? 0),
+          };
+        });
+      }
 
-      deviceUsageList?.forEach((deviceUsage, index) => {
-        entry[`ch${index}`] = deviceUsage.usage[i];
-        entry.kWh += limitDecimalToOnePlace(deviceUsage.usage[i]);
-        entry.average_kW == limitDecimalToOnePlace(listPowerAverageKW?.[i]);
-        entry.max_kW === limitDecimalToOnePlace(listPowerMaxKW?.[i]);
+      deviceUsageList?.forEach((deviceUsage) => {
+        if (typeof deviceUsage.id === "string") {
+          barData[`${deviceUsage.id}`] = 0;
+        }
       });
 
-      entry.average_kW /= deviceUsageList?.length || 1;
-      entry.max_kW /= deviceUsageList?.length || 1;
+      deviceUsageList?.forEach((deviceUsage) => {
+        deviceUsage.usage.forEach((usage, i) => {
+          if (result[i]) {
+            result[i] = {
+              ...result[i],
+              time:
+                monitorPeriodMinute > 0
+                  ? i * deviceUsage.monitorPeriodMinute
+                  : i,
+              [`${deviceUsage.id}`]: limitDecimalToOnePlace(usage),
+              // diff: limitDecimalToOnePlace(subtract(result[i].diff, usage)),
+            };
+          } else {
+            result[i] = {
+              ...barData,
+              time:
+                deviceUsage.monitorPeriodMinute > 0
+                  ? i * deviceUsage.monitorPeriodMinute
+                  : i,
+              average_kW: limitDecimalToOnePlace(listPowerAverageKW?.[i] ?? 0),
+              max_kW: limitDecimalToOnePlace(listPowerMaxKW?.[i] ?? 0),
+              [`${deviceUsage.id}`]: limitDecimalToOnePlace(usage),
+              main: limitDecimalToOnePlace(mainDeviceUsage?.usage[i]),
+            };
+          }
+        });
+      });
 
-      result.push(entry);
-    }
+      return result.map((item) => {
+        const subValues = Object.keys(item)
+          .filter(
+            (key) =>
+              ![
+                "time",
+                "max_kW",
+                "average_kW",
+                "main",
+                "diff",
+                "subSum",
+              ].includes(key)
+          )
+          .map((key) => item[key]);
 
-    return result;
-  }
-  const handleChartData = useCallback(() => {
-    if (deviceUsageList) {
+        // 使用 mathjs 計算 subSum
+        const subSum: number = limitDecimalToOnePlace(
+          subValues.reduce((acc: number, cur: number) => add(acc, cur), 0)
+        );
+
+        // 使用 mathjs 計算 diff
+        const diff = limitDecimalToOnePlace(subtract(item.main, subSum));
+
+        // 返回更新後的物件
+        return {
+          ...item,
+          subSum,
+          diff,
+        };
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+  useEffect(() => {
+    const getBarData = () => {
       const result = formatDeviceUsageList(
-        deviceUsageList,
+        mainDeviceUsage ?? null,
+        deviceUsageList ?? [],
         monitorPeriodMinute,
         listPowerMaxKW,
         listPowerAverageKW
       );
-      setChartData(result);
-    }
+      setChartData([...result]);
+    };
+
+    getBarData();
   }, [
     deviceUsageList,
+    formatDeviceUsageList,
     listPowerAverageKW,
     listPowerMaxKW,
+    mainDeviceUsage,
     monitorPeriodMinute,
   ]);
-
-  useEffect(() => {
-    handleChartData();
-  }, [handleChartData]);
-
+  console.log("chartData", JSON.stringify(chartData, null, 2));
   return (
     <section
       id='charts'
@@ -154,27 +274,38 @@ function Charts({
               border: "none",
             }}
             formatter={(value, name) => {
-              if (name === "time") {
-                return `${value}:00`;
-              } else if (name === "ch2" || name === "ch1" || name === "ch0") {
-                return `${limitDecimalToOnePlace(Number(value) ?? 0)} kwh`;
-              } else if (name === "Max(kW)" || name === "Average(kW)") {
-                return `${value} kw`;
+              if (name === "diff") {
+                return [`${value} `, `main ${name}`];
               }
+              return [value, name];
             }}
-            filterNull={true}
+            filterNull={false}
+            labelFormatter={(label) => {
+              return `${getTimeFormat(label)}~${getTimeFormat(
+                add(label, monitorPeriodMinute)
+              )}`;
+            }}
           />
           <CartesianGrid vertical={false} />
-          <XAxis dataKey='time' scale='band' type='category' name='time' />
+          <XAxis
+            dataKey='time'
+            scale='band'
+            type='category'
+            name='time'
+            tickFormatter={(value) => {
+              return getTimeFormat(value);
+            }}
+          />
           <YAxis
-            dataKey='kWh'
+            domain={["dataMin", (dataMax: number) => dataMax * 1.2]}
+            dataKey='main'
             yAxisId='left'
             scale='auto'
             type='number'
             unit='kWh'
             orientation='left'
             stroke='#16A34A'
-            name='kWh'
+            name='main'
             tickCount={12}
             axisLine={false}
           />
@@ -200,24 +331,6 @@ function Charts({
             }}
             payload={[
               {
-                value: "ch0 kwh",
-                type: "circle",
-                id: "ch0",
-                color: "#4ADE80",
-              },
-              {
-                value: "ch1 kwh",
-                type: "circle",
-                id: "ch1",
-                color: "#22C55E",
-              },
-              {
-                value: "ch2 kwh",
-                type: "circle",
-                id: "ch2",
-                color: "#15803D",
-              },
-              {
                 value: "Average(kW)",
                 type: "line",
                 id: "Average(kW)",
@@ -231,29 +344,50 @@ function Charts({
               },
             ]}
           />
+          {deviceUsageList?.length ? (
+            <Bar
+              key={"diff"}
+              dataKey={"diff"}
+              stackId='time'
+              fill={mainColor}
+              yAxisId='left'
+              unit='kWh'
+              name={"diff"}
+              // shape={(props) => {
+              //   return (
+              //     props.payload.value !== 0 && <RoundedBar dataKey={"main"} />
+              //   );
+              // }}
+            />
+          ) : (
+            <Bar
+              key={"main"}
+              dataKey={"main"}
+              stackId='time'
+              fill={mainColor}
+              yAxisId='left'
+              unit='kWh'
+              name={"main"}
+            />
+          )}
+          {deviceUsageList
+            ?.map((deviceUsage, index) => (
+              <Bar
+                key={deviceUsage.name}
+                dataKey={deviceUsage.id.toString()}
+                stackId='time'
+                fill={subColors[index]}
+                yAxisId='left'
+                name={deviceUsage.name}
+                layout='vertical'
+                unit='kWh'
+                stroke='#8e8e8e'
+                strokeWidth={1}
+                shape={<CustomBarShape dataKey={deviceUsage.id.toString()} />}
+              />
+            ))
+            .reverse()}
 
-          <Bar
-            dataKey='ch2'
-            stackId='time'
-            fill='#15803D'
-            yAxisId='left'
-            name='ch2'
-          />
-          <Bar
-            dataKey='ch1'
-            stackId='time'
-            fill='#22C55E'
-            yAxisId='left'
-            name='ch1'
-          />
-          <Bar
-            dataKey='ch0'
-            stackId='time'
-            fill='#4ADE80'
-            yAxisId='left'
-            name='ch0'
-            shape={<RoundedBar dataKey='ch0' />}
-          />
           <Line
             type='linear'
             dataKey='average_kW'
@@ -262,6 +396,7 @@ function Charts({
             yAxisId='right'
             dot={{ stroke: "#CA8A04", strokeWidth: 2 }}
             name='Average(kW)'
+            unit='kW'
           />
           <Line
             legendType='triangle'
@@ -270,6 +405,7 @@ function Charts({
             strokeWidth={3}
             stroke='#3B82F6'
             yAxisId='right'
+            unit='kW'
             dot={{ stroke: "#1E40AF", strokeWidth: 2 }}
             name='Max(kW)'
           />
