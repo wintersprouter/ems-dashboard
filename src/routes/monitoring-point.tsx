@@ -41,7 +41,7 @@ function MonitoringPoint() {
   const [realtimeSmartMeterInfo, setRealtimeSmartMeterInfo] = useState<
     DeviceUsageInfo["realtimeSmartMeterInfo"]
   >({
-    usedChannel: [],
+    usedChannel: [true, true, true],
     chAVoltage: 0,
     chACurrent: 0,
     chAUsageKW: 0,
@@ -195,8 +195,13 @@ function MonitoringPoint() {
                     monitorPeriodMinute: 0,
                   }
                 }
-                listPowerMaxKW={null}
-                listPowerAverageKW={null}
+                listPowerMaxKW={
+                  data?.deviceUsageInfo?.mainDeviceUsage?.listPowerMaxKW ?? []
+                }
+                listPowerAverageKW={
+                  data?.deviceUsageInfo?.mainDeviceUsage?.listPowerAverageKW ??
+                  []
+                }
                 monitorPeriodMinute={
                   data?.deviceUsageInfo?.deviceUsage?.monitorPeriodMinute ?? 0
                 }
