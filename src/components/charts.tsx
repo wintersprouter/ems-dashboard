@@ -297,7 +297,7 @@ function Charts({
             }}
           />
           <YAxis
-            domain={["dataMin", (dataMax: number) => dataMax * 1.2]}
+            domain={["auto", (dataMax: number) => dataMax * 1.2]}
             dataKey='main'
             yAxisId='left'
             scale='auto'
@@ -310,7 +310,7 @@ function Charts({
             axisLine={false}
           />
           <YAxis
-            domain={["dataMin", (dataMax: number) => dataMax * 1.2]}
+            domain={["auto", (dataMax: number) => dataMax * 1.2]}
             dataKey='max_kW'
             yAxisId='right'
             orientation='right'
