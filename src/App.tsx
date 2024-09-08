@@ -71,9 +71,6 @@ function App() {
           index: true,
           loader: () => {
             AuthProvider.getAuthStatus();
-            if (AuthProvider.isAuthenticated) {
-              return redirect("/dashboard");
-            }
             return null;
           },
         },
