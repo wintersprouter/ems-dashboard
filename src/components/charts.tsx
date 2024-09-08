@@ -310,6 +310,7 @@ function Charts({
             axisLine={false}
           />
           <YAxis
+            domain={["dataMin", (dataMax: number) => dataMax * 1.2]}
             dataKey='max_kW'
             yAxisId='right'
             orientation='right'
@@ -344,7 +345,7 @@ function Charts({
               },
             ]}
           />
-          {deviceUsageList?.length ? (
+          {/* {deviceUsageList?.length ? (
             <Bar
               key={"diff"}
               dataKey={"diff"}
@@ -360,16 +361,17 @@ function Charts({
               // }}
             />
           ) : (
-            <Bar
-              key={"main"}
-              dataKey={"main"}
-              stackId='time'
-              fill={mainColor}
-              yAxisId='left'
-              unit='kWh'
-              name={"main"}
-            />
-          )}
+            
+          )} */}
+          <Bar
+            key={"main"}
+            dataKey={"main"}
+            stackId='time'
+            fill={mainColor}
+            yAxisId='left'
+            unit='kWh'
+            name={"main"}
+          />
           {deviceUsageList
             ?.map((deviceUsage, index) => (
               <Bar
@@ -383,30 +385,31 @@ function Charts({
                 unit='kWh'
                 stroke='#8e8e8e'
                 strokeWidth={1}
+                className='hidden'
                 shape={<CustomBarShape dataKey={deviceUsage.id.toString()} />}
               />
             ))
             .reverse()}
 
           <Line
-            type='linear'
+            type='monotone'
             dataKey='average_kW'
             strokeWidth={3}
             stroke='#FACC15'
             yAxisId='right'
-            dot={{ stroke: "#CA8A04", strokeWidth: 2 }}
+            dot={{ stroke: "#FACC15", strokeWidth: 0.5, fill: "#FACC15" }}
             name='Average(kW)'
             unit='kW'
           />
           <Line
             legendType='triangle'
-            type='linear'
+            type='monotone'
             dataKey='max_kW'
             strokeWidth={3}
             stroke='#3B82F6'
             yAxisId='right'
             unit='kW'
-            dot={{ stroke: "#1E40AF", strokeWidth: 2 }}
+            dot={{ stroke: "#3B82F6", strokeWidth: 0.5, fill: "#3B82F6" }}
             name='Max(kW)'
           />
         </ComposedChart>
