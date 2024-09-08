@@ -239,7 +239,7 @@ function Charts({
     mainDeviceUsage,
     monitorPeriodMinute,
   ]);
-  console.log("chartData", JSON.stringify(chartData, null, 2));
+  // console.log("chartData", JSON.stringify(chartData, null, 2));
   return (
     <section
       id='charts'
