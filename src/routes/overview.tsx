@@ -10,7 +10,6 @@ import { AuthProvider } from "../context/authProvider";
 import { Api, socketUrl } from "../services/apis";
 import { StatusCode } from "../services/apis/types";
 import { overviewResponse } from "../services/apis/web";
-import { mockDeviceUsageList, mockMainDeviceUsage } from "../util/mock";
 
 type MainSmartMeterInfo = z.infer<
   typeof overviewResponse
@@ -133,20 +132,19 @@ function Overview() {
               <Charts
                 listPowerMaxKW={overviewData?.listPowerMaxKW ?? []}
                 listPowerAverageKW={overviewData?.listPowerAverageKW ?? []}
-                // deviceUsageList={overviewData?.deviceUsageList ?? []}
-                // mainDeviceUsage={
-                //   overviewData?.mainDeviceUsage ?? {
-                //     name: "",
-                //     monitorPeriodMinute: 0,
-                //     id: 0,
-                //     usage: [],
-                //     listPowerAverageKW: [],
-                //     listPowerMaxKW: [],
-                //   }
-                // }
-                deviceUsageList={mockDeviceUsageList}
-                // // deviceUsageList={[]}
-                mainDeviceUsage={mockMainDeviceUsage}
+                deviceUsageList={overviewData?.deviceUsageList ?? []}
+                mainDeviceUsage={
+                  overviewData?.mainDeviceUsage ?? {
+                    name: "",
+                    monitorPeriodMinute: 0,
+                    id: 0,
+                    usage: [],
+                    listPowerAverageKW: [],
+                    listPowerMaxKW: [],
+                  }
+                }
+                // deviceUsageList={mockDeviceUsageList}
+                // mainDeviceUsage={mockMainDeviceUsage}
                 monitorPeriodMinute={overviewData?.monitorPeriodMinute ?? 0}
               />
             </>
