@@ -1,4 +1,4 @@
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
@@ -23,7 +23,7 @@ type ToolBarProps = {
 
 const ToolBar = ({
   deviceList,
-  setDtEnd,
+
   setDtStart,
   dtStart,
   dtEnd,
@@ -32,29 +32,29 @@ const ToolBar = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const deviceId = searchParams.get("deviceId");
   const navigate = useNavigate();
-  const handleStartTimeChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const newStartTime: string = event.target.value;
-    // 先解析 ISO 字符串，然後格式化
-    const formattedStartTime = format(
-      parseISO(newStartTime),
-      "yyyy-MM-dd HH:mm"
-    );
-    setDtStart(formattedStartTime);
-    if (dtEnd !== null && formattedStartTime > dtEnd) {
-      setDtEnd(formattedStartTime);
-    }
-  };
+  // const handleStartTimeChange = (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const newStartTime: string = event.target.value;
+  //   // 先解析 ISO 字符串，然後格式化
+  //   const formattedStartTime = format(
+  //     parseISO(newStartTime),
+  //     "yyyy-MM-dd HH:mm"
+  //   );
+  //   setDtStart(formattedStartTime);
+  //   if (dtEnd !== null && formattedStartTime > dtEnd) {
+  //     setDtEnd(formattedStartTime);
+  //   }
+  // };
 
-  const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // 先解析 ISO 字符串，然後格式化
-    const formattedEndTime = format(
-      parseISO(event.target.value),
-      "yyyy-MM-dd HH:mm"
-    );
-    setDtEnd(formattedEndTime);
-  };
+  // const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   // 先解析 ISO 字符串，然後格式化
+  //   const formattedEndTime = format(
+  //     parseISO(event.target.value),
+  //     "yyyy-MM-dd HH:mm"
+  //   );
+  //   setDtEnd(formattedEndTime);
+  // };
 
   useEffect(() => {
     if (dtEnd !== null && dtStart !== null) {
@@ -128,18 +128,29 @@ const ToolBar = ({
               <p className='relative top-2 left-2 z-20 bg-white w-fit text-xs '>
                 Start
               </p>
-              <input
+              {/* <input
                 id='start'
                 aria-label='Date and time from'
-                value={formatDateString(dtStart ?? "")}
+                value={formatDatTimeString(dtStart ?? "")}
                 onChange={handleStartTimeChange}
                 type='datetime-local'
                 className={dtStart ? hasDateStyle : defaultDateStyle}
                 required
                 step='60'
+              /> */}
+              <input
+                id='start'
+                aria-label='Date from'
+                value={formatDateString(dtStart ?? "")}
+                onChange={() => {
+                  setDtStart(formatDateString(dtStart ?? ""));
+                }}
+                type='date'
+                className={dtStart ? hasDateStyle : defaultDateStyle}
+                required
               />
             </label>
-            <label htmlFor='end' className={"bg-white text-xs font-normal"}>
+            {/* <label htmlFor='end' className={"bg-white text-xs font-normal"}>
               <p className='relative top-2 left-2 z-20 bg-white w-fit text-xs'>
                 End
               </p>
@@ -147,14 +158,14 @@ const ToolBar = ({
                 id='end'
                 aria-label='Date and time to'
                 min={dtStart ?? ""}
-                value={formatDateString(dtEnd ?? "")}
+                value={formatDateTimeString(dtEnd ?? "")}
                 onChange={handleEndTimeChange}
                 type='datetime-local'
                 required
                 className={dtEnd ? hasDateStyle : defaultDateStyle}
                 step='60'
               />
-            </label>
+            </label> */}
           </div>
         </div>
         <div>
