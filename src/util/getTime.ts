@@ -1,9 +1,10 @@
 export function getTimeFormat(minute: number) {
-  const hour = Math.floor(minute / 60);
-  const min = minute % 60;
+  const totalMinutesInADay = 1440; // 24 * 60
+  const adjustedMinutes = minute % totalMinutesInADay; // 確保分鐘數在一天內
+  const hour = Math.floor(adjustedMinutes / 60);
+  const min = adjustedMinutes % 60;
   return `${hour > 9 ? "" : "0"}${hour}:${min > 9 ? "" : "0"}${min}`;
 }
-
 export function formatDateString(dateString: string) {
   // 將字串轉換為 Date 物件
   const date = new Date(dateString);
