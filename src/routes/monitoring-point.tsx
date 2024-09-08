@@ -86,10 +86,10 @@ function MonitoringPoint() {
       sendJsonMessage({
         action: "DeviceSmartMeterInfo",
         email: AuthProvider.email ?? "",
-        slaveSmartMeterId: data?.deviceUsageInfo?.id ?? 0,
+        slaveSmartMeterId: deviceId,
       });
     }
-  }, [data?.deviceUsageInfo?.id, readyState, sendJsonMessage]);
+  }, [deviceId, readyState, sendJsonMessage]);
 
   useEffect(() => {
     console.log(
