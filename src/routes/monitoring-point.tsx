@@ -203,7 +203,8 @@ function MonitoringPoint() {
                   []
                 }
                 monitorPeriodMinute={
-                  data?.deviceUsageInfo?.deviceUsage?.monitorPeriodMinute ?? 0
+                  data?.deviceUsageInfo?.mainDeviceUsage?.monitorPeriodMinute ??
+                  0
                 }
               />
             </section>
