@@ -34,7 +34,7 @@ const navigation = [
     navigation: `/dashboard/monitoring-point?deviceId=0&startDate=${format(
       new Date(),
       "yyyy-MM-dd"
-    )}&endDate=${format(new Date(), "yyyy-MM-dd")}`,
+    )}`,
     name: "Monitoring Point",
     icon: monitoring_point_icon,
     activeIcon: monitoring_point_active_icon,
