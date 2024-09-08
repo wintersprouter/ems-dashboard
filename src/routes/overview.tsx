@@ -144,7 +144,6 @@ function Overview() {
                   }
                 }
                 // deviceUsageList={mockDeviceUsageList}
-                // // deviceUsageList={[]}
                 // mainDeviceUsage={mockMainDeviceUsage}
                 monitorPeriodMinute={overviewData?.monitorPeriodMinute ?? 0}
               />
