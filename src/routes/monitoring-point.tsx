@@ -82,7 +82,7 @@ function MonitoringPoint() {
   );
 
   useEffect(() => {
-    if (readyState === ReadyState.OPEN) {
+    if (readyState === ReadyState.OPEN && deviceId !== 0) {
       sendJsonMessage({
         action: "DeviceSmartMeterInfo",
         email: AuthProvider.email ?? "",
@@ -134,6 +134,10 @@ function MonitoringPoint() {
               ),
             ]
       );
+      if (deviceId === 0) {
+        searchParams.set("deviceId", data.deviceUsageInfo?.id.toString() ?? "");
+        navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
+      }
     }
     if (searchParams) {
       navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
@@ -182,7 +186,7 @@ function MonitoringPoint() {
               />
               <Charts
                 mainDeviceUsage={
-                  data?.deviceUsageInfo?.deviceUsage ?? {
+                  data?.deviceUsageInfo?.mainDeviceUsage ?? {
                     usage: [],
                     id: 0,
                     name: "",

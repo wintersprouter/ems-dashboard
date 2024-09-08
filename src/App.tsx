@@ -83,6 +83,9 @@ function App() {
         {
           path: "",
           ...ProtectedRoute({ element: <Navigate to='overview' /> }),
+          loader: () => {
+            return redirect("/dashboard/overview");
+          },
         },
         {
           path: "login",

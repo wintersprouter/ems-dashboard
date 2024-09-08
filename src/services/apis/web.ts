@@ -93,6 +93,7 @@ export const monitorDeviceResponse = z.object({
       averagePowerUsage: averagePowerUsageSchema.nullable(),
       totalUsageKW: z.number(),
       deviceUsage: deviceUsageSchema.nullable(),
+      mainDeviceUsage: deviceUsageSchema.nullable(),
     })
     .nullable(),
 });
