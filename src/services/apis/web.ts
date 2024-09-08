@@ -92,7 +92,8 @@ export const monitorDeviceResponse = z.object({
       realtimeSmartMeterInfo: realtimeSmartMeterInfoSchema,
       averagePowerUsage: averagePowerUsageSchema.nullable(),
       totalUsageKW: z.number(),
-      deviceUsage: deviceUsageSchema,
+      deviceUsage: deviceUsageSchema.nullable(),
+      mainDeviceUsage: deviceUsageSchema.nullable(),
     })
     .nullable(),
 });

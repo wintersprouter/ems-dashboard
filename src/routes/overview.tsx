@@ -44,6 +44,7 @@ function Overview() {
     if (readyState === ReadyState.OPEN) {
       sendJsonMessage({
         action: "MainSmartMeterInfo",
+        email: AuthProvider.email ?? "",
       });
     }
   }, [readyState, sendJsonMessage]);

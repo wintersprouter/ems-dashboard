@@ -71,9 +71,6 @@ function App() {
           index: true,
           loader: () => {
             AuthProvider.getAuthStatus();
-            if (AuthProvider.isAuthenticated) {
-              return redirect("/dashboard");
-            }
             return null;
           },
         },
@@ -86,6 +83,9 @@ function App() {
         {
           path: "",
           ...ProtectedRoute({ element: <Navigate to='overview' /> }),
+          loader: () => {
+            return redirect("/dashboard/overview");
+          },
         },
         {
           path: "login",

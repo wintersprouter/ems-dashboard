@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { match } from "ts-pattern";
 import { z } from "zod";
-import Chart from "../components/chart";
+import Charts from "../components/charts";
 import StatisticsCards from "../components/statistics-cards";
 import ToolBar from "../components/toolbar";
 import { AuthProvider } from "../context/authProvider";
@@ -82,12 +82,14 @@ function MonitoringPoint() {
   );
 
   useEffect(() => {
-    if (readyState === ReadyState.OPEN) {
+    if (readyState === ReadyState.OPEN && deviceId !== 0) {
       sendJsonMessage({
         action: "DeviceSmartMeterInfo",
+        email: AuthProvider.email ?? "",
+        slaveSmartMeterId: deviceId,
       });
     }
-  }, [readyState, sendJsonMessage]);
+  }, [deviceId, readyState, sendJsonMessage]);
 
   useEffect(() => {
     console.log(
@@ -132,6 +134,10 @@ function MonitoringPoint() {
               ),
             ]
       );
+      if (deviceId === 0) {
+        searchParams.set("deviceId", data.deviceUsageInfo?.id.toString() ?? "");
+        navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
+      }
     }
     if (searchParams) {
       navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
@@ -178,9 +184,9 @@ function MonitoringPoint() {
                   }
                 }
               />
-              <Chart
-                deviceUsage={
-                  data?.deviceUsageInfo?.deviceUsage ?? {
+              <Charts
+                mainDeviceUsage={
+                  data?.deviceUsageInfo?.mainDeviceUsage ?? {
                     usage: [],
                     id: 0,
                     name: "",
@@ -188,6 +194,11 @@ function MonitoringPoint() {
                     listPowerAverageKW: [],
                     monitorPeriodMinute: 0,
                   }
+                }
+                listPowerMaxKW={null}
+                listPowerAverageKW={null}
+                monitorPeriodMinute={
+                  data?.deviceUsageInfo?.deviceUsage?.monitorPeriodMinute ?? 0
                 }
               />
             </section>

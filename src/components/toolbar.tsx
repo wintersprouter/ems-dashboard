@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { DeviceUsageInfo } from "../routes/monitoring-point";
 import { monitorDeviceResponse } from "../services/apis/web";
+import { formatDateString } from "../util/getTime";
 import Navbar from "./navbar";
 
 const defaultDateStyle =
@@ -130,7 +131,7 @@ const ToolBar = ({
               <input
                 id='start'
                 aria-label='Date and time from'
-                value={dtStart ?? ""}
+                value={formatDateString(dtStart ?? "")}
                 onChange={handleStartTimeChange}
                 type='datetime-local'
                 className={dtStart ? hasDateStyle : defaultDateStyle}
@@ -146,7 +147,7 @@ const ToolBar = ({
                 id='end'
                 aria-label='Date and time to'
                 min={dtStart ?? ""}
-                value={dtEnd ?? ""}
+                value={formatDateString(dtEnd ?? "")}
                 onChange={handleEndTimeChange}
                 type='datetime-local'
                 required
