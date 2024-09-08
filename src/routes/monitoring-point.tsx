@@ -134,6 +134,13 @@ function MonitoringPoint() {
               ),
             ]
       );
+      setRealtimeSmartMeterInfo({
+        ...realtimeSmartMeterInfo,
+        ...data?.deviceUsageInfo?.realtimeSmartMeterInfo,
+        usedChannel: [
+          ...(data?.deviceUsageInfo?.realtimeSmartMeterInfo?.usedChannel ?? []),
+        ],
+      });
       if (deviceId === 0) {
         searchParams.set("deviceId", data.deviceUsageInfo?.id.toString() ?? "");
         navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
@@ -203,7 +210,8 @@ function MonitoringPoint() {
                   []
                 }
                 monitorPeriodMinute={
-                  data?.deviceUsageInfo?.deviceUsage?.monitorPeriodMinute ?? 0
+                  data?.deviceUsageInfo?.mainDeviceUsage?.monitorPeriodMinute ??
+                  0
                 }
               />
             </section>
