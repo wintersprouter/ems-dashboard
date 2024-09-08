@@ -97,8 +97,24 @@ function MonitoringPoint() {
     );
 
     if (lastJsonMessage !== null && lastJsonMessage) {
-      const { usedChannel, ...rest } =
-        lastJsonMessage as DeviceUsageInfo["realtimeSmartMeterInfo"];
+      const { deviceSmartMeterInfo } = lastJsonMessage as {
+        deviceSmartMeterInfo: {
+          usedChannel: boolean[];
+          chAVoltage: number;
+          chACurrent: number;
+          chAUsageKW: number;
+          chBVoltage: number;
+          chBCurrent: number;
+          chBUsageKW: number;
+          chCVoltage: number;
+          chCCurrent: number;
+          chCUsageKW: number;
+        };
+        email: string;
+        action: string;
+        statusCode: number;
+      };
+      const { usedChannel, ...rest } = deviceSmartMeterInfo;
       setRealtimeSmartMeterInfo({
         ...realtimeSmartMeterInfo,
         ...rest,
