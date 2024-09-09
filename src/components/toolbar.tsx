@@ -26,7 +26,6 @@ const ToolBar = ({
 
   setDtStart,
   dtStart,
-  dtEnd,
   device,
 }: ToolBarProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,21 +55,43 @@ const ToolBar = ({
   //   setDtEnd(formattedEndTime);
   // };
 
+  // useEffect(() => {
+  //   if (dtEnd !== null && dtStart !== null) {
+  //     searchParams.set("startDate", dtStart);
+  //     searchParams.set("endDate", dtEnd);
+  //     return navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
+  //   } else {
+  //     setSearchParams((params) => {
+  //       const queryParams = Object.fromEntries(params);
+  //       delete queryParams["startDate"];
+  //       delete queryParams["endDate"];
+  //       return queryParams;
+  //     });
+  //   }
+  // }, [dtEnd, dtStart, navigate, searchParams, setSearchParams]);
+
   useEffect(() => {
-    if (dtEnd !== null && dtStart !== null) {
+    if (dtStart !== null) {
+      setSearchParams((params) => {
+        const queryParams = Object.fromEntries(params);
+        delete queryParams["startDate"];
+        return queryParams;
+      });
       searchParams.set("startDate", dtStart);
-      searchParams.set("endDate", dtEnd);
       return navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
     } else {
       setSearchParams((params) => {
         const queryParams = Object.fromEntries(params);
         delete queryParams["startDate"];
-        delete queryParams["endDate"];
         return queryParams;
       });
     }
-  }, [dtEnd, dtStart, navigate, searchParams, setSearchParams]);
-
+  }, [dtStart, navigate, searchParams, setSearchParams]);
+  const handleStartTimeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDtStart(event.target.value);
+  };
   return (
     <section className='fixed top-4 lg:top-20 lg:left-2 bg-white rounded-2xl  flex h-[calc(100vh-6rem)]'>
       <div className='rounded-2xl border border-white shadow min-w-28 py-6 px-3 overflow-y-auto bg-gray-50 grid grid-cols-1 divide-y-2 divide-gray-200 gap-6 h-full '>
@@ -142,9 +163,7 @@ const ToolBar = ({
                 id='start'
                 aria-label='Date from'
                 value={formatDateString(dtStart ?? "")}
-                onChange={() => {
-                  setDtStart(formatDateString(dtStart ?? ""));
-                }}
+                onChange={handleStartTimeChange}
                 type='date'
                 className={dtStart ? hasDateStyle : defaultDateStyle}
                 required

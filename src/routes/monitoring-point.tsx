@@ -126,7 +126,7 @@ function MonitoringPoint() {
 
   useEffect(() => {
     if (status === "success") {
-      setDtStart(data.deviceUsageInfo?.dtStart ?? "");
+      // setDtStart(data.deviceUsageInfo?.dtStart ?? "");
       // setDtEnd(data.deviceUsageInfo?.dtEnd ?? "");
       // setDeviceList(
       //   deviceList?.length === 0
@@ -197,7 +197,6 @@ function MonitoringPoint() {
     data?.deviceUsageInfo?.realtimeSmartMeterInfo?.usedChannel,
     deviceId,
     navigate,
-    realtimeSmartMeterInfo,
     searchParams,
     status,
   ]);
