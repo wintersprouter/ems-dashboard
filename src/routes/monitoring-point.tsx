@@ -33,9 +33,9 @@ function MonitoringPoint() {
   const startDate = searchParams.get("startDate") ?? new Date().toISOString();
   const endDate = searchParams.get("endDate") ?? new Date().toISOString();
   const deviceId = Number(searchParams.get("deviceId")) ?? 0;
-  const [deviceList, setDeviceList] = useState<
-    z.infer<typeof monitorDeviceResponse>["deviceList"]
-  >([]);
+  // const [deviceList, setDeviceList] = useState<
+  //   z.infer<typeof monitorDeviceResponse>["deviceList"]
+  // >([]);
   const [dtStart, setDtStart] = useState(startDate ?? "");
   const [dtEnd, setDtEnd] = useState(endDate ?? "");
   const [realtimeSmartMeterInfo, setRealtimeSmartMeterInfo] = useState<
@@ -126,50 +126,76 @@ function MonitoringPoint() {
 
   useEffect(() => {
     if (status === "success") {
-      setDtStart(data.deviceUsageInfo?.dtStart ?? "");
-      setDtEnd(data.deviceUsageInfo?.dtEnd ?? "");
-      setDeviceList(
-        deviceList?.length === 0
-          ? [...(data.deviceList ?? [])]
-          : [
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              ...(deviceList?.filter((device) => {
-                const newDevice = data.deviceList?.find(
-                  (d) => d.id === device.id
-                );
-                if (newDevice) {
-                  return {
-                    ...device,
-                    ...newDevice,
-                  };
-                }
-              }) ?? []),
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              ...(data.deviceList ?? []).filter(
-                (newDevice) => !deviceList?.some((d) => d.id === newDevice.id)
-              ),
-            ]
-      );
+      // setDtStart(data.deviceUsageInfo?.dtStart ?? "");
+      // setDtEnd(data.deviceUsageInfo?.dtEnd ?? "");
+      // setDeviceList(
+      //   deviceList?.length === 0
+      //     ? [...(data.deviceList ?? [])]
+      //     : [
+      //         // eslint-disable-next-line no-unsafe-optional-chaining
+      //         ...(deviceList?.filter((device) => {
+      //           const newDevice = data.deviceList?.find(
+      //             (d) => d.id === device.id
+      //           );
+      //           if (newDevice) {
+      //             return {
+      //               ...device,
+      //               ...newDevice,
+      //             };
+      //           }
+      //         }) ?? []),
+      //         // eslint-disable-next-line no-unsafe-optional-chaining
+      //         ...(data.deviceList ?? []).filter(
+      //           (newDevice) => !deviceList?.some((d) => d.id === newDevice.id)
+      //         ),
+      //       ]
+      // );
+
       setRealtimeSmartMeterInfo({
-        ...realtimeSmartMeterInfo,
-        ...data?.deviceUsageInfo?.realtimeSmartMeterInfo,
+        chAVoltage:
+          data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chAVoltage ?? 0,
+        chACurrent:
+          data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chACurrent ?? 0,
+        chAUsageKW:
+          data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chAUsageKW ?? 0,
+        chBVoltage:
+          data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chBVoltage ?? 0,
+        chBCurrent:
+          data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chBCurrent ?? 0,
+        chBUsageKW:
+          data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chBUsageKW ?? 0,
+        chCVoltage:
+          data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chCVoltage ?? 0,
+        chCCurrent:
+          data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chCCurrent ?? 0,
+        chCUsageKW:
+          data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chCUsageKW ?? 0,
+
         usedChannel: [
           ...(data?.deviceUsageInfo?.realtimeSmartMeterInfo?.usedChannel ?? []),
         ],
       });
       if (deviceId === 0) {
         searchParams.set("deviceId", data.deviceUsageInfo?.id.toString() ?? "");
-        navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
       }
     }
     if (searchParams) {
       navigate(`/dashboard/monitoring-point?${searchParams.toString()}`);
     }
-    // data.deviceList,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    data?.deviceUsageInfo?.dtEnd,
     data?.deviceUsageInfo?.dtStart,
+    data?.deviceUsageInfo?.id,
+    data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chACurrent,
+    data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chAUsageKW,
+    data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chAVoltage,
+    data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chBCurrent,
+    data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chBUsageKW,
+    data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chBVoltage,
+    data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chCCurrent,
+    data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chCUsageKW,
+    data?.deviceUsageInfo?.realtimeSmartMeterInfo?.chCVoltage,
+    data?.deviceUsageInfo?.realtimeSmartMeterInfo?.usedChannel,
+    deviceId,
     navigate,
     searchParams,
     status,
@@ -185,7 +211,7 @@ function MonitoringPoint() {
         .with("success", () => (
           <>
             <ToolBar
-              deviceList={deviceList}
+              deviceList={data?.deviceList ?? []}
               setDtStart={setDtStart ?? ""}
               setDtEnd={setDtEnd ?? ""}
               dtStart={dtStart}
